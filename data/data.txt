@@ -1,0 +1,14 @@
+# format:
+# Exp 2020-08-15
+# Pink;xx 55 student
+# Pink;yy 25 student
+# White;xx 85 student
+# White;yy 155 student
+#Pink;xx;;White;xx 124 1.5e-07
+
+Exp 2020-08-15 Nanie url Image
+Pink;xx 55 student
+Pink;yy 25 student
+White;xx 85 student
+White;yy 155 student
+Pink;xx;;White;xx 124 1.5e-07
