@@ -9,3 +9,30 @@
   color: base.$body-color;
   font-family: "Times New Roman", Times, serif;
 }
+
+
+.accordion {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100% !important;
+}
+
+.mySelect {
+  width: 100px !important;
+  background-color: lightgreen !important;
+}
+
+.myInputInt {
+  width: 75px !important;
+  background-color: lightblue !important;
+}
+
+.myInputFloat {
+  width: 100px !important;
+  background-color: lightblue !important;
+}
+
+
+.ui.grid.container {
+    width: 100% !important;
+}

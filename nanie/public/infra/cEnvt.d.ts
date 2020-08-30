@@ -1,4 +1,5 @@
 import { eLoggerLevel } from './cLogger';
 export default class cEnvt {
-    static _debugLevel: eLoggerLevel;
+    private static _debugLevel;
+    static getDebugLevel(): eLoggerLevel;
 }

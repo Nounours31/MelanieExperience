@@ -1,4 +1,4 @@
-import cExperience from './Services/DB/cExperience';
+import { cExperience } from './Services/DB/cExperience';
 import cMyUI from './cMyUI';
 import cMyUI_MainTab_create from './cMyUI_MainTab_create';
 import cMyUI_MainTab_ajout from './cMyUI_MainTab_ajout';
@@ -6,6 +6,7 @@ import cMyUI_MainTab_ajout from './cMyUI_MainTab_ajout';
 
 export default class cMyUI_MainTab extends cMyUI {
     private readonly _idTabSaisie: string = 'tab-saisie';
+    private readonly _idAccordeonCompleterExperience: string = 'idAccordeonCompleterExperience';
     private _creationUI: cMyUI_MainTab_create;
     private _ajoutUI: cMyUI_MainTab_ajout;
 
@@ -20,8 +21,14 @@ export default class cMyUI_MainTab extends cMyUI {
         $('.ui.accordion').accordion();
         $('.tabular.menu .item').tab();
 
-        this._creationUI.addCallBackOnMyDialog();
-        this._ajoutUI.addCallBackOnMyDialog();
+        let me: cMyUI_MainTab = this;
+        me._creationUI.addCallBackOnMyDialog();
+        me._ajoutUI.addCallBackOnMyDialog();
+
+        // propagation de l'evenement de mise  ajour de 'id d'experience
+        $(`#${this._idAccordeonCompleterExperience}`).on ('click', function() {
+            me._ajoutUI.UpdateMyDialog(me._ctrl.lastExp, me._ctrl.iLastExp);
+        });
     }
 
     public draw (): string {
@@ -45,6 +52,7 @@ export default class cMyUI_MainTab extends cMyUI {
                 ${experienceConsultationInfo}
             </div>
         </div>
+        <div id="${this._idResultatDB}"></div>
         `;
         return retour;
     }
@@ -62,16 +70,14 @@ export default class cMyUI_MainTab extends cMyUI {
                         Creation d'une experience
                     </div>
                     <div class="content active">
-                        Info pour la creation:
                         ${experienceCreationInfo}
                     </div>
 
-                    <div class="title">
+                    <div class="title" id="${this._idAccordeonCompleterExperience}">
                         <i class="dropdown icon"></i>
                         Completer une experience
                     </div>
                     <div class="content">
-                        Ajout des infos:
                         ${experienceAjoutInfo}
                     </div>
                 </div>

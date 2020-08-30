@@ -1,12 +1,14 @@
 import cEnvt from './infra/cEnvt';
+import { cControler } from './infra/cControler';
 import { cLogger } from './infra/cLogger';
 import $ from 'jquery';
 var cMyUI = /** @class */ (function () {
     function cMyUI(id) {
-        this._logger = null;
+        this._idResultatDB = 'idResultatDB';
         if (id == null)
             id = 'cMyUI';
-        this._logger = new cLogger(cEnvt._debugLevel, id);
+        this._logger = new cLogger(cEnvt.getDebugLevel(), id);
+        this._ctrl = cControler.getIntance();
     }
     cMyUI.prototype.addCallBackOnMessage = function (messageId) {
         if (messageId == null) {

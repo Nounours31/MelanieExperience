@@ -19,6 +19,7 @@ var cMyUI_MainTab = /** @class */ (function (_super) {
     function cMyUI_MainTab() {
         var _this = _super.call(this, 'MainTab') || this;
         _this._idTabSaisie = 'tab-saisie';
+        _this._idAccordeonCompleterExperience = 'idAccordeonCompleterExperience';
         _this._creationUI = new cMyUI_MainTab_create();
         _this._ajoutUI = new cMyUI_MainTab_ajout();
         return _this;
@@ -27,21 +28,26 @@ var cMyUI_MainTab = /** @class */ (function (_super) {
         // activer les sementicUI du dialog
         $('.ui.accordion').accordion();
         $('.tabular.menu .item').tab();
-        this._creationUI.addCallBackOnMyDialog();
-        this._ajoutUI.addCallBackOnMyDialog();
+        var me = this;
+        me._creationUI.addCallBackOnMyDialog();
+        me._ajoutUI.addCallBackOnMyDialog();
+        // propagation de l'evenement de mise  ajour de 'id d'experience
+        $("#" + this._idAccordeonCompleterExperience).on('click', function () {
+            me._ajoutUI.UpdateMyDialog(me._ctrl.lastExp, me._ctrl.iLastExp);
+        });
     };
     cMyUI_MainTab.prototype.draw = function () {
         var retour;
         var experienceCreationAccordeonInfo = this.experienceCreationAccordeonInfo();
         var experienceConsultationInfo = this.experienceConsultationInfo();
-        retour = "\n        <div class=\"ui fluid container\">\n            <div class=\"ui top attached tabular menu\">\n                <div class=\"active item\" data-tab=\"" + this._idTabSaisie + "\" id=\"" + this._idTabSaisie + "\">Saisie Experience</div>\n                <div class=\"item\" data-tab=\"tab-consultation\">Consultation</div>\n            </div>\n            <div class=\"ui bottom attached active tab segment\" data-tab=\"" + this._idTabSaisie + "\">\n                <!-- Tab Content !-->\n                " + experienceCreationAccordeonInfo + "\n            </div>\n            <div class=\"ui bottom attached tab segment\" data-tab=\"tab-consultation\">\n                <!-- Tab Content !-->\n                " + experienceConsultationInfo + "\n            </div>\n        </div>\n        ";
+        retour = "\n        <div class=\"ui fluid container\">\n            <div class=\"ui top attached tabular menu\">\n                <div class=\"active item\" data-tab=\"" + this._idTabSaisie + "\" id=\"" + this._idTabSaisie + "\">Saisie Experience</div>\n                <div class=\"item\" data-tab=\"tab-consultation\">Consultation</div>\n            </div>\n            <div class=\"ui bottom attached active tab segment\" data-tab=\"" + this._idTabSaisie + "\">\n                <!-- Tab Content !-->\n                " + experienceCreationAccordeonInfo + "\n            </div>\n            <div class=\"ui bottom attached tab segment\" data-tab=\"tab-consultation\">\n                <!-- Tab Content !-->\n                " + experienceConsultationInfo + "\n            </div>\n        </div>\n        <div id=\"" + this._idResultatDB + "\"></div>\n        ";
         return retour;
     };
     cMyUI_MainTab.prototype.experienceCreationAccordeonInfo = function () {
         var experienceCreationInfo = this._creationUI.draw();
         var experienceAjoutInfo = this._ajoutUI.draw();
         var retour;
-        retour = "\n            <div class=\"ui grid container\">\n                <div class=\"ui styled accordion\">\n                    <div class=\"title active\">\n                        <i class=\"dropdown icon\"></i>\n                        Creation d'une experience\n                    </div>\n                    <div class=\"content active\">\n                        Info pour la creation:\n                        " + experienceCreationInfo + "\n                    </div>\n\n                    <div class=\"title\">\n                        <i class=\"dropdown icon\"></i>\n                        Completer une experience\n                    </div>\n                    <div class=\"content\">\n                        Ajout des infos:\n                        " + experienceAjoutInfo + "\n                    </div>\n                </div>\n            </div>\n            ";
+        retour = "\n            <div class=\"ui grid container\">\n                <div class=\"ui styled accordion\">\n                    <div class=\"title active\">\n                        <i class=\"dropdown icon\"></i>\n                        Creation d'une experience\n                    </div>\n                    <div class=\"content active\">\n                        " + experienceCreationInfo + "\n                    </div>\n\n                    <div class=\"title\" id=\"" + this._idAccordeonCompleterExperience + "\">\n                        <i class=\"dropdown icon\"></i>\n                        Completer une experience\n                    </div>\n                    <div class=\"content\">\n                        " + experienceAjoutInfo + "\n                    </div>\n                </div>\n            </div>\n            ";
         return retour;
     };
     cMyUI_MainTab.prototype.experienceConsultationInfo = function () {
