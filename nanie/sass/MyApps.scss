@@ -1,0 +1,11 @@
+@use 'base';
+
+.inverse {
+  background-color: base.$primary-color;
+  color: white;
+}
+
+.MyApps {
+  color: base.$body-color;
+  font-family: "Times New Roman", Times, serif;
+}

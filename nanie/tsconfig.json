@@ -1,0 +1,47 @@
+{
+    "compilerOptions": {
+        "sourceMap": true, /* pour le debug*/
+        "outDir": "public", /* repertoire output */
+        "declaration": true,
+        "alwaysStrict": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        
+        "module": "es6", /* le loader de module amd, ...*/
+        "target": "es5", /* version compilee */
+        
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node",
+        // "resolveJsonModule": true,
+        "isolatedModules": true,
+        // "noEmit": true,
+        "jsx": "react",
+
+        "typeRoots": [
+            "./node_modules/@types"
+        ],
+
+        "lib": [
+            "DOM",
+            "ES6",
+        ]
+    },
+    "include": [ /* ce qui va etre compiler*/
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "public",
+        "sass",
+        "server"
+    ],
+    "compileOnSave": true,
+}
