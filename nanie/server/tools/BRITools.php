@@ -1,5 +1,5 @@
 <?php
-
+include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRIUID.php';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -52,6 +52,10 @@ class BRITools {
         $yummy   = array("<", ">", "<", ">", "#", "#", "-", "-", "-");        
         $newphrase = str_replace($healthy, $yummy, $msgOut);
         return $newphrase;
+    }
+
+    public static function UUID() {
+        return BRIUID::guid();
     }
     
 }

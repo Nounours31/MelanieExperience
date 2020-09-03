@@ -88,6 +88,8 @@ export default class cMyUI_MainTab_create extends cMyUI {
 
                 let id: number = cExperience.createDBExperience(experienceId, date, qui, files);
                 if (id > 0) {
+                    cExperience.uploadFiles(id, files);
+
                     let onOKMessage: string = `<div class="ui positive message ${me._My_Message_Classe}"><i class="close icon"></i>`;
                     onOKMessage += `
                                 <div class="header">

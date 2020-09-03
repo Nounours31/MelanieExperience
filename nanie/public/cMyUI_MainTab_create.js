@@ -84,6 +84,7 @@ var cMyUI_MainTab_create = /** @class */ (function (_super) {
                 experienceId += $("#" + me._idExperienceClef).val();
                 var id = cExperience.createDBExperience(experienceId, date, qui, files);
                 if (id > 0) {
+                    cExperience.uploadFiles(id, files);
                     var onOKMessage = "<div class=\"ui positive message " + me._My_Message_Classe + "\"><i class=\"close icon\"></i>";
                     onOKMessage += "\n                                <div class=\"header\">\n                                    Creation experience en DB -- OK\n                                </div>\n                                <p> " + experienceId + ", " + date + ", " + qui + ", " + files + " </p>";
                     onOKMessage += '</div>';

@@ -21,7 +21,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/Envt/BRIENVT.php';
 
  *******************************************************************************/
 
-class BRIWSMessageServer2Client {
+class BRIWSMessageServer2Client implements JsonSerializable {
     protected $logger = null;
     protected $type   = '';
     protected $data   = array ();
@@ -76,21 +76,46 @@ class BRIWSMessageServer2Client {
         return $retour;
     }
     
+    public function jsonSerialize() {
+        if (strcmp ($this -> type, BRIConst::_MSG_TYPE_MESSAGE) == 0) {
+            return [
+                'type' => $this->type,
+                'data' => $this -> data[BRIConst::_MSG_TYPE_MESSAGE]
+            ];
+        }
+        else {
+            return [
+                'type' => $this->type,
+                'data' => [
+                        $this -> data[BRIConst::_MSG_TYPE_ERRORNO],
+                        $this -> data[BRIConst::_MSG_TYPE_MESSAGE]
+                ]
+            ];
+
+        }
+
+    }
+
     public function toJSON () {
-        $json = '{"type" : "'.$this -> type.'",';
+        $this->logger -> debug("---> BRIWSMessageServer2Client::ToJson de :");
+        $this -> Dump();
+
+/*        $json = '{type : "'.$this -> type.'",';
         if ($this -> data[BRIConst::_MSG_TYPE_ERRORNO] >= 0) {
-           $json .= '"data": [{"errno": '.$this -> data[BRIConst::_MSG_TYPE_ERRORNO].'}, {"data":"'. 
+           $json .= 'data: [{errno: '.$this -> data[BRIConst::_MSG_TYPE_ERRORNO].'}, {data:"'. 
                    BRITools::echapJSONPourMessageOut($this -> data[BRIConst::_MSG_TYPE_MESSAGE]).'"}]}';
         }
         else {
-            $json .= '"data": "'.BRITools::echapJSONPourMessageOut($this -> data[BRIConst::_MSG_TYPE_MESSAGE]).'"}';
+            $json .= 'data: "'.BRITools::echapJSONPourMessageOut($this -> data[BRIConst::_MSG_TYPE_MESSAGE]).'"}';
         }
         $r = json_encode ($json);
         if ($r === FALSE) {
             $this->logger -> fatal ('Error PARSING TO JSON');
             BRIError::GenerateJSONErrorMessage(json_last_error(), $this->logger);
         }
-        return  $r;
+        return  $r; */
+        $jsonData = json_encode($this);
+        return $jsonData;
     }
 
     public function Dump () {

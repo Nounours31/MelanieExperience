@@ -3,9 +3,13 @@ var cEnvt = /** @class */ (function () {
     function cEnvt() {
     }
     cEnvt.getDebugLevel = function () {
-        return this._debugLevel;
+        return cEnvt._debugLevel;
+    };
+    cEnvt.getAjaxURLWS = function () {
+        return cEnvt._ajaxWSURL;
     };
     cEnvt._debugLevel = eLoggerLevel.Debug;
+    cEnvt._ajaxWSURL = 'http://localhost:88/nanie/server/WS/BRIWS.php';
     return cEnvt;
 }());
 export default cEnvt;

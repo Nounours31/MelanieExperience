@@ -53,14 +53,30 @@ class BRIDBTableExperience extends BRIDBAccess {
      * @param type $eMail
      * @return type
      */
-    public function createExperience ($infos) {
-        $update = false;
-        return $this -> createOrUpdateExperience ($infos, $update);
+    public function createExperience ($ExperienceId, $date, $qui, $files) {
+        $ret = array();
+
+        $sql = 'insert into experience (`dateExperience`, `experienceId`, `dateInsert`, `qui`, `url_graph`) VALUES ';
+        $sql .= "('".$date."', '".$ExperienceId."', '".date("Y-m-d H:i:s")."', '".$qui."', '".$files."')";
+        $this -> _logger -> Debug ('sql: '.$sql);
+            
+        $rc = $this ->insertAsRest($sql);
+        if ($rc !== FALSE) {
+            $this ->_logger ->Debug('OK: Experience cree');
+            $ret['uid'] = $rc;
+            $ret['status'] = 0;             
+        }
+        else {
+            $ret['status'] = 1;             
+        }
+        return $ret;    
     }
+    
     public function updateExperience ($infos) {
         $update = true;
         return $this -> createOrUpdateExperience ($infos, $update);        
     }
+    
     private function createOrUpdateExperience ($infos, $update) {
         $ret = array();
         $log = array();
@@ -116,6 +132,7 @@ class BRIDBTableExperience extends BRIDBAccess {
         }
         $ret['log'] = $log;
         $ret['uid'] = $uid;
+
         return $ret;
     }
     }

@@ -24,6 +24,7 @@ class BRIWSMessageClient2Server {
     private $requete = 'none';              // le type de la requete
     private $type = 'none';              // le type de la requete
     private $Args = array();              // le type de la requete
+    private $Files= array();              // le type de la requete
     
     // --------------------------------------------------------------------------------------
     // ctor
@@ -36,6 +37,7 @@ class BRIWSMessageClient2Server {
     public function getRequete() { return $this->requete;}
     public function getType() { return $this->type;}
     public function getArgs() { return $this->Args;}
+    public function getFiles() { return $this->Files;}
     
     // --------------------------------------------------------------------------------------
     // prend un ensemble de valeur lue dans le php://input et 
@@ -49,36 +51,40 @@ class BRIWSMessageClient2Server {
         }
         
         // est ce que le type de la requete est dans la demande
-        if (!isset ($ArrayOfArgsEnvoyedParLeClient['class'])) {
+        if (!isset ($ArrayOfArgsEnvoyedParLeClient['_classe'])) {
             $err = new BRIError (5, "BRIWSMessageClient2Server - Pas de requete dans le message");
             return $err;
         }
         
         
         // est ce que le nom de la requete est dans la demande
-        if (!isset ($ArrayOfArgsEnvoyedParLeClient['requete'])) {
+        if (!isset ($ArrayOfArgsEnvoyedParLeClient['_requete'])) {
             $err = new BRIError (5, "BRIWSMessageClient2Server - Pas de requete dans le message");
             return $err;
         }
        
         
         // recupe de la requete
-        $this -> type = $ArrayOfArgsEnvoyedParLeClient['class'];
+        $this -> type = $ArrayOfArgsEnvoyedParLeClient['_classe'];
 
         // recupe de la requete
-        $this -> requete = $ArrayOfArgsEnvoyedParLeClient['requete'];
+        $this -> requete = $ArrayOfArgsEnvoyedParLeClient['_requete'];
 
         // recupe de la requete
-        if (isset ($ArrayOfArgsEnvoyedParLeClient['args'])) {
-            if (is_array($ArrayOfArgsEnvoyedParLeClient['args'])) {
-                foreach ($ArrayOfArgsEnvoyedParLeClient['args'] as $OneArrayValue) {
-                    foreach ($OneArrayValue as $key => $value) {
-                        $this->Args[$key]=$value;                        
-                    }
+        // {"_args":[{"nom":"ExperienceId","val":"F0-A0"},{"nom":"date","val":"2020-10-01"},{"nom":"qui","val":"Fages"},{"nom":"files","val":"sassInfo.png"}]
+        if (isset ($ArrayOfArgsEnvoyedParLeClient['_args'])) {
+            if (is_array($ArrayOfArgsEnvoyedParLeClient['_args'])) {
+                foreach ($ArrayOfArgsEnvoyedParLeClient['_args'] as $OneArrayValue) {
+                    $this->Args[$OneArrayValue['nom']]=$OneArrayValue['val'];
                 }          
             }
         }
-        $this->logger->debug("::buildFromArray - REturn OK");
+        $this->logger->debugTab("::buildFromArray - Args ... ", $this->Args);
+
+        if (isset ($ArrayOfArgsEnvoyedParLeClient['__FILES__'])) {
+            $this->Files = $ArrayOfArgsEnvoyedParLeClient['__FILES__'];
+        }
+
         return BRIError::S_OK();
     }
     

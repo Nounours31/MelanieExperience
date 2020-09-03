@@ -4,6 +4,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRILogger.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/WS/BRIWSMessageServer2Client.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/WS/BRIWSMessageClient2Server.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/WS/BRIWSApi.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/WS/BRIWSApiPersonnes.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/WS/BRIWSApiExperience.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRIError.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRITools.php';
@@ -43,6 +44,12 @@ if ($rc->SUCCEEDED()) {
         $referenceOutputData = null;
         if ($rc) {
             switch ($msgIn -> getType()) {
+                case 'personnes' : 
+                    $l -> debug('---> OK Api personnes');
+                    $api = new BRIWSApiPersonnes ();
+                    $err = $api ->executeRequest($msgIn, $referenceOutputData);
+                    break;
+
                 case 'experience' : 
                     $l -> debug('---> OK Api experience');
                     $api = new BRIWSApiExperience ();
@@ -56,8 +63,9 @@ if ($rc->SUCCEEDED()) {
         else {
            $err = new BRIError("Invalid input message");
         }
-        if (!$err ->SUCCEEDED())
+        if (!$err ->SUCCEEDED()) {
             $msgOut->buildFromError($err);
+        }
         else {
             if ($referenceOutputData == null)
                 $referenceOutputData = "No msg";
@@ -72,7 +80,7 @@ if ($rc->SUCCEEDED()) {
 }
 
 // on crache le massage de sortie
-$jsonMsg=$msgOut -> toJSON();
+$jsonMsg= $msgOut -> toJSON();
 $l -> debug('JSON message OUT: -->'.$jsonMsg.'<--');
 print $jsonMsg;
 ?>

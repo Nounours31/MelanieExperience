@@ -2,6 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/Envt/BRIENVT.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/tools/BRILogger.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/WS/iBRIWSApi.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/tools/BRITools.php';
 
 /*********************************************************************************************
  * Classe mere de tous les implementation des API 
@@ -127,8 +128,18 @@ class BRIWSApi extends iBRIWSApi
         $decode = array();
         if (isset($_POST)) {
             $this -> logger->debugTab("decode POST:", $_POST);
+            $decode['_args'] = array();
+            // "_args":[{"nom":"ExperienceId","val":"F0-A0"},{"nom":"date","val":"2020-10-01"},{"nom":"qui","val":"Fages"},{"nom":"files","val":"sassInfo.png"}]
             foreach ($_POST as $key => $value) {
-                $decode[$key] = $value;
+                if (substr( $key, 0, 1 ) === "_") {
+                    $decode [$key] = $value;
+                }
+                else {
+                    $UnArg=array();
+                    $UnArg['nom'] = $key;
+                    $UnArg['val'] = $value;
+                    array_push ($decode['_args'], $UnArg);
+                }
             }
         }
 

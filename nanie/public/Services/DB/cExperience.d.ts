@@ -14,10 +14,14 @@ export interface iAllInfoForUpdateExperience {
     SComparatif: number;
 }
 export declare class cExperience {
-    constructor();
+    private _ajax;
+    private static _singleton;
+    private constructor();
+    private static getInstance;
     static getAllPersone(): string[];
     static getAllExperienceInitiale(): string[];
     static createDBExperience(experienceId: string, date: string, qui: string, files: FileList): number;
+    static uploadFiles(id: number, files: FileList): void;
     static updateDBExperience(experience: iAllInfoForUpdateExperience): number;
     static dumpFromDB(id: number, _idResultatDB: string): void;
     static getAllTestType(): string[];
