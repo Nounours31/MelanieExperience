@@ -7,7 +7,8 @@ var cEnvt = /** @class */ (function () {
         return cEnvt._debugLevel;
     };
     cEnvt.getAjaxURLWS = function () {
-        return cEnvt._ajaxWSURL;
+        var x = window.location.origin;
+        return (x + cEnvt._ajaxWSURL);
     };
     cEnvt._debugLevel = eLoggerLevel.Debug;
     cEnvt._ajaxWSURL = cConfigs.ajaxWSURL();

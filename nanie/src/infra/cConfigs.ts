@@ -7,8 +7,8 @@ export class cConfigs {
     private static readonly _currentConfig: eConfigConnues = eConfigConnues.Nanie;
 
     private static readonly _ajaxWSURL: string[] = [
-        'http://localhost/nanie/server/WS/BRIWS.php', /* Nanie */
-        'http://localhost:88/nanie/server/WS/BRIWS.php' /* Paps */
+        '/nanie/server/WS/BRIWS.php', /* Nanie */
+        '/nanie/server/WS/BRIWS.php' /* Paps */
     ];
 
     public static ajaxWSURL() : string {

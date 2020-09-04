@@ -11,8 +11,8 @@ var cConfigs = /** @class */ (function () {
     };
     cConfigs._currentConfig = eConfigConnues.Nanie;
     cConfigs._ajaxWSURL = [
-        'http://localhost/nanie/server/WS/BRIWS.php',
-        'http://localhost:88/nanie/server/WS/BRIWS.php' /* Paps */
+        '/nanie/server/WS/BRIWS.php',
+        '/nanie/server/WS/BRIWS.php' /* Paps */
     ];
     return cConfigs;
 }());

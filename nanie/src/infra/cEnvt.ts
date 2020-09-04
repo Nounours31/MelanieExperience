@@ -10,6 +10,7 @@ export default class cEnvt {
     }
 
     public static getAjaxURLWS(): string {
-        return cEnvt._ajaxWSURL;
+        let x : string = window.location.origin;
+        return (x + cEnvt._ajaxWSURL);
     }
 }
