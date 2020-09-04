@@ -10,7 +10,7 @@ class BRIEnvt {
     const isLOCALSERVER = true;
     const _DEBUGLEVEL = BRIConst::_ALL;
     const _DEBUGMAIL = true;
-    const _DEBUGMAIL_EMAIL = 'pfs@3ds.com';
+    const _DEBUGMAIL_EMAIL = 'melanie.fages@free.fr';
     
     
     // Cookie de cnx
@@ -19,7 +19,7 @@ class BRIEnvt {
     // access DB
     const DBUser = "root"; //root; 
     const DBPassword =""; /* */
-    const DBBaseName= "nanie";
+    const DBBaseName= "melanie_fages";
     const DBHost = "127.0.0.1";
     const DBPort = 3306;
 

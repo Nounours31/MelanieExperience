@@ -2,10 +2,10 @@ import cMyUI from './cMyUI';
 export default class cMyUI_MainTab_ajout extends cMyUI {
     private readonly _idOKButton;
     private readonly _idInputExp;
-    private readonly _idSelectOnchromosome1;
-    private readonly _idSelectOnchromosome2;
-    private readonly _idSelectOnchromosome3;
-    private readonly _idSelectOnchromosome4;
+    private readonly _idSelectOnChromo1;
+    private readonly _idSelectOnChromo2;
+    private readonly _idSelectOnChromo3;
+    private readonly _idSelectOnChromo4;
     private readonly _idSelectOnTestType;
     private readonly _idSelectOnMarquage;
     private readonly _idInputNbEchantillon;

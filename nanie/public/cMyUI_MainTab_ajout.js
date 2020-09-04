@@ -20,10 +20,10 @@ var cMyUI_MainTab_ajout = /** @class */ (function (_super) {
         var _this = _super.call(this, 'MainTab') || this;
         _this._idOKButton = 'idOKButton';
         _this._idInputExp = 'cMyUI_MainTab_ajout_idInputExp';
-        _this._idSelectOnChromo1 = 'cMyUI_MainTab_ajout_idSelectOnChromo1';
-        _this._idSelectOnChromo2 = 'cMyUI_MainTab_ajout_idSelectOnChromo2';
-        _this._idSelectOnChromo3 = 'cMyUI_MainTab_ajout_idSelectOnChromo3';
-        _this._idSelectOnChromo4 = 'cMyUI_MainTab_ajout_idSelectOnChromo4';
+        _this._idSelectOnchromosome1 = 'cMyUI_MainTab_ajout_idSelectOnchromosome1';
+        _this._idSelectOnchromosome2 = 'cMyUI_MainTab_ajout_idSelectOnchromosome2';
+        _this._idSelectOnchromosome3 = 'cMyUI_MainTab_ajout_idSelectOnchromosome3';
+        _this._idSelectOnchromosome4 = 'cMyUI_MainTab_ajout_idSelectOnchromosome4';
         _this._idSelectOnTestType = 'cMyUI_MainTab_ajout_idSelectOnTestType';
         _this._idSelectOnMarquage = 'cMyUI_MainTab_ajout_idSelectOnMarquage';
         _this._idInputNbEchantillon = 'cMyUI_MainTab_ajout_idInputNbEchantillon';
@@ -39,52 +39,56 @@ var cMyUI_MainTab_ajout = /** @class */ (function (_super) {
         // $(`#${this._idTabSaisie}`).addClass('active');
         var me = this;
         $("#" + me._idOKButton).on('click', function (event) {
-            var allInfosFromPage = cExperience.create_iAllInfoForUpdateExperience();
-            allInfosFromPage.ExpId = $("#" + me._idInputExp).val();
-            allInfosFromPage.Marquage = $("#" + me._idSelectOnMarquage).val();
+            var allInfosFromPage = cExperience.create_iResultatMessage();
+            allInfosFromPage.experiencestringid = $("#" + me._idInputExp).val();
+            allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
+            allInfosFromPage.marquage = $("#" + me._idSelectOnMarquage).val();
             allInfosFromPage.NbGenotype = me._nbGenotype;
             allInfosFromPage.SComparatif = $("#" + me._idInputSComparatif).val();
             allInfosFromPage.SGeneral = $("#" + me._idInputSGeneral).val();
-            allInfosFromPage.TypeTest = $("#" + me._idSelectOnTestType).val();
+            allInfosFromPage.typedetest = $("#" + me._idSelectOnTestType).val();
             for (var i = 0; i < me._nbGenotype; i++) {
-                var allInfosFromGenotype = cExperience.create_iAllGenotypeInfoForUpdateExperience();
-                allInfosFromGenotype.Chromo1 = $("#" + me._idSelectOnChromo1 + "_" + i).val();
-                allInfosFromGenotype.Chromo2 = $("#" + me._idSelectOnChromo2 + "_" + i).val();
-                allInfosFromGenotype.Chromo3 = $("#" + me._idSelectOnChromo3 + "_" + i).val();
-                allInfosFromGenotype.Chromo4 = $("#" + me._idSelectOnChromo4 + "_" + i).val();
-                allInfosFromPage.Genotype.push(allInfosFromGenotype);
+                var allInfosFromGenotype = cExperience.create_iGenotypeMessage();
+                allInfosFromGenotype.chromosome1 = $("#" + me._idSelectOnchromosome1 + "_" + i).val();
+                allInfosFromGenotype.chromosome2 = $("#" + me._idSelectOnchromosome2 + "_" + i).val();
+                allInfosFromGenotype.chromosome3 = $("#" + me._idSelectOnchromosome3 + "_" + i).val();
+                allInfosFromGenotype.chromosome4 = $("#" + me._idSelectOnchromosome4 + "_" + i).val();
+                allInfosFromGenotype.nbechantillon = $("#" + me._idInputNbEchantillon + "_" + i).val();
+                if (allInfosFromPage.Genotype != null)
+                    allInfosFromPage.Genotype.push(allInfosFromGenotype);
             }
             var id = cExperience.updateDBExperience(allInfosFromPage);
-            cExperience.dumpFromDB(id, me._idResultatDB);
+            event.stopImmediatePropagation();
+            return false;
         });
     };
     cMyUI_MainTab_ajout.prototype.UpdateMyDialog = function (lastExp, ilastExp) {
-        var x = lastExp + ' [db: ' + ilastExp.toString() + ']';
+        var x = lastExp;
         $("#" + this._idInputExp).val(x);
     };
     cMyUI_MainTab_ajout.prototype.draw = function () {
         var retour;
         var nbLigne = this._nbGenotype;
-        var x = this._ctrl.lastExp + ' [db: ' + this._ctrl.iLastExp.toString() + ']';
+        var x = this._ctrl.lastExp;
         var infosForHTML;
-        var selectChromo1 = ['', '', '', ''];
-        var selectChromo2 = ['', '', '', ''];
-        var selectChromo3 = ['', '', '', ''];
-        var selectChromo4 = ['', '', '', ''];
+        var selectchromosome1 = ['', '', '', ''];
+        var selectchromosome2 = ['', '', '', ''];
+        var selectchromosome3 = ['', '', '', ''];
+        var selectchromosome4 = ['', '', '', ''];
         var InputNbEchantillon = ['', '', '', ''];
         var selectTypeTest;
         var selectMarquage;
         var InputSGeneral;
         var InputSComparatif;
         for (var i = 0; i < nbLigne; i++) {
-            infosForHTML = { 'class': 'mySelect', 'id': this._idSelectOnChromo1 + "_" + i };
-            selectChromo1[i] = cTools.BuildSelectFromTab(cExperience.getAllChromo1(), infosForHTML);
-            infosForHTML = { 'class': 'mySelect', 'id': this._idSelectOnChromo2 + "_" + i };
-            selectChromo2[i] = cTools.BuildSelectFromTab(cExperience.getAllChromo2(), infosForHTML);
-            infosForHTML = { 'class': 'mySelect', 'id': this._idSelectOnChromo3 + "_" + i };
-            selectChromo3[i] = cTools.BuildSelectFromTab(cExperience.getAllChromo3(), infosForHTML);
-            infosForHTML = { 'class': 'mySelect', 'id': this._idSelectOnChromo4 + "_" + i };
-            selectChromo4[i] = cTools.BuildSelectFromTab(cExperience.getAllChromo4(), infosForHTML);
+            infosForHTML = { 'class': 'mySelect', 'id': this._idSelectOnchromosome1 + "_" + i };
+            selectchromosome1[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome1(), infosForHTML);
+            infosForHTML = { 'class': 'mySelect', 'id': this._idSelectOnchromosome2 + "_" + i };
+            selectchromosome2[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome2(), infosForHTML);
+            infosForHTML = { 'class': 'mySelect', 'id': this._idSelectOnchromosome3 + "_" + i };
+            selectchromosome3[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome3(), infosForHTML);
+            infosForHTML = { 'class': 'mySelect', 'id': this._idSelectOnchromosome4 + "_" + i };
+            selectchromosome4[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome4(), infosForHTML);
             infosForHTML = { 'class': 'myInputInt', 'type': 'number', 'id': this._idInputNbEchantillon + "_" + i };
             InputNbEchantillon[i] = cTools.BuildInputInt('1', infosForHTML);
         }
@@ -96,13 +100,13 @@ var cMyUI_MainTab_ajout = /** @class */ (function (_super) {
         selectTypeTest = cTools.BuildSelectFromTab(cExperience.getAllTestType(), infosForHTML);
         infosForHTML = { 'class': 'mySelect', 'id': "" + this._idSelectOnMarquage };
         selectMarquage = cTools.BuildSelectFromTab(cExperience.getAllMarquage(), infosForHTML);
-        retour = "\n            <form class=\"ui form\">\n                <div class=\"ui labeled input\">\n                    <div class=\"ui label\">\n                        Experience Id\n                    </div>\n                    <input type=\"text\" value=\"" + x + "\" placeholder=\"[lettre][chiffre]-[lettre][chiffre]\" id=\"" + this._idInputExp + "\"/>\n                </div>\n                <table class=\"ui celled table\">\n                <thead>\n                    <tr>\n                        <th>Genotype</th><th>Chromosome 1</th> <th>Chromosome 2</th> <th>Chromosome 3</th><th>Chromosome 4</th>\n                            <th>Nb Echantillon</th><th>Marquage</th><th>S general</th><th>S comparatif</th><th>Type test</th>\n                    </tr>\n                </thead>\n                <tbody>";
+        retour = "\n            <form class=\"ui form\">\n                <div class=\"ui labeled input\">\n                    <div class=\"ui label\">\n                        Experience Id\n                    </div>\n                    <input type=\"text\" value=\"" + x + "\" placeholder=\"[lettre][chiffre]-[lettre][chiffre]\" id=\"" + this._idInputExp + "\"/>\n                </div>\n                <table class=\"ui celled table\">\n                <thead>\n                    <tr>\n                        <th>Genotype</th><th>chromosomesome 1</th> <th>chromosomesome 2</th> <th>chromosomesome 3</th><th>chromosomesome 4</th>\n                            <th>Nb Echantillon</th><th>Marquage</th><th>S general</th><th>S comparatif</th><th>Type test</th>\n                    </tr>\n                </thead>\n                <tbody>";
         for (var i = 0; i < nbLigne; i++) {
             if (i == 0) {
-                retour += "\n                    <tr>\n                        <td>G " + (i + 1) + "</td><td>" + selectChromo1[i] + "</td><td>" + selectChromo2[i] + "</td><td>" + selectChromo3[i] + "</td><td>" + selectChromo4[i] + "</td>\n                            <td>" + InputNbEchantillon[i] + "</td>\n                            <td rowspan=\"" + nbLigne + "\">" + selectMarquage + "</td>\n                            <td rowspan=\"" + nbLigne + "\">" + InputSGeneral + "</td>\n                            <td rowspan=\"" + nbLigne + "\">" + InputSComparatif + "</td>\n                            <td rowspan=\"" + nbLigne + "\">" + selectTypeTest + "</td>\n                    </tr>";
+                retour += "\n                    <tr>\n                        <td>G " + (i + 1) + "</td><td>" + selectchromosome1[i] + "</td><td>" + selectchromosome2[i] + "</td><td>" + selectchromosome3[i] + "</td><td>" + selectchromosome4[i] + "</td>\n                            <td>" + InputNbEchantillon[i] + "</td>\n                            <td rowspan=\"" + nbLigne + "\">" + selectMarquage + "</td>\n                            <td rowspan=\"" + nbLigne + "\">" + InputSGeneral + "</td>\n                            <td rowspan=\"" + nbLigne + "\">" + InputSComparatif + "</td>\n                            <td rowspan=\"" + nbLigne + "\">" + selectTypeTest + "</td>\n                    </tr>";
             }
             else {
-                retour += "\n                    <tr>\n                        <td>G " + (i + 1) + "</td><td>" + selectChromo1[i] + "</td><td>" + selectChromo2[i] + "</td><td>" + selectChromo3[i] + "</td><td>" + selectChromo4[i] + "</td><td>" + InputNbEchantillon[i] + "</td>\n                    </tr>";
+                retour += "\n                    <tr>\n                        <td>G " + (i + 1) + "</td><td>" + selectchromosome1[i] + "</td><td>" + selectchromosome2[i] + "</td><td>" + selectchromosome3[i] + "</td><td>" + selectchromosome4[i] + "</td><td>" + InputNbEchantillon[i] + "</td>\n                    </tr>";
             }
         }
         retour += "\n                </tbody>\n                </table>\n                <button class=\"ui button pink\" type=\"submit\" id=\"" + this._idOKButton + "\">OK !</button>\n            </form>\n        ";

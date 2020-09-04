@@ -1,23 +1,7 @@
 import { cAjax, cAjaxSendMessage, iAjaxSendMessageArgs } from './cAjax';
 import cEnvt from '../../infra/cEnvt';
-import cMyUI_MainTab_create from '../../cMyUI_MainTab_create';
-
-export interface iAllGenotypeInfoForUpdateExperience {
-    Chromo1: string;
-    Chromo2: string;
-    Chromo3: string;
-    Chromo4: string;
-}
-
-export interface iAllInfoForUpdateExperience {
-    ExpId: string;
-    NbGenotype: number;
-    Genotype: iAllGenotypeInfoForUpdateExperience[];
-    Marquage: string;
-    TypeTest: string;
-    SGeneral: number;
-    SComparatif: number;
-}
+import { iGenotypeMessage, iResultatMessage } from './iOnMessageWithServer';
+import { iExperienceIDMessage, iExperienceFilesMessage, iInternalExperienceOneFileMessage } from './iOnMessageWithServer';
 
 export class cExperience {
     private _ajax: cAjax = new cAjax();
@@ -72,34 +56,130 @@ export class cExperience {
         return retour;
     }
 
-    static createDBExperience(experienceId: string, date: string, qui: string, files: FileList): number {
+    static createDBExperience(experienceId: string, date: string, qui: string): number {
         let me: cExperience = cExperience.getInstance();
         me._ajax.reset();
         let retour: string[] = [];
 
         let args: iAjaxSendMessageArgs[] = [];
-        let arg1: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('ExperienceId', experienceId);
+        let arg1: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('experiencestringid', experienceId);
         args.push(arg1);
-        arg1 = cAjaxSendMessage.buildArgsFromString('date', date);
+        arg1 = cAjaxSendMessage.buildArgsFromString('daterealisationexperience', date);
         args.push(arg1);
-        arg1 = cAjaxSendMessage.buildArgsFromString('qui', qui);
+        arg1 = cAjaxSendMessage.buildArgsFromString('faiteparqui', qui);
         args.push(arg1);
-        if (files.length > 0) {
-            arg1 = cAjaxSendMessage.buildArgsFromString('files', (files.item(0) as File).name);
-            args.push(arg1);
-        }
 
         let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'create', args);
         me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
         if (me._ajax.getStatus() == 0) {
             let response: string = me._ajax.getData();
-            let jsonObject: JSON = JSON.parse(response);
-            if ('uid' in jsonObject)
-                return jsonObject['uid'];
+            return Number.parseInt (response);
         }
 
         return 0;
     }
+
+
+
+    static getExperienceUidFromExperienceStringid(experiencestringid : string): number {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour: number[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg1: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('experiencestringid', experiencestringid);
+        args.push(arg1);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getExperienceUidFromExperienceStringid', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            return Number.parseInt (response);
+        }
+        return 0;
+    }
+
+    static getAllExperienceUid(): number[] {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour: number[] = [];
+
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getAllExperienceUid', null);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let resp: Array<number> = (JSON.parse(response) as Array<number>);
+            resp.forEach(element => {
+                retour.push(element);
+            });
+        }
+        return retour;
+    }
+
+    static getExperience_InfoGenerale(iExpUid: number): iExperienceIDMessage | null {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg1: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromNum('uid', iExpUid);
+        args.push(arg1);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getExperience_InfoGenerale', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let resp: Array<iExperienceIDMessage> = (JSON.parse(response) as Array<iExperienceIDMessage>);
+            return resp[0];
+        }
+        return null;
+    }
+
+
+    static getExperience_ResultatGenotype(iExpUid: number): iGenotypeMessage[]|null {
+        let me: cExperience = cExperience.getInstance();
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg1: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromNum('uid', iExpUid);
+        args.push(arg1);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getExperience_ResultatGenotype', args);
+        
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let resp: Array<iGenotypeMessage> = (JSON.parse(response) as Array<iGenotypeMessage>);
+            return resp;
+        }
+        return null;
+    }
+    static getExperience_ResultatTest(iExpUid: number): iResultatMessage[] | null {
+        let me: cExperience = cExperience.getInstance();
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg1: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromNum('uid', iExpUid);
+        args.push(arg1);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getExperience_ResultatTest', args);
+
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let resp: Array<iResultatMessage> = (JSON.parse(response) as Array<iResultatMessage>);
+            return resp;
+        }
+        return null;
+    }
+
+    static getExperience_ResultatImage(iExpUid: number): iExperienceFilesMessage[] | null {
+        let me: cExperience = cExperience.getInstance();
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg1: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromNum('uid', iExpUid);
+        args.push(arg1);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getExperience_ResultatImage', args);
+
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let resp: Array<iExperienceFilesMessage> = (JSON.parse(response) as Array<iExperienceFilesMessage>);
+            return resp;
+        }
+        return null;
+    }
+
 
     static uploadFiles(id: number, files: FileList) {
         let data : FormData = new FormData();
@@ -122,86 +202,139 @@ export class cExperience {
 
 
 
-    
-    static updateDBExperience(experience: iAllInfoForUpdateExperience): number {
-        let retour: string[] = [];
-        retour.push('Nanie');
-        retour.push('Pap\'s');
 
-        let c = new cAjax();
+    static updateDBExperience(experience: iResultatMessage): number {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour: number = -1;
+        
         let args: iAjaxSendMessageArgs[] = [];
-        let arg1: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('ExperienceId', 'SS');
+        let arg1: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromNum('idexperience', (experience.idexperience as number));
         args.push(arg1);
-
+        arg1 = cAjaxSendMessage.buildArgsFromString('marquage', experience.marquage);
+        args.push(arg1);
+        if (experience.NbGenotype != null) {
+            arg1 = cAjaxSendMessage.buildArgsFromNum('NbGenotype', experience.NbGenotype);
+            args.push(arg1);
+        }
+        arg1 = cAjaxSendMessage.buildArgsFromNum('SComparatif', experience.SComparatif);
+        args.push(arg1);
+        arg1 = cAjaxSendMessage.buildArgsFromNum('SGeneral', experience.SGeneral);
+        args.push(arg1);
+        arg1 = cAjaxSendMessage.buildArgsFromString('typedetest', experience.typedetest);
+        args.push(arg1);
+        if (experience.Genotype != null) {
+            arg1 = cAjaxSendMessage.buildArgsFromArray('Genotype', experience.Genotype);
+            args.push(arg1);
+        }
         let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'update', args);
-        c.postData('http://localhost:88/nanie/server/WS/BRIWS.php', msg);
-
-        //return retour;
-                return 1234;
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            console.log(response);
+        }
+        return retour;
     }
+
+
+
 
     static dumpFromDB(id: number, _idResultatDB: string) {
         throw new Error('Method not implemented.');
     }
 
     static getAllTestType(): string[] {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
         let retour: string[] = [];
-        retour.push('Wallis');
-        retour.push('Student');
+
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getAllTestTypes', null);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let jsonObject: JSON = JSON.parse(response);
+            if (Array.isArray(jsonObject)) {
+                jsonObject.forEach(element => {
+                    retour.push(element);
+                });
+            }
+        }
         return retour;
     }
 
     static getAllMarquage(): string[] {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
         let retour: string[] = [];
-        retour.push('Dcp-1');
-        retour.push('Kema');
+
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getAllMarquage', null);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let jsonObject: JSON = JSON.parse(response);
+            if (Array.isArray(jsonObject)) {
+                jsonObject.forEach(element => {
+                    retour.push(element);
+                });
+            }
+        }
+        return retour;
+
+    }
+
+    static getAllchromosome1(): string[] {
+        return cExperience.getAllchromosomeXX();
+    }
+    static getAllchromosome2(): string[] {
+        return cExperience.getAllchromosomeXX();
+    }
+    static getAllchromosome3(): string[] {
+        return cExperience.getAllchromosomeXX();
+    }
+    static getAllchromosome4(): string[] {
+        return cExperience.getAllchromosomeXX();
+    }
+
+    private static getAllchromosomeXX(): string[] {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour: string[] = [];
+
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getAllChromosomes', null);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let jsonObject: JSON = JSON.parse(response);
+            if (Array.isArray(jsonObject)) {
+                jsonObject.forEach(element => {
+                    retour.push(element);
+                });
+            }
+        }
         return retour;
     }
 
-    static getAllChromo1(): string[] {
-        return cExperience.getAllChromoXX();
-    }
-    static getAllChromo2(): string[] {
-        return cExperience.getAllChromoXX();
-    }
-    static getAllChromo3(): string[] {
-        return cExperience.getAllChromoXX();
-    }
-    static getAllChromo4(): string[] {
-        return cExperience.getAllChromoXX();
-    }
-
-    private static getAllChromoXX(): string[] {
-        let retour: string[] = [];
-        retour.push('-');
-        retour.push('Pink[5]');
-        retour.push('Vg');
-        retour.push('LacZ');
-        retour.push('White');
-        retour.push('Debcl');
-        retour.push('Pink');
-        return retour;
-    }
-
-    static create_iAllInfoForUpdateExperience(): iAllInfoForUpdateExperience {
-        let retour: iAllInfoForUpdateExperience = {
-            'ExpId': '',
+    static create_iResultatMessage(): iResultatMessage {
+        let retour: iResultatMessage = {
+            'idexperience': 0,
+            'experiencestringid': '',
             'Genotype' : [],
-            'Marquage' : '',
+            'marquage' : '',
             'NbGenotype' : 0,
             'SComparatif' : 0,
             'SGeneral' : 0,
-            'TypeTest' : ''
+            'typedetest' : ''
         };
         return retour;
     }
 
-    static create_iAllGenotypeInfoForUpdateExperience(): iAllGenotypeInfoForUpdateExperience {
-        let retour: iAllGenotypeInfoForUpdateExperience = {
-            'Chromo1': '',
-            'Chromo2': '',
-            'Chromo3': '',
-            'Chromo4': ''
+    static create_iGenotypeMessage(): iGenotypeMessage {
+        let retour: iGenotypeMessage = {
+            'chromosome1': '',
+            'chromosome2': '',
+            'chromosome3': '',
+            'chromosome4': '',
+            'nbechantillon': 0
         };
         return retour;
     }

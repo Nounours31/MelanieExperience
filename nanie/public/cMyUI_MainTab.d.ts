@@ -4,6 +4,7 @@ export default class cMyUI_MainTab extends cMyUI {
     private readonly _idAccordeonCompleterExperience;
     private _creationUI;
     private _ajoutUI;
+    private _ConsultationUI;
     constructor();
     addCallBackOnMyDialog(): void;
     draw(): string;

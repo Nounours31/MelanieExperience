@@ -22,6 +22,20 @@ var cAjaxSendMessage = /** @class */ (function () {
         };
         return r;
     };
+    cAjaxSendMessage.buildArgsFromNum = function (nom, val) {
+        var r = {
+            'nom': nom,
+            'val': val.toString()
+        };
+        return r;
+    };
+    cAjaxSendMessage.buildArgsFromArray = function (nom, val) {
+        var r = {
+            'nom': nom,
+            'val': JSON.stringify(val)
+        };
+        return r;
+    };
     return cAjaxSendMessage;
 }());
 export { cAjaxSendMessage };
@@ -145,7 +159,6 @@ var cAjax = /** @class */ (function () {
                     else {
                         myAjaxClass._internalStatus = 0;
                         myAjaxClass._returnedData = ajaxReponse.data;
-                        alert('WS OK');
                         console.log(myAjaxClass._returnedData);
                     }
                 }

@@ -66,4 +66,7 @@ nanieOriginalOK/
 nanieReactGalere/
 java/
 
-.vscode
+.vscodenanie/server/vault/
+nanie/logs/
+.vscode/
+nanie/server/vault/

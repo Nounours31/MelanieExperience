@@ -9,6 +9,8 @@ export declare class cAjaxSendMessage {
     constructor();
     static buildFromString(classe: string, requete: string, args: iAjaxSendMessageArgs[] | null): cAjaxSendMessage;
     static buildArgsFromString(nom: string, val: string): iAjaxSendMessageArgs;
+    static buildArgsFromNum(nom: string, val: number): iAjaxSendMessageArgs;
+    static buildArgsFromArray(nom: string, val: object[]): iAjaxSendMessageArgs;
 }
 export declare class cAjax {
     private _internalStatus;

@@ -32,19 +32,13 @@ class BRIConst {
     const MSG_IN_SERVICE_AVAILABLE_USERLOGGING = 'logging';
     // const MSG_IN_SERVICE_AVAILABLE = ['User', 'resa'];
     
-    const MSG_IN_TYPE = "type";
-    const MSG_IN_TYPE_AVAILABLE_USER = 'user';
-    const MSG_IN_TYPE_AVAILABLE_RESA = 'resa';
-    // const MSG_IN_TYPE_AVAILABLE = [BRIConst::MSG_IN_TYPE_AVAILABLE_USER, BRIConst::MSG_IN_TYPE_AVAILABLE_RESA]; // pas possible en PHP
-    const MSG_IN_ARGS = "args";
-    const NOM_ARGUMENT = "name";
-    const VALEUR_ARGUMENT = "value";
-
-    
-    // DB Cnx
-    
-    // Cookie de cnx
-    const COOKIE_LOGGING = "COOKIE_LOGGING";
-    const COOKIE_CSRF = "COOKIE_CSRF";
-    
+    const DB_NOM_Experience = 'experience';
+    const DB_NOM_ExperienceFichier = 'experience_file';
+    const DB_NOM_ExperienceGenotype = 'experience_listegenotype';
+    const DB_NOM_ExperienceResultats = 'experience_resultatdestests';
+    const DB_NOM_ListedesInitiales = 'initialesexperience';
+    const DB_NOM_ListedesMarquages = 'marquagedesexperiences';
+    const DB_NOM_ListedesPersonnes = 'personnes';
+    const DB_NOM_ListedesTypeExperience = 'typedetestdesexperiences';
+    const DB_NOM_ListedesChromosomes = 'chromosomes';
 }

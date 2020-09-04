@@ -86,7 +86,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
                 experienceId += '-' + $(`#${me._idExperienceExperiencetype}`).val();
                 experienceId += $(`#${me._idExperienceClef}`).val();
 
-                let id: number = cExperience.createDBExperience(experienceId, date, qui, files);
+                let id: number = cExperience.createDBExperience(experienceId, date, qui);
                 if (id > 0) {
                     cExperience.uploadFiles(id, files);
 

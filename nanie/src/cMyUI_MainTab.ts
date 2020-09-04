@@ -2,6 +2,7 @@ import { cExperience } from './Services/DB/cExperience';
 import cMyUI from './cMyUI';
 import cMyUI_MainTab_create from './cMyUI_MainTab_create';
 import cMyUI_MainTab_ajout from './cMyUI_MainTab_ajout';
+import cMyUI_MainTab_consultation from './cMyUI_MainTab_consultation';
 
 
 export default class cMyUI_MainTab extends cMyUI {
@@ -9,11 +10,13 @@ export default class cMyUI_MainTab extends cMyUI {
     private readonly _idAccordeonCompleterExperience: string = 'idAccordeonCompleterExperience';
     private _creationUI: cMyUI_MainTab_create;
     private _ajoutUI: cMyUI_MainTab_ajout;
+    private _ConsultationUI: cMyUI_MainTab_consultation;
 
     constructor () {
         super ('MainTab');
         this._creationUI = new cMyUI_MainTab_create();
         this._ajoutUI = new cMyUI_MainTab_ajout();
+        this._ConsultationUI = new cMyUI_MainTab_consultation();
     }
 
     public addCallBackOnMyDialog(): void {
@@ -24,6 +27,7 @@ export default class cMyUI_MainTab extends cMyUI {
         let me: cMyUI_MainTab = this;
         me._creationUI.addCallBackOnMyDialog();
         me._ajoutUI.addCallBackOnMyDialog();
+        me._ConsultationUI.addCallBackOnMyDialog();
 
         // propagation de l'evenement de mise  ajour de 'id d'experience
         $(`#${this._idAccordeonCompleterExperience}`).on ('click', function() {
@@ -88,7 +92,8 @@ export default class cMyUI_MainTab extends cMyUI {
 
 
     private experienceConsultationInfo(): string {
-        return '<div>Consultation div</div>';
+        let experienceConsultationInfo: string = this._ConsultationUI.draw();
+        return `<div>${experienceConsultationInfo}</div>`;
     }
 }
 

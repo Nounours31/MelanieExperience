@@ -44,30 +44,111 @@ var cExperience = /** @class */ (function () {
         }
         return retour;
     };
-    cExperience.createDBExperience = function (experienceId, date, qui, files) {
+    cExperience.createDBExperience = function (experienceId, date, qui) {
         var me = cExperience.getInstance();
         me._ajax.reset();
         var retour = [];
         var args = [];
-        var arg1 = cAjaxSendMessage.buildArgsFromString('ExperienceId', experienceId);
+        var arg1 = cAjaxSendMessage.buildArgsFromString('experiencestringid', experienceId);
         args.push(arg1);
-        arg1 = cAjaxSendMessage.buildArgsFromString('date', date);
+        arg1 = cAjaxSendMessage.buildArgsFromString('daterealisationexperience', date);
         args.push(arg1);
-        arg1 = cAjaxSendMessage.buildArgsFromString('qui', qui);
+        arg1 = cAjaxSendMessage.buildArgsFromString('faiteparqui', qui);
         args.push(arg1);
-        if (files.length > 0) {
-            arg1 = cAjaxSendMessage.buildArgsFromString('files', files.item(0).name);
-            args.push(arg1);
-        }
         var msg = cAjaxSendMessage.buildFromString('experience', 'create', args);
         me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
         if (me._ajax.getStatus() == 0) {
             var response = me._ajax.getData();
-            var jsonObject = JSON.parse(response);
-            if ('uid' in jsonObject)
-                return jsonObject['uid'];
+            return Number.parseInt(response);
         }
         return 0;
+    };
+    cExperience.getExperienceUidFromExperienceStringid = function (experiencestringid) {
+        var me = cExperience.getInstance();
+        me._ajax.reset();
+        var retour = [];
+        var args = [];
+        var arg1 = cAjaxSendMessage.buildArgsFromString('experiencestringid', experiencestringid);
+        args.push(arg1);
+        var msg = cAjaxSendMessage.buildFromString('experience', 'getExperienceUidFromExperienceStringid', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            return Number.parseInt(response);
+        }
+        return 0;
+    };
+    cExperience.getAllExperienceUid = function () {
+        var me = cExperience.getInstance();
+        me._ajax.reset();
+        var retour = [];
+        var msg = cAjaxSendMessage.buildFromString('experience', 'getAllExperienceUid', null);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            var resp = JSON.parse(response);
+            resp.forEach(function (element) {
+                retour.push(element);
+            });
+        }
+        return retour;
+    };
+    cExperience.getExperience_InfoGenerale = function (iExpUid) {
+        var me = cExperience.getInstance();
+        me._ajax.reset();
+        var args = [];
+        var arg1 = cAjaxSendMessage.buildArgsFromNum('uid', iExpUid);
+        args.push(arg1);
+        var msg = cAjaxSendMessage.buildFromString('experience', 'getExperience_InfoGenerale', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            var resp = JSON.parse(response);
+            return resp[0];
+        }
+        return null;
+    };
+    cExperience.getExperience_ResultatGenotype = function (iExpUid) {
+        var me = cExperience.getInstance();
+        var args = [];
+        var arg1 = cAjaxSendMessage.buildArgsFromNum('uid', iExpUid);
+        args.push(arg1);
+        var msg = cAjaxSendMessage.buildFromString('experience', 'getExperience_ResultatGenotype', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            var resp = JSON.parse(response);
+            return resp;
+        }
+        return null;
+    };
+    cExperience.getExperience_ResultatTest = function (iExpUid) {
+        var me = cExperience.getInstance();
+        var args = [];
+        var arg1 = cAjaxSendMessage.buildArgsFromNum('uid', iExpUid);
+        args.push(arg1);
+        var msg = cAjaxSendMessage.buildFromString('experience', 'getExperience_ResultatTest', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            var resp = JSON.parse(response);
+            return resp;
+        }
+        return null;
+    };
+    cExperience.getExperience_ResultatImage = function (iExpUid) {
+        var me = cExperience.getInstance();
+        var args = [];
+        var arg1 = cAjaxSendMessage.buildArgsFromNum('uid', iExpUid);
+        args.push(arg1);
+        var msg = cAjaxSendMessage.buildFromString('experience', 'getExperience_ResultatImage', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            var resp = JSON.parse(response);
+            return resp;
+        }
+        return null;
     };
     cExperience.uploadFiles = function (id, files) {
         var data = new FormData();
@@ -85,74 +166,122 @@ var cExperience = /** @class */ (function () {
         me._ajax.postFiles(cEnvt.getAjaxURLWS(), data);
     };
     cExperience.updateDBExperience = function (experience) {
-        var retour = [];
-        retour.push('Nanie');
-        retour.push('Pap\'s');
-        var c = new cAjax();
+        var me = cExperience.getInstance();
+        me._ajax.reset();
+        var retour = -1;
         var args = [];
-        var arg1 = cAjaxSendMessage.buildArgsFromString('ExperienceId', 'SS');
+        var arg1 = cAjaxSendMessage.buildArgsFromNum('idexperience', experience.idexperience);
         args.push(arg1);
+        arg1 = cAjaxSendMessage.buildArgsFromString('marquage', experience.marquage);
+        args.push(arg1);
+        if (experience.NbGenotype != null) {
+            arg1 = cAjaxSendMessage.buildArgsFromNum('NbGenotype', experience.NbGenotype);
+            args.push(arg1);
+        }
+        arg1 = cAjaxSendMessage.buildArgsFromNum('SComparatif', experience.SComparatif);
+        args.push(arg1);
+        arg1 = cAjaxSendMessage.buildArgsFromNum('SGeneral', experience.SGeneral);
+        args.push(arg1);
+        arg1 = cAjaxSendMessage.buildArgsFromString('typedetest', experience.typedetest);
+        args.push(arg1);
+        if (experience.Genotype != null) {
+            arg1 = cAjaxSendMessage.buildArgsFromArray('Genotype', experience.Genotype);
+            args.push(arg1);
+        }
         var msg = cAjaxSendMessage.buildFromString('experience', 'update', args);
-        c.postData('http://localhost:88/nanie/server/WS/BRIWS.php', msg);
-        //return retour;
-        return 1234;
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            console.log(response);
+        }
+        return retour;
     };
     cExperience.dumpFromDB = function (id, _idResultatDB) {
         throw new Error('Method not implemented.');
     };
     cExperience.getAllTestType = function () {
+        var me = cExperience.getInstance();
+        me._ajax.reset();
         var retour = [];
-        retour.push('Wallis');
-        retour.push('Student');
+        var msg = cAjaxSendMessage.buildFromString('experience', 'getAllTestTypes', null);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            var jsonObject = JSON.parse(response);
+            if (Array.isArray(jsonObject)) {
+                jsonObject.forEach(function (element) {
+                    retour.push(element);
+                });
+            }
+        }
         return retour;
     };
     cExperience.getAllMarquage = function () {
+        var me = cExperience.getInstance();
+        me._ajax.reset();
         var retour = [];
-        retour.push('Dcp-1');
-        retour.push('Kema');
+        var msg = cAjaxSendMessage.buildFromString('experience', 'getAllMarquage', null);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            var jsonObject = JSON.parse(response);
+            if (Array.isArray(jsonObject)) {
+                jsonObject.forEach(function (element) {
+                    retour.push(element);
+                });
+            }
+        }
         return retour;
     };
-    cExperience.getAllChromo1 = function () {
-        return cExperience.getAllChromoXX();
+    cExperience.getAllchromosome1 = function () {
+        return cExperience.getAllchromosomeXX();
     };
-    cExperience.getAllChromo2 = function () {
-        return cExperience.getAllChromoXX();
+    cExperience.getAllchromosome2 = function () {
+        return cExperience.getAllchromosomeXX();
     };
-    cExperience.getAllChromo3 = function () {
-        return cExperience.getAllChromoXX();
+    cExperience.getAllchromosome3 = function () {
+        return cExperience.getAllchromosomeXX();
     };
-    cExperience.getAllChromo4 = function () {
-        return cExperience.getAllChromoXX();
+    cExperience.getAllchromosome4 = function () {
+        return cExperience.getAllchromosomeXX();
     };
-    cExperience.getAllChromoXX = function () {
+    cExperience.getAllchromosomeXX = function () {
+        var me = cExperience.getInstance();
+        me._ajax.reset();
         var retour = [];
-        retour.push('-');
-        retour.push('Pink[5]');
-        retour.push('Vg');
-        retour.push('LacZ');
-        retour.push('White');
-        retour.push('Debcl');
-        retour.push('Pink');
+        var msg = cAjaxSendMessage.buildFromString('experience', 'getAllChromosomes', null);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            var jsonObject = JSON.parse(response);
+            if (Array.isArray(jsonObject)) {
+                jsonObject.forEach(function (element) {
+                    retour.push(element);
+                });
+            }
+        }
         return retour;
     };
-    cExperience.create_iAllInfoForUpdateExperience = function () {
+    cExperience.create_iResultatMessage = function () {
         var retour = {
-            'ExpId': '',
+            'idexperience': 0,
+            'experiencestringid': '',
             'Genotype': [],
-            'Marquage': '',
+            'marquage': '',
             'NbGenotype': 0,
             'SComparatif': 0,
             'SGeneral': 0,
-            'TypeTest': ''
+            'typedetest': ''
         };
         return retour;
     };
-    cExperience.create_iAllGenotypeInfoForUpdateExperience = function () {
+    cExperience.create_iGenotypeMessage = function () {
         var retour = {
-            'Chromo1': '',
-            'Chromo2': '',
-            'Chromo3': '',
-            'Chromo4': ''
+            'chromosome1': '',
+            'chromosome2': '',
+            'chromosome3': '',
+            'chromosome4': '',
+            'nbechantillon': 0
         };
         return retour;
     };

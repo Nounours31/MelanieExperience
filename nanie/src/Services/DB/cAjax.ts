@@ -33,6 +33,22 @@ export class cAjaxSendMessage {
         };
         return r;
     }
+
+    public static buildArgsFromNum(nom: string, val: number): iAjaxSendMessageArgs {
+        let r: iAjaxSendMessageArgs = {
+            'nom': nom,
+            'val': val.toString()
+        };
+        return r;
+    }
+
+    public static buildArgsFromArray(nom: string, val: object[]): iAjaxSendMessageArgs {
+        let r: iAjaxSendMessageArgs = {
+            'nom': nom,
+            'val': JSON.stringify(val)
+        };
+        return r;
+    }
 }
 
 interface iAjaxResponseMessage {
@@ -191,7 +207,6 @@ export class cAjax {
                     else {
                         myAjaxClass._internalStatus = 0;
                         myAjaxClass._returnedData = ajaxReponse.data;
-                        alert('WS OK');
                         console.log(myAjaxClass._returnedData);
                     }
                 }

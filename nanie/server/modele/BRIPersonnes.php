@@ -28,10 +28,10 @@ class BRIPersonnes extends iBRIModel {
     ****************************************************************************************************/
     public function getAllPersonnes (&$message) {
         $ret = array();
-        $rc = $this -> _DB -> selectAsRest ('select Nom from Personnes');
+        $rc = $this -> _DB -> selectAsRest ('select nom from '.BRIConst::DB_NOM_ListedesPersonnes);
         if (!empty($rc)) {
             for ($i = 0; $i < count($rc); $i++) {
-                array_push ($ret, $rc[$i]['Nom']);
+                array_push ($ret, $rc[$i]['nom']);
             }
         }
 

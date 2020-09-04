@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 import cMyUI from './cMyUI';
 import cMyUI_MainTab_create from './cMyUI_MainTab_create';
 import cMyUI_MainTab_ajout from './cMyUI_MainTab_ajout';
+import cMyUI_MainTab_consultation from './cMyUI_MainTab_consultation';
 var cMyUI_MainTab = /** @class */ (function (_super) {
     __extends(cMyUI_MainTab, _super);
     function cMyUI_MainTab() {
@@ -22,6 +23,7 @@ var cMyUI_MainTab = /** @class */ (function (_super) {
         _this._idAccordeonCompleterExperience = 'idAccordeonCompleterExperience';
         _this._creationUI = new cMyUI_MainTab_create();
         _this._ajoutUI = new cMyUI_MainTab_ajout();
+        _this._ConsultationUI = new cMyUI_MainTab_consultation();
         return _this;
     }
     cMyUI_MainTab.prototype.addCallBackOnMyDialog = function () {
@@ -31,6 +33,7 @@ var cMyUI_MainTab = /** @class */ (function (_super) {
         var me = this;
         me._creationUI.addCallBackOnMyDialog();
         me._ajoutUI.addCallBackOnMyDialog();
+        me._ConsultationUI.addCallBackOnMyDialog();
         // propagation de l'evenement de mise  ajour de 'id d'experience
         $("#" + this._idAccordeonCompleterExperience).on('click', function () {
             me._ajoutUI.UpdateMyDialog(me._ctrl.lastExp, me._ctrl.iLastExp);
@@ -51,7 +54,8 @@ var cMyUI_MainTab = /** @class */ (function (_super) {
         return retour;
     };
     cMyUI_MainTab.prototype.experienceConsultationInfo = function () {
-        return '<div>Consultation div</div>';
+        var experienceConsultationInfo = this._ConsultationUI.draw();
+        return "<div>" + experienceConsultationInfo + "</div>";
     };
     return cMyUI_MainTab;
 }(cMyUI));
