@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
 include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/Envt/BRIConst.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/Envt/BRIConfigs.php';
 
 class BRIEnvt {
     const isLOCALSERVER = true;
@@ -17,11 +18,11 @@ class BRIEnvt {
     const COOKIE_LOGGING = "BricoCookie";
 
     // access DB
-    const DBUser = "root"; //root; 
-    const DBPassword =""; /* */
-    const DBBaseName= "melanie_fages";
-    const DBHost = "127.0.0.1";
-    const DBPort = 3306;
+    const DBUser = BRIConfigs::_DBUser[BRIConfigs::_currentConfig];
+    const DBPassword = BRIConfigs::_DBPassword[BRIConfigs::_currentConfig];
+    const DBBaseName= BRIConfigs::_DBBaseName[BRIConfigs::_currentConfig];
+    const DBHost = BRIConfigs::_DBUHost[BRIConfigs::_currentConfig];
+    const DBPort = BRIConfigs::_DBPort[BRIConfigs::_currentConfig];
 
     
     // les path

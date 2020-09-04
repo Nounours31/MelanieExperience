@@ -1,8 +1,9 @@
 import { eLoggerLevel } from './cLogger';
+import { cConfigs } from './cConfigs';
 
 export default class cEnvt {
     private static _debugLevel : eLoggerLevel = eLoggerLevel.Debug;
-    private static readonly _ajaxWSURL: string = 'http://localhost:88/nanie/server/WS/BRIWS.php';
+    private static readonly _ajaxWSURL: string = cConfigs.ajaxWSURL();
 
     public static getDebugLevel(): eLoggerLevel {
         return cEnvt._debugLevel;
@@ -11,6 +12,4 @@ export default class cEnvt {
     public static getAjaxURLWS(): string {
         return cEnvt._ajaxWSURL;
     }
-
-
 }
