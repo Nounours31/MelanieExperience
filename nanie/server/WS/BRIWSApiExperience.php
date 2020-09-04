@@ -1,8 +1,8 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/Envt/BRIENVT.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/tools/BRILogger.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/modele/BRIExperience.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/WS/iBRIWSApi.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIENVT.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRILogger.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/modele/BRIExperience.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/WS/iBRIWSApi.php';
 
 /*********************************************************************************************
  * Classe de gestion WS des Users

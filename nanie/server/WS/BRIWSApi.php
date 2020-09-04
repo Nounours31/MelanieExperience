@@ -1,8 +1,8 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/Envt/BRIENVT.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/tools/BRILogger.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/WS/iBRIWSApi.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/tools/BRITools.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIENVT.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRILogger.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/WS/iBRIWSApi.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRITools.php';
 
 /*********************************************************************************************
  * Classe mere de tous les implementation des API 

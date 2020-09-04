@@ -11,12 +11,12 @@
  *
  * @author PFS
  */
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/Envt/BRIENVT.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/tools/BRILogger.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/tools/BRIError.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIENVT.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRILogger.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIError.php';
 
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/thirdPty/PHPMailer/src/PHPMailer.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/thirdPty/PHPMailer/src/Exception.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/thirdPty/PHPMailer/src/PHPMailer.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/thirdPty/PHPMailer/src/Exception.php';
 
 
 abstract class iSendMail {
