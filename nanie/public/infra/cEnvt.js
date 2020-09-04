@@ -1,4 +1,5 @@
 import { eLoggerLevel } from './cLogger';
+import { cConfigs } from './cConfigs';
 var cEnvt = /** @class */ (function () {
     function cEnvt() {
     }
@@ -9,7 +10,7 @@ var cEnvt = /** @class */ (function () {
         return cEnvt._ajaxWSURL;
     };
     cEnvt._debugLevel = eLoggerLevel.Debug;
-    cEnvt._ajaxWSURL = 'http://localhost:88/nanie/server/WS/BRIWS.php';
+    cEnvt._ajaxWSURL = cConfigs.ajaxWSURL();
     return cEnvt;
 }());
 export default cEnvt;
