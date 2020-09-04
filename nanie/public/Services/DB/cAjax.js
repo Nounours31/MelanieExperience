@@ -72,7 +72,7 @@ var cAjax = /** @class */ (function () {
             processData: false,
             type: 'POST',
             success: function (data) {
-                alert(data);
+                // alert (data);
             }
         });
     };
@@ -126,7 +126,7 @@ var cAjax = /** @class */ (function () {
     cAjax.prototype.error_function = function (xhr, status, error) {
         console.log('ajax fail ' + xhr.responseText);
         console.log('ajax fail ' + error);
-        alert('ajax fails: See Console.Log');
+        // alert  ('ajax fails: See Console.Log');
         var myAjaxClass;
         if ('myAjaxClass' in this) {
             myAjaxClass = this.myAjaxClass;
@@ -153,7 +153,7 @@ var cAjax = /** @class */ (function () {
                     if (ajaxReponse.type === 'error') {
                         myAjaxClass._internalStatus = 1;
                         myAjaxClass._returnedData = ajaxReponse.data;
-                        alert('WS fails: error see inlog !');
+                        // alert  ('WS fails: error see inlog !');
                         console.log(myAjaxClass._returnedData);
                     }
                     else {

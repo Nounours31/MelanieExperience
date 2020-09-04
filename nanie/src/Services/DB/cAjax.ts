@@ -114,7 +114,7 @@ export class cAjax {
             processData: false,
             type: 'POST',
             success: function (data) {
-                alert(data);
+                // alert (data);
             }
         });
     }
@@ -173,7 +173,7 @@ export class cAjax {
     private error_function(xhr: XMLHttpRequest, status: string, error: any): void {
         console.log('ajax fail ' + xhr.responseText);
         console.log('ajax fail ' + error);
-        alert ('ajax fails: See Console.Log');
+        // alert  ('ajax fails: See Console.Log');
         let myAjaxClass: cAjax;
         if ('myAjaxClass' in this) {
             myAjaxClass = (this as iAjaxConfig).myAjaxClass;
@@ -201,7 +201,7 @@ export class cAjax {
                     if (ajaxReponse.type === 'error') {
                         myAjaxClass._internalStatus = 1;
                         myAjaxClass._returnedData = ajaxReponse.data;
-                        alert ('WS fails: error see inlog !');
+                        // alert  ('WS fails: error see inlog !');
                         console.log(myAjaxClass._returnedData);
                     }
                     else {
