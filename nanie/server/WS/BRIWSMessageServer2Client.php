@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/Envt/BRIENVT.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIENVT.php';
 
 /*******************************************************************************
  * Classe des message qui sont echanger entre le Server et le client

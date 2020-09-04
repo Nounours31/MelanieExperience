@@ -11,9 +11,9 @@
  *
  * @author PFS
  */
-include_once($_SERVER['DOCUMENT_ROOT'].'nanie/server/DB/iBRIDB.php');
-include_once($_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRILogger.php');
-include_once($_SERVER['DOCUMENT_ROOT'].'nanie/server/Envt/BRIEnvt.php');
+include_once($_SERVER['DOCUMENT_ROOT'].'/nanie/server/DB/iBRIDB.php');
+include_once($_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRILogger.php');
+include_once($_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIEnvt.php');
 class BRIDBAccess extends iBRIDB {
     
     function __construct() {

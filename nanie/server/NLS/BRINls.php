@@ -21,7 +21,7 @@ class BRINls {
     }
 
     static private function _init () {
-        $pathtofile = $_SERVER['DOCUMENT_ROOT'].'nanie/server/NLS/BRINLS_ALL_MESSAGE.json';
+        $pathtofile = $_SERVER['DOCUMENT_ROOT'].'/nanie/server/NLS/BRINLS_ALL_MESSAGE.json';
         $json_file = file_get_contents($pathtofile);
         self::$json = json_decode($json_file,true);
     }

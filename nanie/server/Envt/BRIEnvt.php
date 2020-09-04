@@ -4,8 +4,8 @@ ini_set('display_startup_errors', true);
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/Envt/BRIConst.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/Envt/BRIConfigs.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIConst.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIConfigs.php';
 
 class BRIEnvt {
     const isLOCALSERVER = true;

@@ -11,10 +11,10 @@
  *
  * @author PFS
  */
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRIError.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRILogger.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRITools.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRIUID.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIError.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRILogger.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRITools.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIUID.php';
 
 
 class BRISecurite {

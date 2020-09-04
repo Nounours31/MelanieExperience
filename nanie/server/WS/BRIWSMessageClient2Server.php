@@ -1,7 +1,7 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/Envt/BRIENVT.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/modele/BRISecurite.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIENVT.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/modele/BRISecurite.php';
 
 
 /*******************************************************************************

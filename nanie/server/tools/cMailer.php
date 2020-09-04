@@ -11,7 +11,7 @@
  *
  * @author PFS
  */
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/iSendMail.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/iSendMail.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/tools/BRILogger.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . 'nanie/server/tools/BRITools.php';
 

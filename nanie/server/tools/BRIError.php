@@ -12,7 +12,7 @@
  *
  * @author PFS
  */
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRILogger.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRILogger.php';
 
 
 class BRIError {

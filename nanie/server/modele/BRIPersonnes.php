@@ -1,12 +1,12 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/Envt/BRIEnvt.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/modele/iBRIModel.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/DB/BRIDBAccess.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRILogger.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRIUID.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/NLS/BRINls.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRIError.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIEnvt.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/modele/iBRIModel.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/DB/BRIDBAccess.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRILogger.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIUID.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/NLS/BRINls.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIError.php';
 
 
 class BRIPersonnes extends iBRIModel { 

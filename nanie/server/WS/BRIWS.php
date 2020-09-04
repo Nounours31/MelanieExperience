@@ -1,14 +1,14 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/Envt/BRIENVT.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRILogger.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/WS/BRIWSMessageServer2Client.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/WS/BRIWSMessageClient2Server.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/WS/BRIWSApi.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/WS/BRIWSApiPersonnes.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/WS/BRIWSApiExperience.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRIError.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRITools.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'nanie/server/tools/BRIUID.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIENVT.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRILogger.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/WS/BRIWSMessageServer2Client.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/WS/BRIWSMessageClient2Server.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/WS/BRIWSApi.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/WS/BRIWSApiPersonnes.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/WS/BRIWSApiExperience.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIError.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRITools.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIUID.php';
 
 /*********************************************************************************************
  * Classe mere de tous les WS de la section brico
