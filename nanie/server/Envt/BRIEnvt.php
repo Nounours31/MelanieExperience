@@ -26,9 +26,9 @@ class BRIEnvt {
 
     
     // les path
-    const relativeDocRoot = 'nanie/';
-    const relativeWSPath = 'nanie/server/WS/BRIWS.php';
-    const PathToVault = 'nanie/server/vault';
+    const relativeDocRoot = '/nanie/';
+    const relativeWSPath = '/nanie/server/WS/BRIWS.php';
+    const PathToVault = '/nanie/server/vault';
     
     // fichier a uploader
     const ExternalFilePATHTODISK = 'upload/';
