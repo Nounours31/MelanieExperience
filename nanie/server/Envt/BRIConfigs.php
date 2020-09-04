@@ -10,7 +10,6 @@ abstract class eConfigConnues
 class BRIConfigs {
     public const _currentConfig = eConfigConnues::Nanie;
 
-    public const _ajaxWSURL = [ 'http://localhost/nanie/server/WS/BRIWS.php', 'http://localhost:88/nanie/server/WS/BRIWS.php'];
     public const _DBUser = [ 'root', 'root' ];
     public const _DBPassword = [ '', '' ];
     public const _DBBaseName = [ 'melanie_fages', 'melanie_fages' ];
