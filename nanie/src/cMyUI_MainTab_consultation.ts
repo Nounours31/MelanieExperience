@@ -5,6 +5,8 @@ import { iMyHtmlInfo, cTools } from './infra/cTools';
 import cMyUI from './cMyUI';
 
 
+
+
 export default class cMyUI_MainTab_consultation extends cMyUI {
     private readonly _idOKButton : string = 'OKButton';
     constructor () {
@@ -126,9 +128,55 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
         let allExperienceuid : number[] = cExperience.getAllExperienceUid();
         let x: iExperienceIDMessage | null;
 
+        let id_territoire_select: string = 'id_territoire_select';
+        let id_selectchromosome: string = 'id_select_chrommosome';
 
-         retour = `
-                <table class="ui celled table">
+        let infosForHTML: object = {'id': `${id_territoire_select}` };
+        let selectTerritoire: string = cTools.BuildSelectFromTab(cExperience.getAllTerritoire(), infosForHTML);
+        let selectchromosome: string[] = [];
+        for (let i : number = 0; i < 4; i++) {
+            let infosForHTML: object = { 'id': `${id_selectchromosome}_${i}` };
+            if (i == 0) selectchromosome.push(cTools.BuildSelectFromTab(cExperience.getAllchromosome1(), infosForHTML));
+            if (i == 1) selectchromosome.push(cTools.BuildSelectFromTab(cExperience.getAllchromosome2(), infosForHTML));
+            if (i == 2) selectchromosome.push(cTools.BuildSelectFromTab(cExperience.getAllchromosome3(), infosForHTML));
+            if (i == 3) selectchromosome.push(cTools.BuildSelectFromTab(cExperience.getAllchromosome4(), infosForHTML));
+        }
+
+
+    /*    SELECT exp.uid FROM`experience` exp
+        INNER JOIN`experience_listegenotype` geno ON geno.idexperience = exp.uid
+        INNER JOIN`experience_resultatdestests` res ON res.idexperience = exp.uid
+        where((res.territoire = 'Vg') and(res.SComparatif < 2) and(res.SComparatif < 2) 
+and(geno.chromosome1 = 'Pink') and(geno.chromosome2 = 'Decl')) */
+
+
+
+
+        retour = `
+           <form class="pure-form">
+                <fieldset class="pure-group pure-input-1-4" style="border-style: none;">
+                    <label for="${id_territoire_select}">Territoire</label>
+                    ${selectTerritoire}
+                </fieldset>
+                <fieldset>
+                    <legend>selection genotype</legend>`;
+        for (let i: number = 0; i < 4; i++) {
+            retour += `
+                <label for="${id_selectchromosome}_${i}">chromosome${i+1}</label>
+                ${selectchromosome[i]}
+                `;
+        }
+        retour += `
+                </fieldset>
+                <fieldset class="pure-group pure-input-1-4"  style="border-style: none;">
+                    <label for="Scomparatif_input">S comparatif (&lt; 0.05)</label>
+                    <input id="Scomparatif_input" type="number" placeholder="1.0e-2" min="0" max="0.05" step="any"/>
+                </fieldset>
+                <fieldset class="pure-group pure-input-1-4"  style="border-style: none;">
+                    <button class="ui button primary voir" type="submit" id="toto">Cherche ...</button></td>
+                </fieldset>
+            </form>
+            <table class="ui celled table">
                 <thead>
                     <tr>
                         <th>Experience Num</th><th>ExperienceID</th><th>Qui</th> <th>Quand</th><th>Date Enregistrement</th><th>Voir</th>

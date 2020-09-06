@@ -16,6 +16,7 @@ export default abstract class cMyUI {
         this._logger = new cLogger(cEnvt.getDebugLevel(), id);
         this._ctrl = cControler.getIntance();
     }
+    
     public abstract draw(): string;
     public abstract addCallBackOnMyDialog(): void;
 

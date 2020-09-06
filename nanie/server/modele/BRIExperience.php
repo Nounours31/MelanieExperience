@@ -196,6 +196,27 @@ class BRIExperience extends iBRIModel {
         return $err;
     }
     
+    
+    public function getAllTerritoire (&$message) {
+        $ret = array();
+        $rc = $this -> _DB -> selectAsRest ('select uid, nom from '.BRIConst::DB_NOM_ListedesTerritoire.' order by uid');
+        if (!empty($rc)) {
+            for ($i = 0; $i < count($rc); $i++) {
+                array_push ($ret, $rc[$i]['nom']);
+            }
+        }
+
+        if (count ($ret) < 1) {
+            $err = new BRIError(1, 'Pas de nom trouve en table');
+        }
+        else {
+            $err = BRIError::S_OK();
+            $message = json_encode ($ret);
+        }
+
+        return $err;
+    }
+
     public function getAllMarquage (&$message) {
         $ret = array();
         $rc = $this -> _DB -> selectAsRest ('select uid, nom from '.BRIConst::DB_NOM_ListedesMarquages.' order by uid');
@@ -346,8 +367,8 @@ class BRIExperience extends iBRIModel {
             return $err;
         }
         
-        $sql = "insert into ".BRIConst::DB_NOM_ExperienceResultats." (`idexperience`, `marquage`, `SGeneral`, `SComparatif`, `typedetest`, `dateinsert`) VALUES ";
-        $sql .= "( ".$id_experience.", '".$allargs['marquage']."', ".$allargs['SGeneral'].", ".$allargs['SComparatif'].", '".$allargs['typedetest']."', '".date("Y-m-d H:i:s")."')";
+        $sql = "insert into ".BRIConst::DB_NOM_ExperienceResultats." (`idexperience`, `territoire`, `marquage`, `SGeneral`, `SComparatif`, `typedetest`, `dateinsert`) VALUES ";
+        $sql .= "( ".$id_experience.", '".$allargs['territoire']."','".$allargs['marquage']."', ".$allargs['SGeneral'].", ".$allargs['SComparatif'].", '".$allargs['typedetest']."', '".date("Y-m-d H:i:s")."')";
         $rc = $this -> _DB -> insertAsRest ($sql);
         if ($rc === FALSE) {
             $err = new BRIError (58, 'Impossible de ajouter les info generales');

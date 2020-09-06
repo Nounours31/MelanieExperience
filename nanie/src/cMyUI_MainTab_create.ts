@@ -1,38 +1,335 @@
 import { cExperience } from './Services/DB/cExperience';
+import { iResultatMessage, iGenotypeMessage } from './Services/DB/iOnMessageWithServer';
+import { iMyHtmlInfo, cTools } from './infra/cTools';
 import cMyUI from './cMyUI';
 
 
+
 export default class cMyUI_MainTab_create extends cMyUI {
-    private readonly _DefaultPersonneNom: string = 'Fages';
-    private readonly _DefaultPersonneNomInitiale: string = this._DefaultPersonneNom.charAt(0);
-    private readonly _idOKButton: string = 'SaisieExperience_OKButton';
-    private readonly _idDateExp: string = 'SaisieExperience_DateExp';
-    private readonly _idQui: string = 'SaisieExperience_Qui';
-    private readonly _idFiles: string = 'SaisieExperience_Files';
-    private readonly _idDivForMessageInfo: string = 'MainTab_DivForForm_Info';
-    private readonly _idMessageInfo: string = 'MainTab_UI_Info_MessageID';
-    private readonly _idExperienceNomPrefixe: string = 'MainTab_UI_Info_ExperienceAsLettre';
-    private readonly _idExperienceNumero: string = 'MainTab_UI_Info_idExperienceNumero';
-    private readonly _idExperienceExperiencetype: string = 'MainTab_UI_Info__idExperienceExperiencetype';
-    private readonly _idExperienceClef: string = 'MainTab_UI_Info_idExperienceClef';
+    private readonly _idCreationOKButton: string = 'cMyUI_MainTab_create_SaisieExperience_OKButton';
+    private readonly _idCreationExperienceGroupOfInfo: string = 'cMyUI_MainTab_create_SaisieExperience_ExpIDGroup';
+    private readonly _idCreationDateExp: string = 'cMyUI_MainTab_create_SaisieExperience_DateExp';
+    private readonly _idCreationQui: string = 'cMyUI_MainTab_create_SaisieExperience_Qui';
+    private readonly _idCreationFiles: string = 'cMyUI_MainTab_create_SaisieExperience_Files';
+    private readonly _idCreationDivForMessageInfo: string = 'cMyUI_MainTab_create_MainTab_DivForForm_Info';
+    private readonly _idCreationExperienceNomPrefixe: string = 'cMyUI_MainTab_create_MainTab_UI_Info_ExperienceAsLettre';
+    private readonly _idCreationExperienceExperiencetype: string = 'cMyUI_MainTab_create_MainTab_UI_Info__idExperienceExperiencetype';
+    private readonly _idCreationExperienceClef: string = 'cMyUI_MainTab_create_MainTab_UI_Info_idExperienceClef';
+    private readonly _idCreationExperienceNumero: string = 'cMyUI_MainTab_create_MainTab_UI_Info_idExperienceNumero';
+
 
     private readonly _My_Message_Classe : string = 'ClasseDesMessagesInfo';
 
+    private readonly _idUpdateOKButton: string = 'cMyUI_MainTab_ajout_idOKButton';
+    private readonly _idUpdateInputExp: string = 'cMyUI_MainTab_ajout_idInputExp';
+    private readonly _idUpdateSelectOnchromosome1: string = 'cMyUI_MainTab_ajout_idSelectOnchromosome1';
+    private readonly _idUpdateSelectOnchromosome2: string = 'cMyUI_MainTab_ajout_idSelectOnchromosome2';
+    private readonly _idUpdateSelectOnchromosome3: string = 'cMyUI_MainTab_ajout_idSelectOnchromosome3';
+    private readonly _idUpdateSelectOnchromosome4: string = 'cMyUI_MainTab_ajout_idSelectOnchromosome4';
+    private readonly _idUpdateSelectOnTestType: string = 'cMyUI_MainTab_ajout_idSelectOnTestType';
+    private readonly _idUpdateSelectOnMarquage: string = 'cMyUI_MainTab_ajout_idSelectOnMarquage';
+    private readonly _idUpdateSelectOnTerritoire: string = 'cMyUI_MainTab_ajout_idSelectOnTerritoire';
+    private readonly _idUpdateInputNbEchantillon: string = 'cMyUI_MainTab_ajout_idInputNbEchantillon';
+    private readonly _idUpdateInputSGeneral: string = 'cMyUI_MainTab_ajout__idInputSGeneral';
+    private readonly _idUpdateInputSComparatif: string = 'cMyUI_MainTab_ajout_idInputSComparatif';
+
+    // ----------------------------------------------------
+    // Nb genotype par defaut
+    // ----------------------------------------------------
+    private readonly _nbGenotype = 4;
 
     constructor () {
-        super ('MainTab');
+        super('cMyUI_MainTab_create');
     }
 
+
+    public draw (): string {
+        let retour : string = '';
+
+        // affichage de la zone de creation de l'experience
+        retour += '<div style="margin-left: 10px;"><fieldset><legend> Cr&eacute;ation d\'une experience en base </legend>'
+        retour += this.drawCreateDialog();
+        retour += '</fieldset></div>'
+
+        // Le separateur
+        retour += '<div class="ui horizontal divider">G&eacute;notypes associ&eacute;s</div>';
+
+        // affichage de la zone de mise a jour de l'experience
+        retour += '<div style="margin-left: 10px;"><fieldset><legend> Mise &agrave; jour des g&eacute;notypes associ&eacute;s &agrave; une experience en base </legend>'
+        retour += this.drawUpdateDialog();
+        retour += '</fieldset></div>';
+        return retour;
+    }
+
+    private drawCreateDialog(): string {
+        // -----------------------------------------------
+        // recup de la liste des personnes qui peuvent realiser une experience, et creation du select UI
+        // -----------------------------------------------
+        let DefaultPersonneNom: string = '';
+        let DefaultPersonneNomInitiale: string = '';
+        let allPersonnesOption: string = '';
+        let allPersonnes: string[] = cExperience.getAllPersone();
+        let selected : string = 'selected';
+        for (let i : number  = 0; i < allPersonnes.length; i++) {
+            selected = '';
+            if (i == 0) {
+                selected = 'selected';
+                DefaultPersonneNom = allPersonnes[i];
+                DefaultPersonneNomInitiale = DefaultPersonneNom.charAt (0);
+            }
+            allPersonnesOption += `<option value="${allPersonnes[i]}" ${selected}>${allPersonnes[i]}</option>`;
+        }
+
+        // -----------------------------------------------
+        // recup des initales possibles d'une experience, et creation du select UI
+        // -----------------------------------------------
+        let AllExperienceInitialeOption: string = '';
+        let AllExperienceInitiale: string[] = cExperience.getAllExperienceInitiale();
+        for (let i : number = 0; i < AllExperienceInitiale.length; i++) {
+            selected = '';
+            if (i == 0)
+                selected = 'selected';
+            AllExperienceInitialeOption += `<option value="${AllExperienceInitiale[i]}" ${selected}>${AllExperienceInitiale[i]}</option>`;
+        }
+
+
+        // -----------------------------------------------
+        // creation du dialogue
+        // -----------------------------------------------
+        let retour: string = `
+            <form class="ui form">
+                <!-- Experience ID -->
+                <div class="field">
+                    <label>Experience Id</label>
+                    <div id="${this._idCreationExperienceGroupOfInfo}">
+                        <div class="ui left labeled input">
+                            <input type="text" value="${DefaultPersonneNomInitiale}" id="${this._idCreationExperienceNomPrefixe}">
+                            <input type="number" value="0" id="${this._idCreationExperienceNumero}">
+                            <p style="font-size: x-large; margin:auto;">-</p>
+                            <select class="ui compact selection dropdown" id="${this._idCreationExperienceExperiencetype}">
+                                ${AllExperienceInitialeOption}
+                            </select>
+                            <input type="number" value="0" id="${this._idCreationExperienceClef}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- date de le Experience -->
+                <div class="field">
+                    <label>Date de l'experience</label>
+                    <input type="date" name="date-exp" value="2020-10-01" min="2020-10-01" id="${this._idCreationDateExp}"/>
+                </div>
+
+                <!-- qui a fait le Experience -->
+                <div class="field">
+                    <label>Qui a realise l'experience?</label>
+                    <select class="ui compact selection dropdown" id="${this._idCreationQui}">
+                        ${allPersonnesOption}
+                    </select>
+                </div>
+
+                <!-- Fichier associed  -->
+                <div class="field">
+                    <label>Lien vers les images</label>
+                    <input type="file" name="expImage" accept="*" multiple id="${this._idCreationFiles}">
+                </div>
+
+                <!-- Zone a message  -->
+                <div id="${this._idCreationDivForMessageInfo}"></div>
+
+                <!-- Validation  -->
+                <button class="ui button pink right floated" type="submit" id="${this._idCreationOKButton}">Cr&eacute;ation de l\'exp&eacute;rience !</button>
+            </form>`;
+
+        return retour;
+    }
+
+    private drawUpdateDialog(): string {
+        let retour: string;
+
+        // ----------------------------------------------------
+        // Nb genotype par defaut
+        // ----------------------------------------------------
+        const nbLigne = this._nbGenotype;
+
+        // ----------------------------------------------------
+        // Les infos a afficher dans l'UI 
+        // ----------------------------------------------------
+        let infosForHTML: iMyHtmlInfo;
+        let selectchromosome1: string[] = ['', '', '', ''];
+        let selectchromosome2: string[] = ['', '', '', ''];
+        let selectchromosome3: string[] = ['', '', '', ''];
+        let selectchromosome4: string[] = ['', '', '', ''];
+        let InputNbEchantillon: string[] = ['', '', '', ''];
+        let selectTypeTest: string;
+        let selectMarquage: string;
+        let selectTerritoire: string;
+        let InputSGeneral: string;
+        let InputSComparatif: string;
+
+        // ----------------------------------------------------
+        // Recup des info en DB et construction des Select generiques
+        // ----------------------------------------------------
+        for (let i = 0; i < nbLigne; i++) {
+            infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnchromosome1}_${i}` };
+            selectchromosome1[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome1(), infosForHTML);
+
+            infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnchromosome2}_${i}` };
+            selectchromosome2[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome2(), infosForHTML);
+
+            infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnchromosome3}_${i}` };
+            selectchromosome3[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome3(), infosForHTML);
+
+            infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnchromosome4}_${i}` };
+            selectchromosome4[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome4(), infosForHTML);
+
+            infosForHTML = { 'class': 'myInputInt', 'type': 'number', 'id': `${this._idUpdateInputNbEchantillon}_${i}` };
+            InputNbEchantillon[i] = cTools.BuildInputInt('0', infosForHTML);
+        }
+        infosForHTML = { 'class': 'myInputFloat', 'type': 'number', 'id': `${this._idUpdateInputSGeneral}`, 'placeholder': '1.79e-11' };
+        InputSGeneral = cTools.BuildInputInt('1', infosForHTML);
+
+        infosForHTML = { 'class': 'myInputFloat', 'type': 'number', 'id': `${this._idUpdateInputSComparatif}`, 'placeholder': '1.79e-11' };
+        InputSComparatif = cTools.BuildInputInt('1', infosForHTML);
+
+
+        infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnTestType}` };
+        selectTypeTest = cTools.BuildSelectFromTab(cExperience.getAllTestType(), infosForHTML);
+
+        infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnMarquage}` };
+        selectMarquage = cTools.BuildSelectFromTab(cExperience.getAllMarquage(), infosForHTML);
+
+        infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnTerritoire}` };
+        selectTerritoire = cTools.BuildSelectFromTab(cExperience.getAllTerritoire(), infosForHTML);
+
+
+        // ----------------------------------------------------
+        // Contructin de l'UI
+        // ----------------------------------------------------
+        retour = `
+            <form class="ui form">
+                <button class="ui button pink right floated" type="submit" id="${this._idUpdateOKButton}">OK !</button>
+                <div class="ui labeled input">
+                    <div class="ui label">
+                        Experience Id
+                    </div>
+                    <!-- Recup du nom de l'exprience de l'UI OU par callback ATTENTION-->
+                    <input type="text" placeholder="[lettre][chiffre]-[lettre][chiffre]" id="${this._idUpdateInputExp}"/>
+                </div>
+                <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>Genotype</th><th>territoire</th><th>chromosomesome 1</th> <th>chromosomesome 2</th> <th>chromosomesome 3</th><th>chromosomesome 4</th>
+                            <th>Nb Echantillon</th><th>Marquage</th><th>S general</th><th>S comparatif</th><th>Type test</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+        for (let i = 0; i < nbLigne; i++) {
+            if (i == 0) {
+                retour += `
+                    <tr>
+                        <td>G ${i + 1}</td>
+                            <!-- le territoire de tous les chromosomes -->
+                            <td rowspan="${nbLigne}">${selectTerritoire}</td>
+
+                            <!-- les chromosomes -->
+                            <td>${selectchromosome1[i]}</td><td>${selectchromosome2[i]}</td><td>${selectchromosome3[i]}</td><td>${selectchromosome4[i]}</td> <td>${InputNbEchantillon[i]}</td>
+
+                            <!-- les info de tous les chromo -->
+                            <td rowspan="${nbLigne}">${selectMarquage}</td>
+                            <td rowspan="${nbLigne}">${InputSGeneral}</td>
+                            <td rowspan="${nbLigne}">${InputSComparatif}</td>
+                            <td rowspan="${nbLigne}">${selectTypeTest}</td>
+                    </tr>`;
+            }
+            else {
+                retour += `
+                    <tr>
+                        <td>G ${i + 1}</td>
+
+                        <!-- les chromosomes -->
+                        <td>${selectchromosome1[i]}</td><td>${selectchromosome2[i]}</td><td>${selectchromosome3[i]}</td><td>${selectchromosome4[i]}</td><td>${InputNbEchantillon[i]}</td>
+                    </tr>`;
+            }
+        }
+        retour += `
+                </tbody>
+                </table>
+            </form>
+        `;
+
+        return retour;
+    }
+
+
     public addCallBackOnMyDialog(): void {
+        this.addCallBackOnMyDialog_create();
+        this.addCallBackOnMyDialog_ajout();
+        return;
+    }
+
+
+    private addCallBackOnMyDialog_ajout(): void {
+        // activer les sementicUI du dialog
+
+        // choisir la tab par defaut
+        // $('.ui .item').removeClass('active');
+        // $(`#${this._idTabSaisie}`).addClass('active');
+
+        let me: cMyUI_MainTab_create = this;
+        $(`#${me._idCreationExperienceGroupOfInfo}`).on('change', function (event: JQuery.ChangeEvent) {
+            let lettreNomPrefixExpID : string = $(`#${me._idCreationExperienceNomPrefixe}`).val() as string;
+            let chiffreNumExpId : number = $(`#${me._idCreationExperienceNumero}`).val() as number;
+            let lettreTypeExpId : string = $(`#${me._idCreationExperienceExperiencetype}`).val() as string;
+            let chiffreClefExpId : number = $(`#${me._idCreationExperienceClef}`).val() as number;
+            let ExpIdName = lettreNomPrefixExpID + chiffreNumExpId.toString() + '-' + lettreTypeExpId + chiffreClefExpId.toString();
+            $(`#${me._idUpdateInputExp}`).val(ExpIdName);
+        });
+
+
+        $(`#${me._idCreationOKButton}`).on('click', function (event: JQuery.ClickEvent) {
+            let allInfosFromPage: iResultatMessage = cExperience.create_iResultatMessage();
+            allInfosFromPage.experiencestringid = <string>$(`#${me._idUpdateInputExp}`).val();
+            allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
+
+            allInfosFromPage.marquage = <string>$(`#${me._idUpdateSelectOnMarquage}`).val();
+            allInfosFromPage.territoire = <string>$(`#${me._idUpdateSelectOnTerritoire}`).val();
+            allInfosFromPage.SComparatif = <number>$(`#${me._idUpdateInputSComparatif}`).val();
+            allInfosFromPage.SGeneral = <number>$(`#${me._idUpdateInputSGeneral}`).val();
+            allInfosFromPage.typedetest = <string>$(`#${me._idUpdateSelectOnTestType}`).val();
+
+            let nbValuatedGenotype: number = 0;
+            for (let i = 0; i < me._nbGenotype; i++) {
+                let allInfosFromGenotype: iGenotypeMessage = cExperience.create_iGenotypeMessage();
+                allInfosFromGenotype.chromosome1 = <string>$(`#${me._idUpdateSelectOnchromosome1}_${i}`).val();
+                allInfosFromGenotype.chromosome2 = <string>$(`#${me._idUpdateSelectOnchromosome2}_${i}`).val();
+                allInfosFromGenotype.chromosome3 = <string>$(`#${me._idUpdateSelectOnchromosome3}_${i}`).val();
+                allInfosFromGenotype.chromosome4 = <string>$(`#${me._idUpdateSelectOnchromosome4}_${i}`).val();
+                allInfosFromGenotype.nbechantillon = <number>$(`#${me._idUpdateInputNbEchantillon}_${i}`).val();
+                if ((allInfosFromPage.Genotype != null) && (allInfosFromGenotype.nbechantillon > 0)) {
+                    allInfosFromPage.Genotype.push(allInfosFromGenotype);
+                    nbValuatedGenotype++;
+                }
+            }
+            allInfosFromPage.NbGenotype = nbValuatedGenotype;
+
+            let id = cExperience.updateDBExperience(allInfosFromPage);
+            event.stopImmediatePropagation();
+            return false;
+        });
+    }
+    private addCallBackOnMyDialog_create(): void {
         this.checkFormContenu();
         this.lienExprienceId_NomManip();
     }
+
     private lienExprienceId_NomManip(): void {
         let me: cMyUI_MainTab_create = this;
-        $(`#${this._idQui}`).on ('change', function (event) {
-            let val: string = <string> $(`#${me._idQui}`).val();
+        $(`#${this._idCreationQui}`).on('change', function (event) {
+            let val: string = <string>$(`#${me._idCreationQui}`).val();
             let valEntete = val.charAt(0);
-            $(`#${me._idExperienceNomPrefixe}`).val(valEntete);
+            $(`#${me._idCreationExperienceNomPrefixe}`).val(valEntete);
+            $(`#${me._idCreationExperienceGroupOfInfo}`).trigger('change');
         });
     }
 
@@ -43,12 +340,12 @@ export default class cMyUI_MainTab_create extends cMyUI {
     // ---------------------------------------------------------------------------
     private checkFormContenu(): void {
         let me: cMyUI_MainTab_create = this;
-        $(`#${this._idOKButton}`).on ('click', function (event) {
+        $(`#${this._idCreationOKButton}`).on('click', function (event) {
 
             // les 3 champs a controler
-            let date : string = <string> $(`#${me._idDateExp}`).val();
-            let qui: string = <string> $(`#${me._idQui}`).val();
-            let files: FileList = $(`#${me._idFiles}`).prop('files');
+            let date: string = <string>$(`#${me._idCreationDateExp}`).val();
+            let qui: string = <string>$(`#${me._idCreationQui}`).val();
+            let files: FileList = $(`#${me._idCreationFiles}`).prop('files');
 
             // errurs si 1 manque
             let onError: boolean = false;
@@ -73,18 +370,18 @@ export default class cMyUI_MainTab_create extends cMyUI {
 
             // affiche de l'erreur
             if (onError) {
-                $(`#${me._idDivForMessageInfo}`).append(onErrorMessage);
-                $(`#${me._idDivForMessageInfo}`).on('click', function () {
+                $(`#${me._idCreationDivForMessageInfo}`).append(onErrorMessage);
+                $(`#${me._idCreationDivForMessageInfo}`).on('click', function () {
                     $(`.${me._My_Message_Classe}`).remove();
                 });
             }
             else {
                 // envoie en DB
-                let experienceId : string = '';
-                experienceId += $(`#${me._idExperienceNomPrefixe}`).val();
-                experienceId += $(`#${me._idExperienceNumero}`).val();
-                experienceId += '-' + $(`#${me._idExperienceExperiencetype}`).val();
-                experienceId += $(`#${me._idExperienceClef}`).val();
+                let experienceId: string = '';
+                experienceId += $(`#${me._idCreationExperienceNomPrefixe}`).val();
+                experienceId += $(`#${me._idCreationExperienceNumero}`).val();
+                experienceId += '-' + $(`#${me._idCreationExperienceExperiencetype}`).val();
+                experienceId += $(`#${me._idCreationExperienceClef}`).val();
 
                 let id: number = cExperience.createDBExperience(experienceId, date, qui);
                 if (id > 0) {
@@ -97,78 +394,21 @@ export default class cMyUI_MainTab_create extends cMyUI {
                                 </div>
                                 <p> ${experienceId}, ${date}, ${qui}, ${files} </p>`;
                     onOKMessage += '</div>';
-                    $(`#${me._idDivForMessageInfo}`).append(onOKMessage);
-                    $(`#${me._idDivForMessageInfo}`).on('click', function () {
+                    $(`#${me._idCreationDivForMessageInfo}`).append(onOKMessage);
+                    $(`#${me._idCreationDivForMessageInfo}`).on('click', function () {
                         $(`.${me._My_Message_Classe}`).remove();
                     });
                     me._ctrl.setLastExp(experienceId, id);
                 }
                 else {
-                    alert ('Impossible de mettre en base cette demande');
+                    alert('Impossible de mettre en base cette demande');
                 }
             }
-            event.stopPropagation ();
+            event.stopPropagation();
             return false;
 
         });
     }
 
-    public draw (): string {
-        let allPersonnesOption: string = '';
-        let allPersonnes: string[] = cExperience.getAllPersone();
-        for (let i = 0; i < allPersonnes.length; i++) {
-            allPersonnesOption += `<option value="${allPersonnes[i]}">${allPersonnes[i]}</option>`;
-        }
-
-        let AllExperienceInitialeOption: string = '';
-        let AllExperienceInitiale: string[] = cExperience.getAllExperienceInitiale();
-        for (let i = 0; i < AllExperienceInitiale.length; i++) {
-            AllExperienceInitialeOption += `<option value="${AllExperienceInitiale[i]}">${AllExperienceInitiale[i]}</option>`;
-        }
-
-
-        let retour : string = `
-            <form class="ui form">
-                <div class="field">
-                    <label>Experience Id</label>
-                    <div class="ui left labeled input">
-                        <input type="text" value="${this._DefaultPersonneNomInitiale}" id="${this._idExperienceNomPrefixe}">
-                        <input type="number" value="0" id="${this._idExperienceNumero}">
-                        <p style="font-size: x-large; margin:auto;">-</p>
-                        <select class="ui compact selection dropdown" id="${this._idExperienceExperiencetype}">
-                            <option selected value="A">A</option>
-                            ${AllExperienceInitialeOption}
-                            <option value="autre">Autres</option>
-                        </select>
-                        <input type="number" value="0" id="${this._idExperienceClef}">
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label>Date de l'experience</label>
-                    <input type="date" name="date-exp" value="2020-10-01" min="2020-10-01" id="${this._idDateExp}"/>
-                </div>
-
-                <div class="field">
-                    <label>Qui a realise l'experience?</label>
-                    <select class="ui compact selection dropdown" id="${this._idQui}">
-                        <option selected value="${this._DefaultPersonneNom}">${this._DefaultPersonneNom}</option>
-                        ${allPersonnesOption}
-                        <option value="autre">Autres</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>Lien vers les images</label>
-                    <input type="file" name="expImage" accept="image/png, image/jpeg" multiple id="${this._idFiles}">
-                </div>
-
-                <div id="${this._idDivForMessageInfo}"></div>
-
-                <button class="ui button pink" type="submit" id="${this._idOKButton}">OK !</button>
-            </form>`;
-
-        return retour;
-    }
 }
 

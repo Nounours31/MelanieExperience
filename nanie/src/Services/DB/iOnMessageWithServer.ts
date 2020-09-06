@@ -12,6 +12,7 @@ export interface iResultatMessage {
     uid?: number;
     experiencestringid?: string;
     idexperience: number;
+    territoire:string;
     marquage: string;
     SGeneral: number;
     SComparatif: number;

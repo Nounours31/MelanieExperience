@@ -19,6 +19,7 @@ export declare class cExperience {
     static dumpFromDB(id: number, _idResultatDB: string): void;
     static getAllTestType(): string[];
     static getAllMarquage(): string[];
+    static getAllTerritoire(): string[];
     static getAllchromosome1(): string[];
     static getAllchromosome2(): string[];
     static getAllchromosome3(): string[];

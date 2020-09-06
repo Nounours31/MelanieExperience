@@ -41,4 +41,5 @@ class BRIConst {
     const DB_NOM_ListedesPersonnes = 'personnes';
     const DB_NOM_ListedesTypeExperience = 'typedetestdesexperiences';
     const DB_NOM_ListedesChromosomes = 'chromosomes';
+    const DB_NOM_ListedesTerritoire = 'territoireexperiences';
 }

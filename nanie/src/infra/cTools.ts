@@ -4,6 +4,7 @@ export interface iMyHtmlInfo {
     type?: string;
     indiceselected?: number;
     placeholder?: string;
+    style?:string;
 }
 
 export class cTools {
@@ -14,6 +15,9 @@ export class cTools {
         retour = `<select `;
         if (info['class'] !== undefined) {
             retour += `class="${info['class']}" `;
+        }
+        if (info['style'] !== undefined) {
+            retour += `style="${info['style']}" `;
         }
         if (info['id'] !== undefined) {
             retour += `id="${info['id']}" `;

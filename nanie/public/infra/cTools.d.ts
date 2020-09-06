@@ -4,6 +4,7 @@ export interface iMyHtmlInfo {
     type?: string;
     indiceselected?: number;
     placeholder?: string;
+    style?: string;
 }
 export declare class cTools {
     static BuildSelectFromTab(vals: string[], info: iMyHtmlInfo): string;

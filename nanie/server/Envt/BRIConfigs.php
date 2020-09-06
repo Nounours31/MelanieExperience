@@ -8,12 +8,12 @@ abstract class eConfigConnues
 }
 
 class BRIConfigs {
-    public const _currentConfig = eConfigConnues::Nanie;
+    const _currentConfig = eConfigConnues::Paps;
 
-    public const _DBUser = [ 'root', 'root' ];
-    public const _DBPassword = [ '', '' ];
-    public const _DBBaseName = [ 'melanie_fages', 'melanie_fages' ];
-    public const _DBHost = [ '127.0.0.1', '127.0.0.1' ];
-    public const _DBPort = [ 3307, 3306 ];
+     const _DBUser = [ 'root', 'root' ];
+     const _DBPassword = [ '', '' ];
+     const _DBBaseName = [ 'melanie_fages', 'melanie_fages' ];
+     const _DBHost = [ '127.0.0.1', '127.0.0.1' ];
+     const _DBPort = [ 3307, 3306 ];
 }
 ?>

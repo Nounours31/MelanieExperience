@@ -122,6 +122,7 @@ DROP TABLE IF EXISTS `experience_resultatdestests`;
 CREATE TABLE IF NOT EXISTS `experience_resultatdestests` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `idexperience` int(11) NOT NULL,
+  `territoire` text COLLATE utf8_bin NOT NULL,
   `marquage` text COLLATE utf8_bin NOT NULL,
   `SGeneral` double NOT NULL,
   `SComparatif` double NOT NULL,
@@ -158,9 +159,22 @@ INSERT INTO `initialesexperience` (`uid`, `Nom`) VALUES
 
 -- --------------------------------------------------------
 
+DROP TABLE IF EXISTS `territoireexperiences`;
+CREATE TABLE IF NOT EXISTS `territoireexperiences` (
+  `uid` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`uid`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+INSERT INTO `territoireexperiences` (`uid`, `nom`) VALUES
+
+(1, '-'),
+(2, 'Vg'),
+(3, 'eyeless');
+
 --
--- Table structure for table `marquagedesexperiences`
+-- Dumping data for table `marquagedesexperiences`
 --
+
 
 DROP TABLE IF EXISTS `marquagedesexperiences`;
 CREATE TABLE IF NOT EXISTS `marquagedesexperiences` (

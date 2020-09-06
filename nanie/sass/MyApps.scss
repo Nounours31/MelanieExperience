@@ -36,3 +36,19 @@
 .ui.grid.container {
     width: 100% !important;
 }
+
+
+body > .grid.login {
+      height: 100%;
+    }
+div.login {
+      height: 100%;
+    }
+.login.image {
+      margin-top: -100px;
+    }
+.login.column {
+      max-width: 450px;
+      display: flex !important;
+    justify-content: center;
+    }

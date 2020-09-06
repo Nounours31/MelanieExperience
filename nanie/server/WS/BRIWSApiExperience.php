@@ -86,7 +86,9 @@ class BRIWSApiExperience extends BRIWSApi
                 $err = $Experience->getExperience_ResultatImage($id, $referenceMsgOut);
                 break;
 
-                
+            case "getAllTerritoire":
+                $err = $Experience->getAllTerritoire($referenceMsgOut);
+                break;
 
             case "getAllTestTypes":
                 $err = $Experience->getAllTestTypes($referenceMsgOut);

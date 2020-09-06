@@ -223,6 +223,8 @@ export class cExperience {
         args.push(arg1);
         arg1 = cAjaxSendMessage.buildArgsFromString('typedetest', experience.typedetest);
         args.push(arg1);
+        arg1 = cAjaxSendMessage.buildArgsFromString('territoire', experience.territoire);
+        args.push(arg1);
         if (experience.Genotype != null) {
             arg1 = cAjaxSendMessage.buildArgsFromArray('Genotype', experience.Genotype);
             args.push(arg1);
@@ -279,7 +281,26 @@ export class cExperience {
             }
         }
         return retour;
+    }
 
+    
+    static getAllTerritoire(): string[] {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour: string[] = [];
+
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getAllTerritoire', null);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let jsonObject: JSON = JSON.parse(response);
+            if (Array.isArray(jsonObject)) {
+                jsonObject.forEach(element => {
+                    retour.push(element);
+                });
+            }
+        }
+        return retour;
     }
 
     static getAllchromosome1(): string[] {
@@ -319,7 +340,8 @@ export class cExperience {
             'idexperience': 0,
             'experiencestringid': '',
             'Genotype' : [],
-            'marquage' : '',
+            'marquage': '',
+            'territoire': '',
             'NbGenotype' : 0,
             'SComparatif' : 0,
             'SGeneral' : 0,
