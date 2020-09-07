@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.9
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 04, 2020 at 01:23 PM
--- Server version: 5.7.21
--- PHP Version: 5.6.35
+-- Generation Time: Sep 07, 2020 at 04:59 PM
+-- Server version: 5.7.26
+-- PHP Version: 5.6.40
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,7 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `melanie_fages`
 --
-DROP DATABASE IF EXISTS `melanie_fages`;
 CREATE DATABASE IF NOT EXISTS `melanie_fages` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
 USE `melanie_fages`;
 
@@ -62,11 +61,7 @@ CREATE TABLE IF NOT EXISTS `experience` (
   `faiteparqui` text COLLATE utf8_bin NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `experience`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -82,12 +77,7 @@ CREATE TABLE IF NOT EXISTS `experience_file` (
   `path` text COLLATE utf8_bin NOT NULL,
   `url` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `experience_file`
---
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -106,11 +96,7 @@ CREATE TABLE IF NOT EXISTS `experience_listegenotype` (
   `nbechantillon` int(11) NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `experience_listegenotype`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -129,10 +115,7 @@ CREATE TABLE IF NOT EXISTS `experience_resultatdestests` (
   `typedetest` text COLLATE utf8_bin NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -159,22 +142,9 @@ INSERT INTO `initialesexperience` (`uid`, `Nom`) VALUES
 
 -- --------------------------------------------------------
 
-DROP TABLE IF EXISTS `territoireexperiences`;
-CREATE TABLE IF NOT EXISTS `territoireexperiences` (
-  `uid` int(11) NOT NULL AUTO_INCREMENT,
-  `nom` text COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-INSERT INTO `territoireexperiences` (`uid`, `nom`) VALUES
-
-(1, '-'),
-(2, 'Vg'),
-(3, 'eyeless');
-
 --
--- Dumping data for table `marquagedesexperiences`
+-- Table structure for table `marquagedesexperiences`
 --
-
 
 DROP TABLE IF EXISTS `marquagedesexperiences`;
 CREATE TABLE IF NOT EXISTS `marquagedesexperiences` (
@@ -202,6 +172,11 @@ DROP TABLE IF EXISTS `personnes`;
 CREATE TABLE IF NOT EXISTS `personnes` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
+  `email` text COLLATE utf8_bin NOT NULL,
+  `alias` text COLLATE utf8_bin NOT NULL,
+  `passwd` text COLLATE utf8_bin NOT NULL,
+  `token` text COLLATE utf8_bin NOT NULL,
+  `validite` datetime DEFAULT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -209,10 +184,32 @@ CREATE TABLE IF NOT EXISTS `personnes` (
 -- Dumping data for table `personnes`
 --
 
-INSERT INTO `personnes` (`uid`, `nom`) VALUES
-(1, 'Melanie'),
-(2, 'Sylviana'),
-(3, 'pap\'s');
+INSERT INTO `personnes` (`uid`, `nom`, `email`, `alias`, `passwd`, `token`, `validite`) VALUES
+(1, 'Melanie', 'internet.fages@free.fr', '', 'test', '-', '2020-09-08 00:00:00'),
+(2, 'Sylviana', 'internet.fages@free.fr', '', 'test', '-', '2020-09-08 00:00:00'),
+(3, 'pap\'s', 'internet.fages@free.fr', 'Nounours31', 'test', '786a9611b987aa4ea9ac2259651eaf72', '2020-09-07 13:49:50');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `territoireexperiences`
+--
+
+DROP TABLE IF EXISTS `territoireexperiences`;
+CREATE TABLE IF NOT EXISTS `territoireexperiences` (
+  `uid` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`uid`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Dumping data for table `territoireexperiences`
+--
+
+INSERT INTO `territoireexperiences` (`uid`, `nom`) VALUES
+(1, '-'),
+(2, 'Vg'),
+(3, 'eyeless');
 
 -- --------------------------------------------------------
 

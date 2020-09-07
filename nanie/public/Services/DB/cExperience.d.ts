@@ -6,6 +6,8 @@ export declare class cExperience {
     private constructor();
     private static getInstance;
     static getAllPersone(): string[];
+    static isUserExistInDB(alias: string, email: string): boolean;
+    static createUserInDB(alias: string, email: string, pwd: string): boolean;
     static getMd5PasswdFromMailorAlias(emailOralias: string, type: string): string | null;
     static setLogin(emailOralias: string, type: string): boolean;
     static checkToken(token: string): boolean;

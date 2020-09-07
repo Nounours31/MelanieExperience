@@ -9,6 +9,8 @@ export default class cMyUI_login extends cMyUI {
     private readonly _idLoggonButton : string = 'Login_idLoginButton';
     private readonly _idInputemail : string = 'Login_idNameInput';
     private readonly _idInputpwd : string = 'Login_idPWDInput';
+    private readonly _idLoginDivForMessageInfo : string = 'Login_idMessage';
+    
 
     constructor () {
         super('cMyUI_login');
@@ -42,6 +44,8 @@ export default class cMyUI_login extends cMyUI {
     
             return false;
         });
+
+        this.addCallBackOnMessage(this._idLoginDivForMessageInfo);
     }
 
 
@@ -85,6 +89,10 @@ export default class cMyUI_login extends cMyUI {
                     <div class="ui message">
                         Pour s'enregistrer voir Nanie <a href="?inscription" target="_blank">Comptes</a>
                     </div>
+
+                    <!-- Zone a message  -->
+                    <div id="${this._idLoginDivForMessageInfo}"></div>
+    
                 </div>
             </div>
             <div>&copy; Nanie Fages (octobre 2020) - UVSQ - Licence MIT</div>

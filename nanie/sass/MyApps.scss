@@ -52,3 +52,18 @@ div.login {
       display: flex !important;
     justify-content: center;
     }
+
+body > .grid.inscription {
+      height: 100%;
+    }
+div.inscription {
+      height: 100%;
+    }
+.inscription.image {
+      margin-top: -100px;
+    }
+.inscription.column {
+      max-width: 450px;
+      display: flex !important;
+    justify-content: center;
+    }

@@ -34,7 +34,8 @@ class NanieApps {
             if ((rootDiv != null) && (newHTML != null)) {
                 rootDiv.append(newHTML);
             }
-            inscription.addCallBackOnMyDialog();        }
+            inscription.addCallBackOnMyDialog();        
+        }
         else {
             // ------------------------------------------------------------
             // Appel de la methode draw de tous les dialogues et affichage

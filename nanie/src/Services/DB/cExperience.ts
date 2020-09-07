@@ -37,6 +37,52 @@ export class cExperience {
         return retour;
     }
 
+        static isUserExistInDB(alias:string, email:string) : boolean {
+            let me: cExperience = cExperience.getInstance();
+            me._ajax.reset();
+            let retour : string[] = [];
+    
+            let args: iAjaxSendMessageArgs[] = [];
+            let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('emailOralias', emailOralias);
+            args.push(arg);
+            arg = cAjaxSendMessage.buildArgsFromString('type', type);
+            args.push(arg);
+            let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'setLogin', args);
+            me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+            if (me._ajax.getStatus() == 0) {
+                let response : string = me._ajax.getData();
+                if (response.length > 0) {
+                    me._ajax.setToken(response);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static createUserInDB(alias:string, email:string, pwd:string) : boolean {
+            let me: cExperience = cExperience.getInstance();
+            me._ajax.reset();
+            let retour : string[] = [];
+    
+            let args: iAjaxSendMessageArgs[] = [];
+            let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('emailOralias', emailOralias);
+            args.push(arg);
+            arg = cAjaxSendMessage.buildArgsFromString('type', type);
+            args.push(arg);
+            let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'setLogin', args);
+            me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+            if (me._ajax.getStatus() == 0) {
+                let response : string = me._ajax.getData();
+                if (response.length > 0) {
+                    me._ajax.setToken(response);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        
+
     static getMd5PasswdFromMailorAlias(emailOralias:string, type:string) : string | null {
         let me: cExperience = cExperience.getInstance();
         me._ajax.reset();
