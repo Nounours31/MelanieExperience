@@ -45,5 +45,71 @@ class BRIPersonnes extends iBRIModel {
 
         return $err;
     }
+
+    public function getMd5PasswdFromMailorAlias ($args, &$message) {
+        $message = '';
+        $sql = 'select passwd from '.BRIConst::DB_NOM_ListedesPersonnes;
+        $whereClause = " where (email ='".$args['emailOralias']."')";
+        if (isset ($args['type']) && (strcmp ($args['type'], "alias") == 0)) 
+            $whereClause = " where (alias ='".$args['emailOralias']."')";
+
+        $sql = $sql . $whereClause;
+        $rc = $this -> _DB -> selectAsRest ($sql);
+        if (!empty($rc)) {
+            $message = md5 ($rc[0]['passwd']);
+        }
+
+        if (count ($rc) < 1) {
+            $err = new BRIError(1, 'Pas de nom trouve en table');
+        }
+        else {
+            $err = BRIError::S_OK();
+        }
+
+        return $err;
+    }
+
+    public function setLogin ($args, &$message) {
+        $token = md5($args['emailOralias'] . date("Y.m.d-h:i:sa"));
+        $maxTime = date('Y-m-d H:i:s', strtotime ("+1 hour"));
+
+        $sql = 'update '.BRIConst::DB_NOM_ListedesPersonnes." set token = '".$token."', validite ='".$maxTime."' ";
+        $whereClause = " where (email = '".$args['emailOralias']."')";
+        if (isset ($args['type']) && (strcmp ($args['type'], "alias") == 0)) 
+            $whereClause = " where (alias = '".$args['emailOralias']."')";
+
+        $sql = $sql . $whereClause;
+        $rc = $this -> _DB -> updateAsRest ($sql);
+
+        BRIPersonnes::isTokenValid($token);
+
+        $message = $token;
+        $err = BRIError::S_OK();
+        return $err;
+    }
+
+    public function updateToken ($token) {
+        if ((!isset ($token)) || (strlen ($token) < 1))
+            return false;
+
+        $maxTime = date('Y-m-d H:i:s', strtotime ("+1 hour"));
+        $sql = 'update '.BRIConst::DB_NOM_ListedesPersonnes." set validite ='".$maxTime."' ";
+        $whereClause = " where (token = '".$token."')";
+        $sql = $sql . $whereClause;
+        $rc = $this -> _DB -> updateAsRest ($sql);
+        return true;
+    }
+
+    public function isTokenValid ($token) {
+        if ((!isset ($token)) || (strlen ($token) < 1))
+            return false;
+        $sql = 'select uid from '.BRIConst::DB_NOM_ListedesPersonnes." where (token = '".$token."')";
+        $rc = $this -> _DB -> selectAsRest ($sql);
+        if (empty($rc)) {
+            return false;
+        }
+        return true;
+    }
+
 }
 ?>

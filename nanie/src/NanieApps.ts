@@ -2,6 +2,8 @@ import '../sass/myApps.scss';
 import $ from 'jquery';
 import cMyUI_MainTab from './cMyUI_MainTab';
 import cMyUI_login from './cMyUI_login';
+import cEnvt from './infra/cEnvt';
+import { cExperience } from './Services/DB/cExperience';
 
 class NanieApps {
 
@@ -20,21 +22,30 @@ class NanieApps {
         // ------------------------------------------------------------
         // Appel de la methode draw de tous les dialogues et affichage
         // ------------------------------------------------------------
-        let newHTML: string = login.draw();
-        if ((rootDiv != null) && (newHTML != null)) {
-            rootDiv.append(newHTML);
-        }
-        login.addCallBackOnMyDialog();
-/*
-        let newHTML: string = dialog.draw();
-        if ((rootDiv != null) && (newHTML != null)) {
-            rootDiv.append(newHTML);
+        let isTokenOK : boolean = false;
+        let myStorage : Storage = localStorage;
+        if (myStorage.hasOwnProperty (cEnvt._tokenName)) {
+            isTokenOK = cExperience.checkToken (myStorage.getItem (cEnvt._tokenName) as string);
         }
 
-        // ------------------------------------------------------------
-        // chargement des callback
-        // ------------------------------------------------------------
-        dialog.addCallBackOnMyDialog(); */
+        if (!isTokenOK) {
+            let newHTML: string = login.draw();
+            if ((rootDiv != null) && (newHTML != null)) {
+                rootDiv.append(newHTML);
+            }
+            login.addCallBackOnMyDialog();
+        }
+        else {
+            let newHTML: string = dialog.draw();
+            if ((rootDiv != null) && (newHTML != null)) {
+                rootDiv.append(newHTML);
+            }
+
+            // ------------------------------------------------------------
+            // chargement des callback
+            // ------------------------------------------------------------
+            dialog.addCallBackOnMyDialog(); 
+        }
     }
 }
 
