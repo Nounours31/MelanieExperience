@@ -83,7 +83,7 @@ export default class cMyUI_login extends cMyUI {
                     </form>
 
                     <div class="ui message">
-                        Pour s'enregistrer voir Nanie <a href="./inscription.html" target="_blank">Comptes</a>
+                        Pour s'enregistrer voir Nanie <a href="?inscription" target="_blank">Comptes</a>
                     </div>
                 </div>
             </div>
