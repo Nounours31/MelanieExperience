@@ -37,45 +37,59 @@ export class cExperience {
         return retour;
     }
 
-        static isUserExistInDB(alias:string, email:string) : boolean {
+        static isUserExistInDB(nom:string, alias:string, email:string) : boolean {
             let me: cExperience = cExperience.getInstance();
             me._ajax.reset();
             let retour : string[] = [];
     
             let args: iAjaxSendMessageArgs[] = [];
-            let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('emailOralias', emailOralias);
+            let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('alias', alias);
             args.push(arg);
-            arg = cAjaxSendMessage.buildArgsFromString('type', type);
+            arg = cAjaxSendMessage.buildArgsFromString('email', email);
             args.push(arg);
-            let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'setLogin', args);
+            arg = cAjaxSendMessage.buildArgsFromString('nom', nom);
+            args.push(arg);
+            let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'isUserExistInDB', args);
             me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
             if (me._ajax.getStatus() == 0) {
                 let response : string = me._ajax.getData();
                 if (response.length > 0) {
-                    me._ajax.setToken(response);
-                    return true;
+                    if (response === 'false') 
+                        return false;
+                    if (response === 'true') 
+                        return true;
                 }
             }
             return false;
         }
 
-        static createUserInDB(alias:string, email:string, pwd:string) : boolean {
+        static createUserInDB(nom:string, alias:string, email:string, pwd:string) : boolean {
             let me: cExperience = cExperience.getInstance();
             me._ajax.reset();
             let retour : string[] = [];
     
             let args: iAjaxSendMessageArgs[] = [];
-            let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('emailOralias', emailOralias);
+            let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('alias', alias);
             args.push(arg);
-            arg = cAjaxSendMessage.buildArgsFromString('type', type);
+            arg = cAjaxSendMessage.buildArgsFromString('email', email);
             args.push(arg);
-            let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'setLogin', args);
+
+            arg = cAjaxSendMessage.buildArgsFromString('nom', nom);
+            args.push(arg);
+            arg = cAjaxSendMessage.buildArgsFromString('pwd', pwd);
+            args.push(arg);
+
+            let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'createUserInDB', args);
             me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
             if (me._ajax.getStatus() == 0) {
                 let response : string = me._ajax.getData();
                 if (response.length > 0) {
-                    me._ajax.setToken(response);
-                    return true;
+                    if (response.length > 0) {
+                        if (response === 'false') 
+                            return false;
+                        if (response === 'true') 
+                            return true;
+                    }
                 }
             }
             return false;
@@ -123,6 +137,61 @@ export class cExperience {
         }
         return false;
     }
+
+    static sendTokenForPasswordLost(nom : string | null, alias: string | null, email: string| null) : boolean {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs;
+        if (nom != null) {
+            arg = cAjaxSendMessage.buildArgsFromString('nom', nom);
+            args.push(arg);
+        }
+        if (alias != null) {
+            arg = cAjaxSendMessage.buildArgsFromString('alias', alias);
+            args.push(arg);
+        }
+        if (email != null) {
+            arg = cAjaxSendMessage.buildArgsFromString('email', email);
+            args.push(arg);
+        }
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'sendTokenForPasswordLost', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    }
+    static updatePwd(token : string, pwd: string) : boolean {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('tokenPwd', token);
+        args.push(arg);
+        arg = cAjaxSendMessage.buildArgsFromString('pwd', pwd);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'updatePwd', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
 
     static checkToken(token:string) : boolean {
         let me: cExperience = cExperience.getInstance();

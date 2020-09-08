@@ -30,8 +30,24 @@ class BRIWSApiPersonnes extends BRIWSApi
                 $err = $Personnes->getAllPersonnes($referenceMsgOut);
                 break;
             
+            case "isUserExistInDB":
+                $err = $Personnes->isUserExistInDB($msgIN->getArgs(), $referenceMsgOut);
+                break;
+
+            case "createUserInDB":
+                $err = $Personnes->createUserInDB($msgIN->getArgs(), $referenceMsgOut);
+                break;
+
             case "getMd5PasswdFromMailorAlias":
                 $err = $Personnes->getMd5PasswdFromMailorAlias($msgIN->getArgs(), $referenceMsgOut);
+                break;
+    
+            case "sendTokenForPasswordLost":
+                $err = $Personnes->sendTokenForPasswordLost($msgIN->getArgs(), $referenceMsgOut);
+                break;
+
+            case "updatePwd":
+                $err = $Personnes->updatePwd($msgIN->getArgs(), $referenceMsgOut);
                 break;
 
             case "checkToken":

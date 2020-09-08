@@ -3,6 +3,7 @@ import $ from 'jquery';
 import cMyUI_MainTab from './cMyUI_MainTab';
 import cMyUI_login from './cMyUI_login';
 import cMyUI_Inscription from './cMyUI_Inscription';
+import cMyUI_Recup from './cMyUI_Recup';
 import cEnvt from './infra/cEnvt';
 import { cExperience } from './Services/DB/cExperience';
 
@@ -19,6 +20,7 @@ class NanieApps {
         let dialog: cMyUI_MainTab = new cMyUI_MainTab();
         let login: cMyUI_login = new cMyUI_login();
         let inscription: cMyUI_Inscription = new cMyUI_Inscription();
+        let recup: cMyUI_Recup = new cMyUI_Recup();
 
 
         // ------------------------------------------------------------
@@ -29,12 +31,20 @@ class NanieApps {
         uri = uri.replace('?', '');
         uri = uri.toLowerCase();
         
-        if (uri == 'inscription') {
+        if (uri.startsWith('inscription')) {
             let newHTML: string = inscription.draw();
             if ((rootDiv != null) && (newHTML != null)) {
                 rootDiv.append(newHTML);
             }
             inscription.addCallBackOnMyDialog();        
+        }
+        else if (uri.startsWith('recup')){
+            recup.parseURI(uri);
+            let newHTML: string = recup.draw();
+            if ((rootDiv != null) && (newHTML != null)) {
+                rootDiv.append(newHTML);
+            }
+            recup.addCallBackOnMyDialog();        
         }
         else {
             // ------------------------------------------------------------

@@ -27,42 +27,54 @@ var cExperience = /** @class */ (function () {
         }
         return retour;
     };
-    cExperience.isUserExistInDB = function (alias, email) {
+    cExperience.isUserExistInDB = function (nom, alias, email) {
         var me = cExperience.getInstance();
         me._ajax.reset();
         var retour = [];
         var args = [];
-        var arg = cAjaxSendMessage.buildArgsFromString('emailOralias', emailOralias);
+        var arg = cAjaxSendMessage.buildArgsFromString('alias', alias);
         args.push(arg);
-        arg = cAjaxSendMessage.buildArgsFromString('type', type);
+        arg = cAjaxSendMessage.buildArgsFromString('email', email);
         args.push(arg);
-        var msg = cAjaxSendMessage.buildFromString('personnes', 'setLogin', args);
+        arg = cAjaxSendMessage.buildArgsFromString('nom', nom);
+        args.push(arg);
+        var msg = cAjaxSendMessage.buildFromString('personnes', 'isUserExistInDB', args);
         me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
         if (me._ajax.getStatus() == 0) {
             var response = me._ajax.getData();
             if (response.length > 0) {
-                me._ajax.setToken(response);
-                return true;
+                if (response === 'false')
+                    return false;
+                if (response === 'true')
+                    return true;
             }
         }
         return false;
     };
-    cExperience.createUserInDB = function (alias, email, pwd) {
+    cExperience.createUserInDB = function (nom, alias, email, pwd) {
         var me = cExperience.getInstance();
         me._ajax.reset();
         var retour = [];
         var args = [];
-        var arg = cAjaxSendMessage.buildArgsFromString('emailOralias', emailOralias);
+        var arg = cAjaxSendMessage.buildArgsFromString('alias', alias);
         args.push(arg);
-        arg = cAjaxSendMessage.buildArgsFromString('type', type);
+        arg = cAjaxSendMessage.buildArgsFromString('email', email);
         args.push(arg);
-        var msg = cAjaxSendMessage.buildFromString('personnes', 'setLogin', args);
+        arg = cAjaxSendMessage.buildArgsFromString('nom', nom);
+        args.push(arg);
+        arg = cAjaxSendMessage.buildArgsFromString('pwd', pwd);
+        args.push(arg);
+        var msg = cAjaxSendMessage.buildFromString('personnes', 'createUserInDB', args);
         me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
         if (me._ajax.getStatus() == 0) {
             var response = me._ajax.getData();
             if (response.length > 0) {
-                me._ajax.setToken(response);
-                return true;
+                if (response.length > 0) {
+                    if (response === 'false')
+                        return false;
+                    if (response === 'true')
+                        return true;
+                }
             }
         }
         return false;
@@ -94,6 +106,55 @@ var cExperience = /** @class */ (function () {
         arg = cAjaxSendMessage.buildArgsFromString('type', type);
         args.push(arg);
         var msg = cAjaxSendMessage.buildFromString('personnes', 'setLogin', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    };
+    cExperience.sendTokenForPasswordLost = function (nom, alias, email) {
+        var me = cExperience.getInstance();
+        me._ajax.reset();
+        var retour = [];
+        var args = [];
+        var arg;
+        if (nom != null) {
+            arg = cAjaxSendMessage.buildArgsFromString('nom', nom);
+            args.push(arg);
+        }
+        if (alias != null) {
+            arg = cAjaxSendMessage.buildArgsFromString('alias', alias);
+            args.push(arg);
+        }
+        if (email != null) {
+            arg = cAjaxSendMessage.buildArgsFromString('email', email);
+            args.push(arg);
+        }
+        var msg = cAjaxSendMessage.buildFromString('personnes', 'sendTokenForPasswordLost', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            var response = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    };
+    cExperience.updatePwd = function (token, pwd) {
+        var me = cExperience.getInstance();
+        me._ajax.reset();
+        var retour = [];
+        var args = [];
+        var arg = cAjaxSendMessage.buildArgsFromString('tokenPwd', token);
+        args.push(arg);
+        arg = cAjaxSendMessage.buildArgsFromString('pwd', pwd);
+        args.push(arg);
+        var msg = cAjaxSendMessage.buildFromString('personnes', 'updatePwd', args);
         me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
         if (me._ajax.getStatus() == 0) {
             var response = me._ajax.getData();

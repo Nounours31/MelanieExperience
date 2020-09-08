@@ -8,6 +8,10 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIUID.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/NLS/BRINls.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIError.php';
 
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/thirdPty/PHPMailer/src/PHPMailer.php';
+
+
+
 
 class BRIPersonnes extends iBRIModel { 
     private $_DB = null;
@@ -46,6 +50,78 @@ class BRIPersonnes extends iBRIModel {
         return $err;
     }
 
+
+    public function updatePwd ($args, &$message) {
+        $message = '';
+        $pwdtoken = '-';
+        if (isset ($args['tokenPwd']) && (strlen($args['tokenPwd']) > 0)) {
+            $pwdtoken = $args['tokenPwd'];
+        }
+
+        $uid = -1;
+        $sql = 'select uid from '.BRIConst::DB_NOM_ListedesPersonnes." where (token ='".$pwdtoken."')";
+        $rc = $this -> _DB -> selectAsRest ($sql);
+        if (!empty($rc)) {
+            $uid = ($rc[0]['uid']);
+        }
+
+        if ($uid > 0) {
+            $pwd = md5 ($args['pwd']);
+            $sql = 'update '.BRIConst::DB_NOM_ListedesPersonnes." set passwd = '".$pwd."'";
+            $rc = $this -> _DB -> updateAsRest ($sql);
+            $message = "success";
+            if ($rc === FALSE)
+                $message = "failed";
+        }
+
+        $err = BRIError::S_OK();
+        return $err;
+    }
+    
+    public function sendTokenForPasswordLost ($args, &$message) {
+        $message = '';
+
+        $email = $alias = $nom = '-';
+        if (isset ($args['nom']) && (strlen($args['nom']) > 0)) {
+            $nom = $args['nom'];
+            $sql = 'select uid, email from '.BRIConst::DB_NOM_ListedesPersonnes." where nom = '".$nom."'";
+        }
+        else if (isset ($args['alias']) && (strlen($args['alias']) > 0)) {
+            $alias = $args['alias'];
+            $sql = 'select uid, email from '.BRIConst::DB_NOM_ListedesPersonnes." where alias = '".$alias."'";
+        }
+        else if (isset ($args['email']) && (strlen($args['email']) > 0)) {
+            $email = $args['email'];
+            $sql = 'select uid, email from '.BRIConst::DB_NOM_ListedesPersonnes." where email = '".$email."'";
+        }
+
+        $uid = -1;
+        $email = '';
+        $rc = $this -> _DB -> selectAsRest ($sql);
+        if (!empty($rc)) {
+            $uid = ($rc[0]['uid']);
+            $email = ($rc[0]['email']);
+        }
+
+        if ($uid > 0) {
+            $token = md5 (strtotime('now'));
+            $maxTime = date('Y-m-d H:i:s', strtotime ("+5 minutes"));
+            $sql = 'update '.BRIConst::DB_NOM_ListedesPersonnes." set token = '".$token."', validite = '".$maxTime."' where uid = ".$uid."";
+            $rc = $this -> _DB -> updateAsRest ($sql);
+
+            print_r ($_SERVER);
+            $uri = $_SERVER['HTTP_REFERER'].'&recup_token='.$token.'&mode=navigo';
+            $uri = '<a href="'.$uri.'>'.$uri.'</a>';
+            $rc = $this -> smtpMailer ('pfs@3ds.com', 'code.fages@gmail.com', 'Nanie', 'Lien pour mettre a jour notre mot de passe', 'coucou, <br/>Lien: '.$uri);
+            $message = "success";
+            if ($rc === FALSE)
+                $message = "failed";
+        }
+
+        $err = BRIError::S_OK();
+        return $err;
+    }
+
     public function getMd5PasswdFromMailorAlias ($args, &$message) {
         $message = '';
         $sql = 'select passwd from '.BRIConst::DB_NOM_ListedesPersonnes;
@@ -56,7 +132,7 @@ class BRIPersonnes extends iBRIModel {
         $sql = $sql . $whereClause;
         $rc = $this -> _DB -> selectAsRest ($sql);
         if (!empty($rc)) {
-            $message = md5 ($rc[0]['passwd']);
+            $message = ($rc[0]['passwd']);
         }
 
         if (count ($rc) < 1) {
@@ -68,6 +144,80 @@ class BRIPersonnes extends iBRIModel {
 
         return $err;
     }
+
+
+    public function createUserInDB ($args, &$message) {
+        $message = '';
+    
+        $err = BRIError::S_OK();
+
+
+        if (!isset ($args['nom']) || (strlen ($args['nom']) < 1)) {
+            $message = "false";
+            return $err;
+        }
+        if (!isset ($args['email']) || (strlen ($args['email']) < 1)) {
+            $message = "false";
+            return $err;
+        }
+        if (!isset ($args['pwd']) || (strlen ($args['pwd']) < 1)) {
+            $message = "false";
+            return $err;
+        }
+        $alias = "";
+        if (isset ($args['alias']) && (strlen ($args['alias']) > 0)) {
+            $alias = $args['alias'];
+        }
+
+        $testUser = '';
+        BRIPersonnes::isUserExistInDB ($args, $testUser);
+        if (strcmp ($testUser, 'true') == 0) {
+            $message = "false";
+            return $err;
+        }
+
+        $sql = 'insert '.BRIConst::DB_NOM_ListedesPersonnes;
+        $sql .= " set nom='".$args['nom']."', email='".$args['email']."', alias='".$args['alias']."', passwd='".$args['pwd']."', token='', validite='2020-01-01 00:00:00'";
+        $rc = $this -> _DB -> insertAsRest ($sql);
+        if ($rc === FALSE) 
+            $message = "false";
+        else 
+            $message = "true";
+
+            return $err;
+    }
+
+    public function isUserExistInDB ($args, &$message) {
+        $message = '';
+    
+        $err = new BRIError (54, 'Nom ou email invalid');
+        if (!isset ($args['nom']) || (strlen ($args['nom']) < 1)) {
+            $message = "false";
+            return $err;
+        }
+        if (!isset ($args['email']) || (strlen ($args['email']) < 1)) {
+            $message = "false";
+            return $err;
+        }
+
+        $sql = 'select uid from '.BRIConst::DB_NOM_ListedesPersonnes;
+        $whereClause = " where ((email ='".$args['email']."') or (nom ='".$args['nom']."'))";
+
+        if (isset ($args['alias']) && (strlen ($args['alias']) > 0)) 
+            $whereClause = " where ((email ='".$args['email']."') or (alias ='".$args['alias']."') or (nom ='".$args['nom']."'))";
+
+        $sql = $sql . $whereClause;
+        $rc = $this -> _DB -> selectAsRest ($sql);
+        if (!empty($rc)) {
+            $message = "true";
+        }
+        else 
+            $message = "false";
+
+        $err = BRIError::S_OK();
+        return $err;
+    }
+        
 
     public function setLogin ($args, &$message) {
         $token = md5($args['emailOralias'] . date("Y.m.d-h:i:sa"));
@@ -111,5 +261,26 @@ class BRIPersonnes extends iBRIModel {
         return true;
     }
 
+    function smtpMailer($to, $from, $from_name, $subject, $body) {
+        $mail = new PHPMailer\PHPMailer\PHPMailer();  // Cree un nouvel objet PHPMailer
+        $mail->IsSMTP(); // active SMTP
+        $mail->SMTPDebug = 1;  // debogage: 1 = Erreurs et messages, 2 = messages seulement
+        $mail->SMTPAuth = true;  // Authentification SMTP active
+        $mail->SMTPSecure = 'ssl'; // Gmail REQUIERT Le transfert securise
+        $mail->Host = BRIEnvt::SMTP_GMAIL; // 'smtp.gmail.com';
+        $mail->Port = 465;
+        $mail->Username = BRIEnvt::SMTP_GMAIL_USER; //'cedssections.bricolage@gmail.com';
+        $mail->Password = BRIEnvt::SMTP_GMAIL_USER_PWD; //'Gilles.Collin';
+        $mail->SetFrom($from, $from_name);
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+        $mail->IsHTML(true); 
+        $mail->AddAddress($to);
+        if(!$mail->Send()) {
+            return 'Mail error: '.$mail->ErrorInfo;
+        } else {
+            return true;
+        }
+    }
 }
 ?>

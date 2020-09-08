@@ -67,3 +67,18 @@ div.inscription {
       display: flex !important;
     justify-content: center;
     }
+
+body > .grid.recup {
+      height: 100%;
+    }
+div.recup {
+      height: 100%;
+    }
+.recup.image {
+      margin-top: -100px;
+    }
+.recup.column {
+      max-width: 450px;
+      display: flex !important;
+    justify-content: center;
+    }

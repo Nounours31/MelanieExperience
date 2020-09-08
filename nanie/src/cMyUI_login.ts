@@ -35,17 +35,19 @@ export default class cMyUI_login extends cMyUI {
 
             if ((pwdDB != null) && (pwdDB == pwdLu)) {
                 let rc : boolean = cExperience.setLogin(emailOralias, type);
+                let y : Location = window.location;
+                y.reload(true);
             }
-
+            else {
+                let onErrorMessage: string = `<div class="ui negative message"><i class="close icon"></i>`;
+                onErrorMessage += `<div class="header"> User </div> <p> user inconnu ou mot de passe invalide </p>`;
+                onErrorMessage += '</div>';
+                $(`#${me._idLoginDivForMessageInfo}`).append(onErrorMessage);    
+                me.addCallBackOnMessage(me._idLoginDivForMessageInfo);
+            }
             event.stopImmediatePropagation;
-
-            let y : Location = window.location;
-            y.reload(true);
-    
             return false;
         });
-
-        this.addCallBackOnMessage(this._idLoginDivForMessageInfo);
     }
 
 
@@ -87,7 +89,9 @@ export default class cMyUI_login extends cMyUI {
                     </form>
 
                     <div class="ui message">
-                        Pour s'enregistrer voir Nanie <a href="?inscription" target="_blank">Comptes</a>
+                        Pour s'enregistrer <a href="?inscription" target="_blank">Comptes ...</a>
+                        <br/>Pour une demande de recup de pwd <a href="?recup" target="_blank">Recuperation ...</a>
+                        <br/>Sinon voir Nanie!
                     </div>
 
                     <!-- Zone a message  -->

@@ -7,6 +7,7 @@ export default class cMyUI_Inscription extends cMyUI {
     private readonly _idInputpwd2;
     private readonly _idInputShowPwd;
     private readonly _idMessageInfo;
+    private readonly _idInputNom;
     constructor();
     addCallBackOnMyDialog(): void;
     draw(): string;

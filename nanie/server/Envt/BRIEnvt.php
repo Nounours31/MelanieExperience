@@ -13,6 +13,10 @@ class BRIEnvt {
     const _DEBUGMAIL = true;
     const _DEBUGMAIL_EMAIL = 'melanie.fages@free.fr';
     
+    const SMTP_GMAIL = 'smtp.gmail.com';
+    const SMTP_GMAIL_USER = 'cedssections.bricolage@gmail.com';
+    const SMTP_GMAIL_USER_PWD = 'Gilles.Collin';
+
     
     // Cookie de cnx
     const COOKIE_LOGGING = "BricoCookie";
