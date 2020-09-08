@@ -53,8 +53,17 @@ export default class cMyUI_Recup extends cMyUI {
                     // mise a jour du mot de passe
                     cExperience.updatePwd (me.getArg('recup_token'), pwd1);
 
-                    let y : Location = window.location;
-                    y.reload(true);    
+                    let y: Location = window.location;
+                    // href: "http://localhost/nanie/?recup"
+                    // search: "?recup"
+
+                    let x: string = y.href;
+                    let i: number = x.indexOf(y.search, 0);
+                    if (i < 0) {
+                        i = x.length;
+                    }
+                    x = x.substring(0, i);
+                    y.replace(x);
                 }
             }
             else {
@@ -95,13 +104,11 @@ export default class cMyUI_Recup extends cMyUI {
 
                     let x : string = y.href;
                     let i : number = x.indexOf (y.search, 0);
-                    if (i < 0) 
+                    if (i < 0) {
                         i = x.length;
+                    }
                     x = x.substring (0, i);
-                    y.href = x;
-                    
-                    window.location = x as unknown as Location;
-                    window.location.reload(true);    
+                    y.replace (x);
                 }
             }
             event.stopImmediatePropagation;

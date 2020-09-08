@@ -111,8 +111,11 @@ class BRIPersonnes extends iBRIModel {
 
             print_r ($_SERVER);
             $uri = $_SERVER['HTTP_REFERER'].'&recup_token='.$token.'&mode=navigo';
-            $uri = '<a href="'.$uri.'>'.$uri.'</a>';
-            $rc = $this -> smtpMailer ('pfs@3ds.com', 'code.fages@gmail.com', 'Nanie', 'Lien pour mettre a jour notre mot de passe', 'coucou, <br/>Lien: '.$uri);
+            $uri = '<a href="'.$uri.'">'.$uri.'</a>';
+            $mailHTML ='Coucou, <br/>';
+            $mailHTML .='Lien pour mettre ajour notre mot de passe: '.$uri.'<br/>';
+            $mailHTML .='A plus dans le bus,<br/>Nanie.';
+            $rc = $this -> smtpMailer ('pfs@3ds.com', 'code.fages@gmail.com', 'Nanie', 'Lien pour mettre a jour notre mot de passe', $mailHTML);
             $message = "success";
             if ($rc === FALSE)
                 $message = "failed";
@@ -264,7 +267,7 @@ class BRIPersonnes extends iBRIModel {
     function smtpMailer($to, $from, $from_name, $subject, $body) {
         $mail = new PHPMailer\PHPMailer\PHPMailer();  // Cree un nouvel objet PHPMailer
         $mail->IsSMTP(); // active SMTP
-        $mail->SMTPDebug = 1;  // debogage: 1 = Erreurs et messages, 2 = messages seulement
+        $mail->SMTPDebug = 0;  // debogage: 1 = Erreurs et messages, 2 = messages seulement
         $mail->SMTPAuth = true;  // Authentification SMTP active
         $mail->SMTPSecure = 'ssl'; // Gmail REQUIERT Le transfert securise
         $mail->Host = BRIEnvt::SMTP_GMAIL; // 'smtp.gmail.com';

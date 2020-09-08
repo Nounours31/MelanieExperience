@@ -178,17 +178,14 @@ CREATE TABLE IF NOT EXISTS `personnes` (
   `token` text COLLATE utf8_bin NOT NULL,
   `validite` datetime DEFAULT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Dumping data for table `personnes`
 --
 
 INSERT INTO `personnes` (`uid`, `nom`, `email`, `alias`, `passwd`, `token`, `validite`) VALUES
-(1, 'Melanie', 'internet.fages@free.fr', '', 'cc8c0a97c2dfcd73caff160b65aa39e2', '-', '2020-09-08 00:00:00'),
-(2, 'Sylviana', 'internet.fages@free.fr', '', 'cc8c0a97c2dfcd73caff160b65aa39e2', '-', '2020-09-08 00:00:00'),
-(3, 'pap\'s', 'internet.fages@free.fr', 'Nounours31', 'cc8c0a97c2dfcd73caff160b65aa39e2', '786a9611b987aa4ea9ac2259651eaf72', '2020-09-07 13:49:50'),
-(6, 'dd', 'pfs@3ds.com', 'dd', 'cc8c0a97c2dfcd73caff160b65aa39e2', '40ab759b3912138ac35c892a7cabd0c8', '2020-09-08 15:07:58');
+(1, 'Fages', 'pfs@3ds.com', 'Nounours31', '-', '-', '2020-01-01 00:00:00');
 
 -- --------------------------------------------------------
 

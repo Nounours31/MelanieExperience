@@ -215,6 +215,30 @@ export class cExperience {
     }
 
     
+    
+
+    static launchSQLListUIDExperience(sql: string): number[] {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour: number[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('sql', sql);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'launchSQLListUIDExperience', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let jsonObject: JSON = JSON.parse(response);
+            if (Array.isArray(jsonObject)) {
+                jsonObject.forEach(element => {
+                    retour.push(element.uid);
+                });
+            }
+        }
+        return retour;
+    }
+
 
     static getAllExperienceInitiale(): string[] {
         let me: cExperience = cExperience.getInstance();

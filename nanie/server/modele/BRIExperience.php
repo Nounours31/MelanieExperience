@@ -79,6 +79,19 @@ class BRIExperience extends iBRIModel {
     }
 
     
+    public function launchSQLListUIDExperience($sql, &$message){
+        $ret = array();
+        $rc = $this -> _DB -> selectAsRest ($sql);
+        if (!empty($rc)) {
+            foreach ($rc as $key => $value) {
+                array_push ($ret, $value);
+            }
+        }
+        $message = json_encode ($ret);
+        $err = BRIError::S_OK();
+        return $err;
+    }
+
 
     public function getExperienceUidFromExperienceStringid($experiencestringid, &$message){
         $ret = array();

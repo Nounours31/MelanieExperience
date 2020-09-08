@@ -48,6 +48,16 @@ class BRIWSApiExperience extends BRIWSApi
                 $err = $Experience->create($ExperienceId, $date, $qui, $referenceMsgOut);
                 break;
                 
+            ;
+            case "launchSQLListUIDExperience":
+                $sql = '';
+                $argsIn = $msgIN->getArgs();
+                if (isset ($argsIn['sql'])) {
+                    $sql=$argsIn['sql'];
+                }
+                $err = $Experience->launchSQLListUIDExperience($sql, $referenceMsgOut);
+                break;
+
                 
             case "getExperienceUidFromExperienceStringid":
                 $experiencestringid = '';

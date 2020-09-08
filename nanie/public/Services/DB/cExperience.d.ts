@@ -13,6 +13,7 @@ export declare class cExperience {
     static sendTokenForPasswordLost(nom: string | null, alias: string | null, email: string | null): boolean;
     static updatePwd(token: string, pwd: string): boolean;
     static checkToken(token: string): boolean;
+    static launchSQLListUIDExperience(sql: string): number[];
     static getAllExperienceInitiale(): string[];
     static createDBExperience(experienceId: string, date: string, qui: string): number;
     static getExperienceUidFromExperienceStringid(experiencestringid: string): number;
