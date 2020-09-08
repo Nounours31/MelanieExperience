@@ -90,7 +90,18 @@ export default class cMyUI_Recup extends cMyUI {
                 else {
                     cExperience.sendTokenForPasswordLost (nom, alias, email);
                     let y : Location = window.location;
-                    y.reload(true);    
+                    // href: "http://localhost/nanie/?recup"
+                    // search: "?recup"
+
+                    let x : string = y.href;
+                    let i : number = x.indexOf (y.search, 0);
+                    if (i < 0) 
+                        i = x.length;
+                    x = x.substring (0, i);
+                    y.href = x;
+                    
+                    window.location = x as unknown as Location;
+                    window.location.reload(true);    
                 }
             }
             event.stopImmediatePropagation;
