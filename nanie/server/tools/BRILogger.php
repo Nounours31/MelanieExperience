@@ -18,7 +18,7 @@ class BRILogger {
     public $_Prefix = null;
 
     function __construct($prefix = 'Inconnu') {
-        $pathForLog = $_SERVER['DOCUMENT_ROOT'].BRIEnvt::relativeDocRoot.BRIEnvt::tracePATHTODISK; 
+        $pathForLog = $_SERVER['DOCUMENT_ROOT'].BRIEnvt::tracePATHTODISK; 
         $this->_FilePath = $pathForLog;
         $this->_Prefix = $prefix;
         try {

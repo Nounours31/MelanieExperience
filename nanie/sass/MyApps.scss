@@ -7,15 +7,9 @@
 
 .MyApps {
   color: base.$body-color;
-  font-family: "Times New Roman", Times, serif;
+  font-family: "roboto", "Times New Roman", Times, serif;
 }
 
-
-.accordion {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    width: 100% !important;
-}
 
 .mySelect {
   width: 100px !important;
@@ -33,11 +27,14 @@
 }
 
 
-.ui.grid.container {
-    width: 100% !important;
-}
+//.ui.grid.container {
+//    width: 100% !important;
+//}
 
 
+// ---------------------------------
+// page de login
+// ---------------------------------
 body > .grid.login {
       height: 100%;
     }
@@ -53,6 +50,9 @@ div.login {
     justify-content: center;
     }
 
+// ---------------------------------
+// page des inscriptions
+// ---------------------------------
 body > .grid.inscription {
       height: 100%;
     }
@@ -68,6 +68,9 @@ div.inscription {
     justify-content: center;
     }
 
+// ---------------------------------
+// page de recup des pwd
+// ---------------------------------
 body > .grid.recup {
       height: 100%;
     }
@@ -83,6 +86,24 @@ div.recup {
     justify-content: center;
     }
 
+// ---------------------------------
+// le fileset du dump des info experience en base
+// ---------------------------------
 fieldset.visuexperience {
     background: red;
+}
+
+// ---------------------------------
+// Visu des liens dans la consultation des images
+// ---------------------------------
+.anchorLikebutton {
+    display: block;
+    width: 115px;
+    background: #4E9CAF;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    line-height: 25px;
 }

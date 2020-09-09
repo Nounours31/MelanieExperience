@@ -9,4 +9,5 @@ export interface iMyHtmlInfo {
 export declare class cTools {
     static BuildSelectFromTab(vals: string[], info: iMyHtmlInfo): string;
     static BuildInputInt(val: string, info: iMyHtmlInfo): string;
+    static isImageFileFromName(fileName: string): boolean;
 }

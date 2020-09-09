@@ -49,7 +49,7 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
             let sqlSelect: string = 'SELECT exp.uid FROM experience exp ';
             let sqlJointForGenotype: string = ' INNER JOIN experience_listegenotype    geno ON (geno.idexperience = exp.uid) ';
             let sqlJointForResultat: string = ' INNER JOIN experience_resultatdestests res  ON (res.idexperience = exp.uid) ';
-            let sqlWhere : string = '(true)';
+            let sqlWhere : string = '';
 
             if (cUIUtils.isValidNumberInput(SComparatif, 0)) {
                 sqlWhere = ` (res.SComparatif < ${SComparatif}) `;
@@ -80,6 +80,12 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
             if (hasresultatInFiltre)
                 sql += sqlJointForResultat;
             sql +=  ' where (';
+
+            // si pas de filtre mettre tout le monde ...
+            if (sqlWhere.length < 1) {
+                sqlWhere = 'true';
+            }
+            
             sql += sqlWhere;
             sql += ')';
 

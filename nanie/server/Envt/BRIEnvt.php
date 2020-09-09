@@ -33,12 +33,13 @@ class BRIEnvt {
     const relativeDocRoot = '/nanie/';
     const relativeWSPath = '/nanie/server/WS/BRIWS.php';
     const PathToVault = '/nanie/server/vault';
+    const ShortPathToVault = 'server/vault';
     
     // fichier a uploader
     const ExternalFilePATHTODISK = 'upload/';
     
     // log php
-    const tracePATHTODISK = 'logs/';
+    const tracePATHTODISK = '/nanie/logs/';
     const traceFILE = "traces.log";
 
     

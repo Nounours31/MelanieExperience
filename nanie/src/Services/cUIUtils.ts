@@ -1,36 +1,37 @@
 import { iExperienceIDMessage, iExperienceFilesMessage } from './DB/iOnMessageWithServer';
 import { iResultatMessage, iGenotypeMessage } from './DB/iOnMessageWithServer';
 import { cExperience } from './DB/cExperience';
+import { cTools } from '../infra/cTools';
 
 export default class cUIUtils {
-    private static readonly _idOfAllExperienceIDFind : string = "uyilitzire_draw__idOfAllExperienceIDFind";
-    private static readonly _idOfOneExperienceDetails : string = "uyilitzire_draw___idOfOneExperienceDetails";
-    private static readonly _idForGenotypeToDelete : string = "IdPourRetrouverButtonDeleteDeUnGenotype";
-    private static readonly _idForFileToDelete : string = "IdPourRetrouverButtonDeleteDeFile";
-    
+    private static readonly _idOfAllExperienceIDFind : string = 'uyilitzire_draw__idOfAllExperienceIDFind';
+    private static readonly _idOfOneExperienceDetails : string = 'uyilitzire_draw___idOfOneExperienceDetails';
+    private static readonly _idForGenotypeToDelete : string = 'IdPourRetrouverButtonDeleteDeUnGenotype';
+    private static readonly _idForFileToDelete : string = 'IdPourRetrouverButtonDeleteDeFile';
+
 
     constructor () {}
-    
+
     public static drawOnExperience (ExpUid : number, deleteOn? : boolean) : string {
         let retour : string = cUIUtils.drawOneExpSumUp(ExpUid, deleteOn);
         return retour;
     }
-    
+
     public static isValidStringInput(StringInput: any, neutralValue? : string): boolean {
         let retour: boolean = true;
-        
+
         if (StringInput == null)
         return false;
-        
+
         if (StringInput == undefined)
         return false;
-        
+
         try {
             let x: string = StringInput as string;
             let i : number = x.length;
             if (i < 1)
             retour = false;
-            
+
             if ((neutralValue != undefined) && (x == neutralValue)) {
                 retour = false;
             }
@@ -38,23 +39,23 @@ export default class cUIUtils {
         catch (e) {
             retour = false;
         }
-        
+
         return retour;
     }
-    
+
     public static isValidNumberInput(NumberInput: any, neutralValue? : number): boolean {
         let retour: boolean = true;
-        
+
         if (NumberInput == null)
         return false;
-        
+
         if (NumberInput == undefined)
         return false;
-        
+
         try {
             let x: number = NumberInput as number;
             x += 1;
-            
+
             x = NumberInput as number;
             if ((neutralValue != undefined) && (x == neutralValue)) {
                 retour = false;
@@ -65,8 +66,8 @@ export default class cUIUtils {
         }
         return retour;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------------------------
     // ZONE CONSULTATION
     //
@@ -113,7 +114,7 @@ export default class cUIUtils {
             `;
         }
         $(`#${idDiv}`).append(retour);
-        
+
         // ----------------------------------------------------------------------------
         // voir les detail ...
         // ----------------------------------------------------------------------------
@@ -125,7 +126,7 @@ export default class cUIUtils {
             let VoirButtonId: string = ($(event.target).attr('id') as string);
             let sExpUid: string = VoirButtonId.substring(_idOKVoirOneExpButton.length + 1);
             let iExpUid: number = Number.parseInt(sExpUid);
-            
+
             let deleteOn : boolean = false;
             let myUIForConsult : string = cUIUtils.drawOneExpSumUp(iExpUid, deleteOn);
             $(`#${cUIUtils._idOfOneExperienceDetails}`).empty();
@@ -133,9 +134,9 @@ export default class cUIUtils {
         });
         return retour;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------------------------
     // ZONE CREATION / UPDATE
     //
@@ -143,7 +144,7 @@ export default class cUIUtils {
     // -------------------------------------------------------------------------------------------
     public static addcallbackFordrawOnExperience(idOfButtonUpdate : string) {
         $(`.${this._idForGenotypeToDelete}`).each (function () {
-            $(this).on ('click', function (event : JQuery.ClickEvent){
+            $(this).on ('click', function (event : JQuery.ClickEvent) {
                 let button : HTMLElement =  event.target;
                 let genotypeuid = Number.parseInt (button.getAttribute ('value') as string);
                 cExperience.deleteGenotypeFromuid (genotypeuid);
@@ -153,7 +154,7 @@ export default class cUIUtils {
             });
         });
         $(`.${this._idForFileToDelete}`).each (function () {
-            $(this).on ('click', function (event : JQuery.ClickEvent){
+            $(this).on ('click', function (event : JQuery.ClickEvent) {
                 let button : HTMLElement =  event.target;
                 let uid = Number.parseInt (button.getAttribute ('value') as string);
                 cExperience.deleteFileFronuid (uid);
@@ -166,35 +167,35 @@ export default class cUIUtils {
         // refresh de la zone En base
 
     }
-    
+
     // -------------------------------------------------------------------------------------------
     // ZONE CREATION / UPDATE
     //
     // Voir ce qui est en base
     // -------------------------------------------------------------------------------------------
     public static drawOneExpSumUp(iExpUid: number, deleteOn? : boolean) : string {
-        
+
         // -----------------------------------------------------
         // recup de toutes les infos possible
         // -----------------------------------------------------
         let infoGeneraleExperience: iExperienceIDMessage | null = cExperience.getExperience_InfoGenerale(iExpUid);
-        let ExperienceStringId: string = "----";
+        let ExperienceStringId: string = '----';
         if (infoGeneraleExperience != null) {
             ExperienceStringId = infoGeneraleExperience.experiencestringid;
         }
-        
+
         let infoResultatExperience: iResultatMessage[] | null = cExperience.getExperience_ResultatTest(iExpUid);
         let infoGenomeExperience: iGenotypeMessage[] | null = cExperience.getExperience_ResultatGenotype(iExpUid);
-        
+
         // -----------------------------------------------------
         // affichage
         // -----------------------------------------------------
         let myUIForConsult: string = '';
-        
+
         // ----------------------
         // de l'experience
         // ----------------------
-        
+
         let x: iExperienceIDMessage = cExperience.getExperience_InfoGenerale(iExpUid) as iExperienceIDMessage;
         myUIForConsult = `
         <!--    Resume de l'experience   -->
@@ -215,7 +216,7 @@ export default class cUIUtils {
         </tr>
         </tbody>
         </table>`;
-        
+
         // ----------------------
         // des resultats de l'experience - si rien (delete explicite en DB ?) je met des info pipo pour permettre le dialog de continuer
         // ----------------------
@@ -231,7 +232,7 @@ export default class cUIUtils {
                 NbGenotype: 0,
                 dateinsert: 'undef',
                 experiencestringid: '----',
-                uid:-1
+                uid: -1
             }];
         }
         if ((infoGenomeExperience == null) || (infoGenomeExperience.length < 1)) {
@@ -245,8 +246,8 @@ export default class cUIUtils {
                 uid: -1
             }];
         }
-        
-        
+
+
         myUIForConsult += `
         <!--    Les resultats   -->
         <div class="ui labeled input">
@@ -262,17 +263,17 @@ export default class cUIUtils {
         </tr>
         </thead>
         <tbody>`;
-        
+
         let uneInfoResultatExperience: iResultatMessage = infoResultatExperience[0];
         let uneInfoGenomeExperience: iGenotypeMessage;
         for (let i = 0; i < infoGenomeExperience.length; i++) {
             uneInfoGenomeExperience = infoGenomeExperience[i];
-            
+
             let buttonstring : string = '';
             if ((deleteOn != undefined) && deleteOn && (uneInfoGenomeExperience.uid as number > 0)) {
                 buttonstring = `<button value="${uneInfoGenomeExperience.uid}" class="${cUIUtils._idForGenotypeToDelete}">delete?</button>`;
             }
-            
+
             if (i == 0) {
                 myUIForConsult += `
                 <tr>
@@ -290,15 +291,14 @@ export default class cUIUtils {
                 <tr>
                 <td>G ${i + 1} ${buttonstring}</td><td>${uneInfoGenomeExperience.chromosome1}</td><td>${uneInfoGenomeExperience.chromosome2}</td><td>${uneInfoGenomeExperience.chromosome3}</td><td>${uneInfoGenomeExperience.chromosome4}</td><td>${uneInfoGenomeExperience.nbechantillon}</td>
                 </tr>`;
-                
+
             }
-            myUIForConsult += `
+        }
+        myUIForConsult += `
             </tbody>
             </table>
             `;
-        }
-        
-        
+
         // ----------------------
         // les fichiers
         // ----------------------
@@ -308,25 +308,36 @@ export default class cUIUtils {
             <!--    Les fichiers   -->
             <div class="ui labeled input" >
             <div class="ui label" >
-            Images
+            Images / Fichiers
             </div>
             </div>
             <table class="ui celled table">
             <tbody>`;
-            
-            let buttonstring : string = '';
+
+            let buttonstring: string = '';
+            let imagestring: string = '';
+            let y : Location = window.location;
+
             for (let i = 0; i < infoFileExperience.length; i++) {
-                
+                buttonstring = '';
                 if ((deleteOn != undefined) && deleteOn) {
                     buttonstring = `<td><button value="${infoFileExperience[i].uid}" class="${cUIUtils._idForFileToDelete}">delete?</button></td>`;
                 }
-                
+
+                imagestring = '';
+                if (cTools.isImageFileFromName(infoFileExperience[i].nom as string)) {
+                    imagestring = `<img src="${y.href}/${infoFileExperience[i].url}" alt="${infoFileExperience[i].path}" width="400" height="341" title="image ${i}" />
+                                 ou <a href="${y.href}/${infoFileExperience[i].url}" download="${infoFileExperience[i].nom}" class="anchorLikebutton">Downloader</a>`;
+                }
+                else {
+                    imagestring = `<a href="${y.href}/${infoFileExperience[i].url}" class="anchorLikebutton" target="_blank">Voir</a> ou <a href="${y.href}/${infoFileExperience[i].url}" download="${infoFileExperience[i].nom}" class="anchorLikebutton">Downloader</a>`;
+                }
+
                 myUIForConsult += `
                 <tr>
                 ${buttonstring}
-                <td>${infoFileExperience[i].nom}</td>
-                <td>${infoFileExperience[i].path}</td>
-                <td><img src="${infoFileExperience[i].url}" alt="${infoFileExperience[i].path}" width="400" height="341" title="image ${i}"></td>
+                <td>${infoFileExperience[i].nom}<br/>[ sur le server --> ${infoFileExperience[i].path} ]</td>
+                <td>${imagestring}</td>
                 </tr>`;
             }
             myUIForConsult += `
@@ -343,4 +354,6 @@ export default class cUIUtils {
         }
         return myUIForConsult;
     }
+
+
 }

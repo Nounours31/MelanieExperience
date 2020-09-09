@@ -1,4 +1,7 @@
 @echo on
 
-del /f /s /q E:\WS\Github\MelanieExperience\nanie\logs
-del /f /s /q E:\WS\Github\MelanieExperience\nanie\server\vault
+del /f /q E:\WS\Github\MelanieExperience\nanie\logs
+del /f /q E:\WS\Github\MelanieExperience\nanie\server\vault
+
+rmdir E:\WS\Github\MelanieExperience\nanie\logs
+rmdir E:\WS\Github\MelanieExperience\nanie\server\vault

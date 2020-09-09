@@ -258,7 +258,8 @@ class BRIExperience extends iBRIModel {
         $id_exp = $aargs['experienceId'];
         $ficDest = $_SERVER['DOCUMENT_ROOT'] . BRIEnvt::PathToVault;
         $ficDest = $ficDest . "/" . $id_exp;
-        $urlfile = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . BRIEnvt::PathToVault . '/' . $id_exp;
+        //$urlfile = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . BRIEnvt::PathToVault . '/' . $id_exp;
+        $urlfile =  BRIEnvt::ShortPathToVault . '/' . $id_exp;
 
         $this->_logger->Debug('Test de ' . $ficDest);
         if (!file_exists($ficDest)) {

@@ -135,9 +135,9 @@ CREATE TABLE IF NOT EXISTS `initialesexperience` (
 --
 
 INSERT INTO `initialesexperience` (`uid`, `Nom`) VALUES
-(1, '-'),
-(2, 'A'),
-(3, 'B'),
+(1, 'A'),
+(2, 'B'),
+(3, 'C'),
 (4, 'ZZ');
 
 -- --------------------------------------------------------

@@ -47,4 +47,30 @@ export class cTools {
         retour += `/>`;
         return retour;
     }
+
+    static isImageFileFromName (fileName : string) : boolean {
+        let localname: string = fileName;
+        localname = localname.toLowerCase();
+        let i: number = localname.lastIndexOf ('.');
+        if (i < 0) {
+            return false;
+        }
+
+        let extens : string = localname.substring (i + 1);
+        let rc : boolean = false;
+
+        switch (extens) {
+            case 'png':
+            case 'jpg':
+            case 'jpeg':
+            case 'tiff':
+                    rc = true;
+                break;
+        
+            default:
+                    rc = false;
+                break;
+        }
+        return rc;
+    }
 }
