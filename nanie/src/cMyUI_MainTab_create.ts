@@ -1,3 +1,11 @@
+/*
+** @quick review 9/9/2020
+** Copyright Nanie 2020 - licence MIT
+**
+** Cette classe est accessible via l'URL .../nanie/ apres le login
+** C'est la page de creation de l'experience
+** et de mise a jour
+*/
 import { cExperience } from './Services/DB/cExperience';
 import { iResultatMessage, iGenotypeMessage } from './Services/DB/iOnMessageWithServer';
 import { iMyHtmlInfo, cTools } from './infra/cTools';
@@ -5,8 +13,10 @@ import cMyUI from './cMyUI';
 import cUIUtils from './Services/cUIUtils';
 
 
-
 export default class cMyUI_MainTab_create extends cMyUI {
+    // ---------------------------------------------------------
+    // list de ancre (via les ID) pour JQuery et retourver mes dialoge dans la page
+    // ---------------------------------------------------------
     private readonly _idCreationOKButton: string = 'cMyUI_MainTab_create_SaisieExperience_OKButton';
     private readonly _idCreationExperienceGroupOfInfo: string = 'cMyUI_MainTab_create_SaisieExperience_ExpIDGroup';
     private readonly _idCreationDateExp: string = 'cMyUI_MainTab_create_SaisieExperience_DateExp';
@@ -17,7 +27,6 @@ export default class cMyUI_MainTab_create extends cMyUI {
     private readonly _idCreationExperienceExperiencetype: string = 'cMyUI_MainTab_create_MainTab_UI_Info__idExperienceExperiencetype';
     private readonly _idCreationExperienceClef: string = 'cMyUI_MainTab_create_MainTab_UI_Info_idExperienceClef';
     private readonly _idCreationExperienceNumero: string = 'cMyUI_MainTab_create_MainTab_UI_Info_idExperienceNumero';
-
 
     private readonly _My_Message_Classe : string = 'ClasseDesMessagesInfo';
 
@@ -36,7 +45,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
 
 
     private readonly _idCreationExperience_drawInfoApresCreation: string = 'cMyUI_MainTab_ajout__idCreationExperience_drawInfoApresCreation';
-    
+
 
     // ----------------------------------------------------
     // Nb genotype par defaut
@@ -48,29 +57,41 @@ export default class cMyUI_MainTab_create extends cMyUI {
     }
 
 
+    // ===========================================================================================
+    // La page est decoupe en 3 sections:
+    //      - section 1: la creation de l'experience
+    //      - section 2: l'ajout des resultats (appelle a tord 'update') sur une experience identifiee par son ExperienceID
+    //      - section 3: une section qui fait echo a ce qui est creer en base (verif que creta + ajout est OK)
+    // ===========================================================================================
     public draw (): string {
         let retour : string = '';
 
         // affichage de la zone de creation de l'experience
-        retour += '<div style="margin-left: 10px;"><fieldset><legend> Cr&eacute;ation d\'une experience en base </legend>'
+        retour += '<div style="margin-left: 10px;"><fieldset><legend> Cr&eacute;ation d\'une experience en base </legend>';
         retour += this.drawCreateDialog();
-        retour += '</fieldset></div>'
+        retour += '</fieldset></div>';
 
         // Le separateur
         retour += '<div class="ui horizontal divider">G&eacute;notypes associ&eacute;s</div>';
 
         // affichage de la zone de mise a jour de l'experience
-        retour += '<div style="margin-left: 10px;"><fieldset><legend> Mise &agrave; jour des g&eacute;notypes associ&eacute;s &agrave; une experience en base </legend>'
+        retour += '<div style="margin-left: 10px;"><fieldset><legend> Mise &agrave; jour des g&eacute;notypes associ&eacute;s &agrave; une experience en base </legend>';
         retour += this.drawUpdateDialog();
         retour += '</fieldset></div>';
 
         // affichage de la zone info de l'experience
-        retour += '<div style="margin-left: 10px;"><fieldset class="visuexperience"><legend> En base: </legend>'
+        retour += '<div style="margin-left: 10px;"><fieldset class="visuexperience"><legend> En base: </legend>';
         retour += this.drawInfoExperienceDialog();
         retour += '</fieldset></div>';
         return retour;
     }
 
+
+
+
+    // ===========================================================================================
+    // La section de creation pure et dure
+    // ===========================================================================================
     private drawCreateDialog(): string {
         // -----------------------------------------------
         // recup de la liste des personnes qui peuvent realiser une experience, et creation du select UI
@@ -154,6 +175,11 @@ export default class cMyUI_MainTab_create extends cMyUI {
         return retour;
     }
 
+
+
+    // ===========================================================================================
+    // La section d'ajout des experiences
+    // ===========================================================================================
     private drawUpdateDialog(): string {
         let retour: string;
 
@@ -163,7 +189,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
         const nbLigne = this._nbGenotype;
 
         // ----------------------------------------------------
-        // Les infos a afficher dans l'UI 
+        // Les infos a afficher dans l'UI
         // ----------------------------------------------------
         let infosForHTML: iMyHtmlInfo;
         let selectchromosome1: string[] = ['', '', '', ''];
@@ -271,15 +297,22 @@ export default class cMyUI_MainTab_create extends cMyUI {
         return retour;
     }
 
+    // ===========================================================================================
+    // La section de consultation vide tant que rien de creer
+    // ===========================================================================================
     public drawInfoExperienceDialog(): string {
         let retour: string = `
             <div id="${this._idCreationExperience_drawInfoApresCreation}"></div>
         `;
-
-        return retour;    
+        return retour;
     }
-    
 
+
+
+
+    // ===========================================================================================
+    // Gestion des callback du dialog
+    // ===========================================================================================
     public addCallBackOnMyDialog(): void {
         this.addCallBackOnMyDialog_create();
         this.addCallBackOnMyDialog_ajout();
@@ -287,115 +320,43 @@ export default class cMyUI_MainTab_create extends cMyUI {
     }
 
 
-    private addCallBackOnMyDialog_ajout(): void {
-        // activer les sementicUI du dialog
 
-        // choisir la tab par defaut
-        // $('.ui .item').removeClass('active');
-        // $(`#${this._idTabSaisie}`).addClass('active');
-
-        let me: cMyUI_MainTab_create = this;
-        $(`#${me._idCreationExperienceGroupOfInfo}`).on('change', function (event: JQuery.ChangeEvent) {
-            let lettreNomPrefixExpID : string = $(`#${me._idCreationExperienceNomPrefixe}`).val() as string;
-            let chiffreNumExpId : number = $(`#${me._idCreationExperienceNumero}`).val() as number;
-            let lettreTypeExpId : string = $(`#${me._idCreationExperienceExperiencetype}`).val() as string;
-            let chiffreClefExpId : number = $(`#${me._idCreationExperienceClef}`).val() as number;
-            let ExpIdName = lettreNomPrefixExpID + chiffreNumExpId.toString() + '-' + lettreTypeExpId + chiffreClefExpId.toString();
-            $(`#${me._idUpdateInputExp}`).val(ExpIdName);
-        });
-
-
-        $(`#${me._idUpdateOKButton}`).on('click', function (event: JQuery.ClickEvent) {
-            let allInfosFromPage: iResultatMessage = cExperience.create_iResultatMessage();
-            allInfosFromPage.experiencestringid = <string>$(`#${me._idUpdateInputExp}`).val();
-            allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
-
-            allInfosFromPage.marquage = <string>$(`#${me._idUpdateSelectOnMarquage}`).val();
-            allInfosFromPage.territoire = <string>$(`#${me._idUpdateSelectOnTerritoire}`).val();
-            allInfosFromPage.SComparatif = <number>$(`#${me._idUpdateInputSComparatif}`).val();
-            allInfosFromPage.SGeneral = <number>$(`#${me._idUpdateInputSGeneral}`).val();
-            allInfosFromPage.typedetest = <string>$(`#${me._idUpdateSelectOnTestType}`).val();
-
-            let nbValuatedGenotype: number = 0;
-            for (let i = 0; i < me._nbGenotype; i++) {
-                let allInfosFromGenotype: iGenotypeMessage = cExperience.create_iGenotypeMessage();
-                allInfosFromGenotype.chromosome1 = <string>$(`#${me._idUpdateSelectOnchromosome1}_${i}`).val();
-                allInfosFromGenotype.chromosome2 = <string>$(`#${me._idUpdateSelectOnchromosome2}_${i}`).val();
-                allInfosFromGenotype.chromosome3 = <string>$(`#${me._idUpdateSelectOnchromosome3}_${i}`).val();
-                allInfosFromGenotype.chromosome4 = <string>$(`#${me._idUpdateSelectOnchromosome4}_${i}`).val();
-                allInfosFromGenotype.nbechantillon = <number>$(`#${me._idUpdateInputNbEchantillon}_${i}`).val();
-                if ((allInfosFromPage.Genotype != null) && (allInfosFromGenotype.nbechantillon > 0)) {
-                    allInfosFromPage.Genotype.push(allInfosFromGenotype);
-                    nbValuatedGenotype++;
-                }
-            }
-            allInfosFromPage.NbGenotype = nbValuatedGenotype;
-
-            let id = cExperience.updateDBExperience(allInfosFromPage);
-
-
-            // update de la visu de l'exp depuis la DB
-            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout (allInfosFromPage.idexperience);
-
-
-            event.stopImmediatePropagation();
-            return false;
-        });
-
-        $(`#${me._idUpdateOKButton}`).on('Event_DeleteFileOrGenotype', function (event:any) {
-            let allInfosFromPage: iResultatMessage = cExperience.create_iResultatMessage();
-            allInfosFromPage.experiencestringid = <string>$(`#${me._idUpdateInputExp}`).val();
-            allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
-            // update de la visu de l'exp depuis la DB
-            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout (allInfosFromPage.idexperience);
-
-            event.stopImmediatePropagation();
-            return false;
-        });
-        
-    }
-
-
-    private UpdateDeLaZONEBilanViSuDBApresCreateOuAjout(id? : number) : void {
-        // update de la zone Info
-        let me : cMyUI_MainTab_create = this;
-        $(`#${me._idCreationExperience_drawInfoApresCreation}`).empty();
-        
-        if (id == undefined) {
-            let expIdAsString : string = <string>$(`#${me._idUpdateInputExp}`).val();
-            let uidExp : number = cExperience.getExperienceUidFromExperienceStringid(expIdAsString);
-            id = uidExp;
-        }
-
-        let deleteOn : boolean = true;
-        $(`#${me._idCreationExperience_drawInfoApresCreation}`).append (cUIUtils.drawOnExperience(id, deleteOn));
-        if (deleteOn)
-            cUIUtils.addcallbackFordrawOnExperience (this._idUpdateOKButton);
-        return;        
-    }
-
+    // ===========================================================================================
+    // Gestion des callback de la section de creation de l'experience
+    // Check si le contenu est valide et definition du nom de l'exprience
+    // ===========================================================================================
     private addCallBackOnMyDialog_create(): void {
         this.checkFormContenu();
         this.lienExprienceId_NomManip();
-
-        
     }
 
+
+    // ===========================================================================================
+    // ce callback me permet de mettre a jour le nom de l'experience lorsque le nom de la personne
+    // qui a realiser l'experience change
+    // ===========================================================================================
     private lienExprienceId_NomManip(): void {
         let me: cMyUI_MainTab_create = this;
+
+        // la personne qui a fait l'exp change
         $(`#${this._idCreationQui}`).on('change', function (event) {
+            // recup de son nom
             let val: string = <string>$(`#${me._idCreationQui}`).val();
             let valEntete = val.charAt(0);
+
+            // changement du nom de l'exp
             $(`#${me._idCreationExperienceNomPrefixe}`).val(valEntete);
+
+            // je pousse l'evenement sur le group qui va prevenir la section ajout de ce changemeny
             $(`#${me._idCreationExperienceGroupOfInfo}`).trigger('change');
         });
     }
 
-    // ---------------------------------------------------------------------------
-    // Callback du OK
+    // ===========================================================================================
+    // Callback du OK - create experience
     //      1. check du contenu du formulaire
     //      2. envoie en DB si OK
-    // ---------------------------------------------------------------------------
+    // ===========================================================================================
     private checkFormContenu(): void {
         let me: cMyUI_MainTab_create = this;
         $(`#${this._idCreationOKButton}`).on('click', function (event) {
@@ -443,6 +404,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
 
                 let id: number = cExperience.createDBExperience(experienceId, date, qui);
                 if (id > 0) {
+                    // si experience cree, on pousse les fichiers dessus
                     cExperience.uploadFiles(id, files);
 
                     let onOKMessage: string = `<div class="ui positive message ${me._My_Message_Classe}"><i class="close icon"></i>`;
@@ -458,8 +420,8 @@ export default class cMyUI_MainTab_create extends cMyUI {
                     });
                     me._ctrl.setLastExp(experienceId, id);
 
-
-                    me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout (id);
+                    // demande de mise a jour de la section 3  de consultation
+                    me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout(id);
                 }
                 else {
                     alert('Impossible de mettre en base cette demande');
@@ -467,9 +429,122 @@ export default class cMyUI_MainTab_create extends cMyUI {
             }
             event.stopPropagation();
             return false;
-
         });
     }
+
+    // ===========================================================================================
+    // Callback du OK - update experience [ajout de resultats]
+    //      1. check du contenu du formulaire
+    //      2. envoie en DB si OK
+    // ===========================================================================================
+    private addCallBackOnMyDialog_ajout(): void {
+        let me: cMyUI_MainTab_create = this;
+
+        // -------------------------------------------
+        // ce call back permet de mettre  ajour le nom d el'expID dnas la zone d'update
+        // le "fire" est fait par
+        //      1. le call back de changement de nom de qui,
+        //          2. qui est re fireed par  lienExprienceId_NomManip de la section 1 de creation
+        // --------------------------------------------
+        $(`#${me._idCreationExperienceGroupOfInfo}`).on('change', function (event: JQuery.ChangeEvent) {
+            let lettreNomPrefixExpID : string = $(`#${me._idCreationExperienceNomPrefixe}`).val() as string;
+            let chiffreNumExpId : number = $(`#${me._idCreationExperienceNumero}`).val() as number;
+            let lettreTypeExpId : string = $(`#${me._idCreationExperienceExperiencetype}`).val() as string;
+            let chiffreClefExpId : number = $(`#${me._idCreationExperienceClef}`).val() as number;
+            let ExpIdName = lettreNomPrefixExpID + chiffreNumExpId.toString() + '-' + lettreTypeExpId + chiffreClefExpId.toString();
+            $(`#${me._idUpdateInputExp}`).val(ExpIdName);
+        });
+
+
+        // -------------------------------------------
+        // call back de lecture du formulaire pour l'envoye en db
+        // check et push en DB
+        // --------------------------------------------
+        $(`#${me._idUpdateOKButton}`).on('click', function (event: JQuery.ClickEvent) {
+
+            // lecture des infos
+            let allInfosFromPage: iResultatMessage = cExperience.create_iResultatMessage();
+            allInfosFromPage.experiencestringid = <string>$(`#${me._idUpdateInputExp}`).val();
+            allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
+
+            allInfosFromPage.marquage = <string>$(`#${me._idUpdateSelectOnMarquage}`).val();
+            allInfosFromPage.territoire = <string>$(`#${me._idUpdateSelectOnTerritoire}`).val();
+            allInfosFromPage.SComparatif = <number>$(`#${me._idUpdateInputSComparatif}`).val();
+            allInfosFromPage.SGeneral = <number>$(`#${me._idUpdateInputSGeneral}`).val();
+            allInfosFromPage.typedetest = <string>$(`#${me._idUpdateSelectOnTestType}`).val();
+
+            let nbValuatedGenotype: number = 0;
+            for (let i = 0; i < me._nbGenotype; i++) {
+                let allInfosFromGenotype: iGenotypeMessage = cExperience.create_iGenotypeMessage();
+                allInfosFromGenotype.chromosome1 = <string>$(`#${me._idUpdateSelectOnchromosome1}_${i}`).val();
+                allInfosFromGenotype.chromosome2 = <string>$(`#${me._idUpdateSelectOnchromosome2}_${i}`).val();
+                allInfosFromGenotype.chromosome3 = <string>$(`#${me._idUpdateSelectOnchromosome3}_${i}`).val();
+                allInfosFromGenotype.chromosome4 = <string>$(`#${me._idUpdateSelectOnchromosome4}_${i}`).val();
+                allInfosFromGenotype.nbechantillon = <number>$(`#${me._idUpdateInputNbEchantillon}_${i}`).val();
+                if ((allInfosFromPage.Genotype != null) && (allInfosFromGenotype.nbechantillon > 0)) {
+                    allInfosFromPage.Genotype.push(allInfosFromGenotype);
+                    nbValuatedGenotype++;
+                }
+            }
+            allInfosFromPage.NbGenotype = nbValuatedGenotype;
+
+            // push en DB des info
+            let id = cExperience.updateDBExperience(allInfosFromPage);
+
+            // update de la visu de l'exp depuis la DB
+            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout (allInfosFromPage.idexperience);
+
+
+            event.stopImmediatePropagation();
+            return false;
+        });
+
+
+        // -------------------------------------------
+        // USER_EVENT
+        // call back du user event envoye par le delete d'un objet afin de demander le redraw de la section info (section 3)
+        // --------------------------------------------
+        $(`#${me._idUpdateOKButton}`).on('Event_DeleteFileOrGenotype', function (event: any) {
+            // recherche de l'id de l'exp
+            let allInfosFromPage: iResultatMessage = cExperience.create_iResultatMessage();
+            allInfosFromPage.experiencestringid = <string>$(`#${me._idUpdateInputExp}`).val();
+            allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
+
+            // update de la visu de l'exp depuis la DB
+            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout (allInfosFromPage.idexperience);
+            event.stopImmediatePropagation();
+            return false;
+        });
+    }
+
+    // ==========================================================================
+    // affichage de la zone d'info
+    // deleguee dans une autre classe pour factorisation
+    // ==========================================================================
+    private UpdateDeLaZONEBilanViSuDBApresCreateOuAjout(id? : number) : void {
+
+        // menage ...
+        let me : cMyUI_MainTab_create = this;
+        $(`#${me._idCreationExperience_drawInfoApresCreation}`).empty();
+
+        // si pas d'info sur l'exp j'essaye de retrouve son nom dans la page
+        if (id == undefined) {
+            let expIdAsString : string = <string>$(`#${me._idUpdateInputExp}`).val();
+            let uidExp : number = cExperience.getExperienceUidFromExperienceStringid(expIdAsString);
+            id = uidExp;
+        }
+
+        // calcul de la page et update
+        let deleteOn : boolean = true;
+        $(`#${me._idCreationExperience_drawInfoApresCreation}`).append (cUIUtils.drawOnExperience(id, deleteOn));
+        if (deleteOn)
+            cUIUtils.addcallbackFordrawOnExperience (this._idUpdateOKButton);
+        return;
+
+    }
+
+
+
 
 }
 
