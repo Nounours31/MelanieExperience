@@ -2,6 +2,7 @@ import { cExperience } from './Services/DB/cExperience';
 import { iResultatMessage, iGenotypeMessage } from './Services/DB/iOnMessageWithServer';
 import { iMyHtmlInfo, cTools } from './infra/cTools';
 import cMyUI from './cMyUI';
+import cUIUtils from './Services/cUIUtils';
 
 
 
@@ -33,6 +34,10 @@ export default class cMyUI_MainTab_create extends cMyUI {
     private readonly _idUpdateInputSGeneral: string = 'cMyUI_MainTab_ajout__idInputSGeneral';
     private readonly _idUpdateInputSComparatif: string = 'cMyUI_MainTab_ajout_idInputSComparatif';
 
+
+    private readonly _idCreationExperience_drawInfoApresCreation: string = 'cMyUI_MainTab_ajout__idCreationExperience_drawInfoApresCreation';
+    
+
     // ----------------------------------------------------
     // Nb genotype par defaut
     // ----------------------------------------------------
@@ -57,6 +62,11 @@ export default class cMyUI_MainTab_create extends cMyUI {
         // affichage de la zone de mise a jour de l'experience
         retour += '<div style="margin-left: 10px;"><fieldset><legend> Mise &agrave; jour des g&eacute;notypes associ&eacute;s &agrave; une experience en base </legend>'
         retour += this.drawUpdateDialog();
+        retour += '</fieldset></div>';
+
+        // affichage de la zone info de l'experience
+        retour += '<div style="margin-left: 10px;"><fieldset class="visuexperience"><legend> En base: </legend>'
+        retour += this.drawInfoExperienceDialog();
         retour += '</fieldset></div>';
         return retour;
     }
@@ -261,6 +271,14 @@ export default class cMyUI_MainTab_create extends cMyUI {
         return retour;
     }
 
+    public drawInfoExperienceDialog(): string {
+        let retour: string = `
+            <div id="${this._idCreationExperience_drawInfoApresCreation}"></div>
+        `;
+
+        return retour;    
+    }
+    
 
     public addCallBackOnMyDialog(): void {
         this.addCallBackOnMyDialog_create();
@@ -287,7 +305,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
         });
 
 
-        $(`#${me._idCreationOKButton}`).on('click', function (event: JQuery.ClickEvent) {
+        $(`#${me._idUpdateOKButton}`).on('click', function (event: JQuery.ClickEvent) {
             let allInfosFromPage: iResultatMessage = cExperience.create_iResultatMessage();
             allInfosFromPage.experiencestringid = <string>$(`#${me._idUpdateInputExp}`).val();
             allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
@@ -314,13 +332,53 @@ export default class cMyUI_MainTab_create extends cMyUI {
             allInfosFromPage.NbGenotype = nbValuatedGenotype;
 
             let id = cExperience.updateDBExperience(allInfosFromPage);
+
+
+            // update de la visu de l'exp depuis la DB
+            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout (allInfosFromPage.idexperience);
+
+
             event.stopImmediatePropagation();
             return false;
         });
+
+        $(`#${me._idUpdateOKButton}`).on('Event_DeleteFileOrGenotype', function (event:any) {
+            let allInfosFromPage: iResultatMessage = cExperience.create_iResultatMessage();
+            allInfosFromPage.experiencestringid = <string>$(`#${me._idUpdateInputExp}`).val();
+            allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
+            // update de la visu de l'exp depuis la DB
+            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout (allInfosFromPage.idexperience);
+
+            event.stopImmediatePropagation();
+            return false;
+        });
+        
     }
+
+
+    private UpdateDeLaZONEBilanViSuDBApresCreateOuAjout(id? : number) : void {
+        // update de la zone Info
+        let me : cMyUI_MainTab_create = this;
+        $(`#${me._idCreationExperience_drawInfoApresCreation}`).empty();
+        
+        if (id == undefined) {
+            let expIdAsString : string = <string>$(`#${me._idUpdateInputExp}`).val();
+            let uidExp : number = cExperience.getExperienceUidFromExperienceStringid(expIdAsString);
+            id = uidExp;
+        }
+
+        let deleteOn : boolean = true;
+        $(`#${me._idCreationExperience_drawInfoApresCreation}`).append (cUIUtils.drawOnExperience(id, deleteOn));
+        if (deleteOn)
+            cUIUtils.addcallbackFordrawOnExperience (this._idUpdateOKButton);
+        return;        
+    }
+
     private addCallBackOnMyDialog_create(): void {
         this.checkFormContenu();
         this.lienExprienceId_NomManip();
+
+        
     }
 
     private lienExprienceId_NomManip(): void {
@@ -399,6 +457,9 @@ export default class cMyUI_MainTab_create extends cMyUI {
                         $(`.${me._My_Message_Classe}`).remove();
                     });
                     me._ctrl.setLastExp(experienceId, id);
+
+
+                    me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout (id);
                 }
                 else {
                     alert('Impossible de mettre en base cette demande');

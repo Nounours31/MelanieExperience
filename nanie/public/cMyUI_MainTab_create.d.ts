@@ -23,13 +23,16 @@ export default class cMyUI_MainTab_create extends cMyUI {
     private readonly _idUpdateInputNbEchantillon;
     private readonly _idUpdateInputSGeneral;
     private readonly _idUpdateInputSComparatif;
+    private readonly _idCreationExperience_drawInfoApresCreation;
     private readonly _nbGenotype;
     constructor();
     draw(): string;
     private drawCreateDialog;
     private drawUpdateDialog;
+    drawInfoExperienceDialog(): string;
     addCallBackOnMyDialog(): void;
     private addCallBackOnMyDialog_ajout;
+    private UpdateDeLaZONEBilanViSuDBApresCreateOuAjout;
     private addCallBackOnMyDialog_create;
     private lienExprienceId_NomManip;
     private checkFormContenu;

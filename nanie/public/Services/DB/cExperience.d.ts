@@ -12,6 +12,8 @@ export declare class cExperience {
     static setLogin(emailOralias: string, type: string): boolean;
     static sendTokenForPasswordLost(nom: string | null, alias: string | null, email: string | null): boolean;
     static updatePwd(token: string, pwd: string): boolean;
+    static deleteGenotypeFromuid(uid: number): boolean;
+    static deleteFileFronuid(uid: number): boolean;
     static checkToken(token: string): boolean;
     static launchSQLListUIDExperience(sql: string): number[];
     static getAllExperienceInitiale(): string[];

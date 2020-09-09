@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `personnes` (
 --
 
 INSERT INTO `personnes` (`uid`, `nom`, `email`, `alias`, `passwd`, `token`, `validite`) VALUES
-(1, 'Fages', 'pfs@3ds.com', 'Nounours31', '-', '-', '2020-01-01 00:00:00');
+(1, 'test', 'pfs@3ds.com', 'xx', '', '', '1968-01-10 05:05:05');
 
 -- --------------------------------------------------------
 

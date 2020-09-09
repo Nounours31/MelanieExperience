@@ -52,18 +52,7 @@ export default class cMyUI_Recup extends cMyUI {
                 else {
                     // mise a jour du mot de passe
                     cExperience.updatePwd (me.getArg('recup_token'), pwd1);
-
-                    let y: Location = window.location;
-                    // href: "http://localhost/nanie/?recup"
-                    // search: "?recup"
-
-                    let x: string = y.href;
-                    let i: number = x.indexOf(y.search, 0);
-                    if (i < 0) {
-                        i = x.length;
-                    }
-                    x = x.substring(0, i);
-                    y.replace(x);
+                    window.close();
                 }
             }
             else {
@@ -98,7 +87,7 @@ export default class cMyUI_Recup extends cMyUI {
                 }
                 else {
                     cExperience.sendTokenForPasswordLost (nom, alias, email);
-                    let y : Location = window.location;
+/*                    let y : Location = window.location;
                     // href: "http://localhost/nanie/?recup"
                     // search: "?recup"
 
@@ -108,7 +97,8 @@ export default class cMyUI_Recup extends cMyUI {
                         i = x.length;
                     }
                     x = x.substring (0, i);
-                    y.replace (x);
+                    y.replace (x);*/
+                    window.close();
                 }
             }
             event.stopImmediatePropagation;

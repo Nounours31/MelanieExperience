@@ -43,8 +43,6 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
             // ---------------------------------------------------
             // build de la requette sql
             // ---------------------------------------------------
-             '';
-
             let hasprevious: boolean = false;
             let hasgenotypeInFiltre: boolean = false;
             let hasresultatInFiltre: boolean = false;
@@ -94,6 +92,7 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
             // ---------------------------------------------------
             // Affichage
             // ---------------------------------------------------
+            $(`#${me._idResultatDB}`).empty();
             cUIUtils.drawAllExpSumUp(allUIDExp, me._idResultatDB);
 
             event.stopImmediatePropagation();

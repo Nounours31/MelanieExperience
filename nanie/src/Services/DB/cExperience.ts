@@ -168,6 +168,7 @@ export class cExperience {
         }
         return false;
     }
+
     static updatePwd(token : string, pwd: string) : boolean {
         let me: cExperience = cExperience.getInstance();
         me._ajax.reset();
@@ -190,8 +191,44 @@ export class cExperience {
         return false;
     }
 
+    static deleteGenotypeFromuid(uid : number) : boolean {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
 
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromNum('uid', uid);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('experience', 'deleteGenotypeFromuid', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    }
+    static deleteFileFronuid(uid : number) : boolean {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
 
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromNum('uid', uid);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('experience', 'deleteFileFronuid', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    }
 
     static checkToken(token:string) : boolean {
         let me: cExperience = cExperience.getInstance();
