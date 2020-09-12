@@ -20,6 +20,7 @@ export declare class cAjax {
     reset(): void;
     getStatus(): number;
     getData(): string;
+    setToken(token: string): void;
     postData(url: string, data: cAjaxSendMessage): void;
     postData(url: string, data: string): void;
     postFiles(serverURL: string, data: FormData): void;

@@ -6,6 +6,16 @@ export declare class cExperience {
     private constructor();
     private static getInstance;
     static getAllPersone(): string[];
+    static isUserExistInDB(nom: string, alias: string, email: string): boolean;
+    static createUserInDB(nom: string, alias: string, email: string, pwd: string): boolean;
+    static getMd5PasswdFromMailorAlias(emailOralias: string, type: string): string | null;
+    static setLogin(emailOralias: string, type: string): boolean;
+    static sendTokenForPasswordLost(nom: string | null, alias: string | null, email: string | null): boolean;
+    static updatePwd(token: string, pwd: string): boolean;
+    static deleteGenotypeFromuid(uid: number): boolean;
+    static deleteFileFronuid(uid: number): boolean;
+    static checkToken(token: string): boolean;
+    static launchSQLListUIDExperience(sql: string): number[];
     static getAllExperienceInitiale(): string[];
     static createDBExperience(experienceId: string, date: string, qui: string): number;
     static getExperienceUidFromExperienceStringid(experiencestringid: string): number;
@@ -19,6 +29,7 @@ export declare class cExperience {
     static dumpFromDB(id: number, _idResultatDB: string): void;
     static getAllTestType(): string[];
     static getAllMarquage(): string[];
+    static getAllTerritoire(): string[];
     static getAllchromosome1(): string[];
     static getAllchromosome2(): string[];
     static getAllchromosome3(): string[];

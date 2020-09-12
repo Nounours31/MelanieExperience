@@ -1,5 +1,7 @@
 import $, { data } from 'jquery';
 import Uuid from '../../infra/Uuid';
+import cEnvt from '../../infra/cEnvt';
+
 
 export interface iAjaxSendMessageArgs {
     nom: string;
@@ -86,7 +88,9 @@ export class cAjax {
     public getStatus(): number { return this._internalStatus; }
     public getData(): string { return this._returnedData; }
 
-
+    public setToken( token : string) : void {
+        localStorage.setItem (cEnvt._tokenName, token);
+    }
     public postData(url: string, data: cAjaxSendMessage): void;
     public postData(url: string, data: string): void;
     public postData(url: string, data: string | cAjaxSendMessage) : void {
@@ -106,6 +110,9 @@ export class cAjax {
     }
 
     public postFiles(serverURL: string, data: FormData) {
+        if (localStorage.hasOwnProperty(cEnvt._tokenName)) {
+            data.set (cEnvt._tokenName, localStorage.getItem(cEnvt._tokenName) as string);
+        }
         jQuery.ajax({
             'url': serverURL,
             'data': data,
@@ -121,7 +128,11 @@ export class cAjax {
 
 
 
-    private getAjaxConf(completefunction: (xhr: XMLHttpRequest, status: string) => void, myUrl : string, data : JSON) : Object {
+    private getAjaxConf(completefunction: (xhr: XMLHttpRequest, status: string) => void, myUrl : string, data : JSON) : object;
+    private getAjaxConf(completefunction: (xhr: XMLHttpRequest, status: string) => void, myUrl : string, data : any) : object {
+        if (localStorage.hasOwnProperty(cEnvt._tokenName)) {
+            data[cEnvt._tokenName] = localStorage.getItem(cEnvt._tokenName) as string;
+        }
         let retour: iAjaxConfig = {
             'async' : false,
             'cache': false,

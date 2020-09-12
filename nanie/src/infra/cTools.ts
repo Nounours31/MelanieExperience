@@ -4,6 +4,7 @@ export interface iMyHtmlInfo {
     type?: string;
     indiceselected?: number;
     placeholder?: string;
+    style?:string;
 }
 
 export class cTools {
@@ -14,6 +15,9 @@ export class cTools {
         retour = `<select `;
         if (info['class'] !== undefined) {
             retour += `class="${info['class']}" `;
+        }
+        if (info['style'] !== undefined) {
+            retour += `style="${info['style']}" `;
         }
         if (info['id'] !== undefined) {
             retour += `id="${info['id']}" `;
@@ -42,5 +46,31 @@ export class cTools {
         }
         retour += `/>`;
         return retour;
+    }
+
+    static isImageFileFromName (fileName : string) : boolean {
+        let localname: string = fileName;
+        localname = localname.toLowerCase();
+        let i: number = localname.lastIndexOf ('.');
+        if (i < 0) {
+            return false;
+        }
+
+        let extens : string = localname.substring (i + 1);
+        let rc : boolean = false;
+
+        switch (extens) {
+            case 'png':
+            case 'jpg':
+            case 'jpeg':
+            case 'tiff':
+                    rc = true;
+                break;
+        
+            default:
+                    rc = false;
+                break;
+        }
+        return rc;
     }
 }

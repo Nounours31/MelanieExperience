@@ -19,6 +19,7 @@
  */
 
 namespace PHPMailer\PHPMailer;
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/thirdPty/PHPMailer/src/Exception.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/thirdPty/PHPMailer/src/SMTP.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/thirdPty/PHPMailer/src/POP3.php';
 

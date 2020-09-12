@@ -37,6 +37,246 @@ export class cExperience {
         return retour;
     }
 
+        static isUserExistInDB(nom:string, alias:string, email:string) : boolean {
+            let me: cExperience = cExperience.getInstance();
+            me._ajax.reset();
+            let retour : string[] = [];
+    
+            let args: iAjaxSendMessageArgs[] = [];
+            let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('alias', alias);
+            args.push(arg);
+            arg = cAjaxSendMessage.buildArgsFromString('email', email);
+            args.push(arg);
+            arg = cAjaxSendMessage.buildArgsFromString('nom', nom);
+            args.push(arg);
+            let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'isUserExistInDB', args);
+            me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+            if (me._ajax.getStatus() == 0) {
+                let response : string = me._ajax.getData();
+                if (response.length > 0) {
+                    if (response === 'false') 
+                        return false;
+                    if (response === 'true') 
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        static createUserInDB(nom:string, alias:string, email:string, pwd:string) : boolean {
+            let me: cExperience = cExperience.getInstance();
+            me._ajax.reset();
+            let retour : string[] = [];
+    
+            let args: iAjaxSendMessageArgs[] = [];
+            let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('alias', alias);
+            args.push(arg);
+            arg = cAjaxSendMessage.buildArgsFromString('email', email);
+            args.push(arg);
+
+            arg = cAjaxSendMessage.buildArgsFromString('nom', nom);
+            args.push(arg);
+            arg = cAjaxSendMessage.buildArgsFromString('pwd', pwd);
+            args.push(arg);
+
+            let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'createUserInDB', args);
+            me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+            if (me._ajax.getStatus() == 0) {
+                let response : string = me._ajax.getData();
+                if (response.length > 0) {
+                    if (response.length > 0) {
+                        if (response === 'false') 
+                            return false;
+                        if (response === 'true') 
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        
+
+    static getMd5PasswdFromMailorAlias(emailOralias:string, type:string) : string | null {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('emailOralias', emailOralias);
+        args.push(arg);
+        arg = cAjaxSendMessage.buildArgsFromString('type', type);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'getMd5PasswdFromMailorAlias', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            return response;
+        }
+        return null;
+    }
+
+    static setLogin(emailOralias:string, type:string) : boolean {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('emailOralias', emailOralias);
+        args.push(arg);
+        arg = cAjaxSendMessage.buildArgsFromString('type', type);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'setLogin', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static sendTokenForPasswordLost(nom : string | null, alias: string | null, email: string| null) : boolean {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs;
+        if (nom != null) {
+            arg = cAjaxSendMessage.buildArgsFromString('nom', nom);
+            args.push(arg);
+        }
+        if (alias != null) {
+            arg = cAjaxSendMessage.buildArgsFromString('alias', alias);
+            args.push(arg);
+        }
+        if (email != null) {
+            arg = cAjaxSendMessage.buildArgsFromString('email', email);
+            args.push(arg);
+        }
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'sendTokenForPasswordLost', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static updatePwd(token : string, pwd: string) : boolean {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('tokenPwd', token);
+        args.push(arg);
+        arg = cAjaxSendMessage.buildArgsFromString('pwd', pwd);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'updatePwd', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static deleteGenotypeFromuid(uid : number) : boolean {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromNum('uid', uid);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('experience', 'deleteGenotypeFromuid', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    }
+    static deleteFileFronuid(uid : number) : boolean {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromNum('uid', uid);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('experience', 'deleteFileFronuid', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            if (response.length > 0) {
+                me._ajax.setToken(response);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static checkToken(token:string) : boolean {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour : string[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg : iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('token', token);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString ('personnes', 'checkToken', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response : string = me._ajax.getData();
+            if (response.length > 0) {
+                if (response.toLowerCase() == 'true') {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    
+    
+
+    static launchSQLListUIDExperience(sql: string): number[] {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour: number[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('sql', sql);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'launchSQLListUIDExperience', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let jsonObject: JSON = JSON.parse(response);
+            if (Array.isArray(jsonObject)) {
+                jsonObject.forEach(element => {
+                    retour.push(element.uid);
+                });
+            }
+        }
+        return retour;
+    }
+
+
     static getAllExperienceInitiale(): string[] {
         let me: cExperience = cExperience.getInstance();
         me._ajax.reset();
@@ -223,6 +463,8 @@ export class cExperience {
         args.push(arg1);
         arg1 = cAjaxSendMessage.buildArgsFromString('typedetest', experience.typedetest);
         args.push(arg1);
+        arg1 = cAjaxSendMessage.buildArgsFromString('territoire', experience.territoire);
+        args.push(arg1);
         if (experience.Genotype != null) {
             arg1 = cAjaxSendMessage.buildArgsFromArray('Genotype', experience.Genotype);
             args.push(arg1);
@@ -279,7 +521,26 @@ export class cExperience {
             }
         }
         return retour;
+    }
 
+    
+    static getAllTerritoire(): string[] {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour: string[] = [];
+
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'getAllTerritoire', null);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            let jsonObject: JSON = JSON.parse(response);
+            if (Array.isArray(jsonObject)) {
+                jsonObject.forEach(element => {
+                    retour.push(element);
+                });
+            }
+        }
+        return retour;
     }
 
     static getAllchromosome1(): string[] {
@@ -319,7 +580,8 @@ export class cExperience {
             'idexperience': 0,
             'experiencestringid': '',
             'Genotype' : [],
-            'marquage' : '',
+            'marquage': '',
+            'territoire': '',
             'NbGenotype' : 0,
             'SComparatif' : 0,
             'SGeneral' : 0,

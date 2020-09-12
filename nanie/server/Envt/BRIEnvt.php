@@ -13,6 +13,10 @@ class BRIEnvt {
     const _DEBUGMAIL = true;
     const _DEBUGMAIL_EMAIL = 'melanie.fages@free.fr';
     
+    const SMTP_GMAIL = 'smtp.gmail.com';
+    const SMTP_GMAIL_USER = 'cedssections.bricolage@gmail.com';
+    const SMTP_GMAIL_USER_PWD = 'Gilles.Collin';
+
     
     // Cookie de cnx
     const COOKIE_LOGGING = "BricoCookie";
@@ -29,12 +33,13 @@ class BRIEnvt {
     const relativeDocRoot = '/nanie/';
     const relativeWSPath = '/nanie/server/WS/BRIWS.php';
     const PathToVault = '/nanie/server/vault';
+    const ShortPathToVault = 'server/vault';
     
     // fichier a uploader
     const ExternalFilePATHTODISK = 'upload/';
     
     // log php
-    const tracePATHTODISK = 'logs/';
+    const tracePATHTODISK = '/nanie/logs/';
     const traceFILE = "traces.log";
 
     
