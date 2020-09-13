@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Sep 08, 2020 at 05:02 PM
--- Server version: 5.7.26
--- PHP Version: 5.6.40
+-- Host: 127.0.0.1:3307
+-- Generation Time: Sep 13, 2020 at 08:40 PM
+-- Server version: 10.2.14-MariaDB
+-- PHP Version: 5.6.35
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -32,7 +32,7 @@ USE `melanie_fages`;
 
 DROP TABLE IF EXISTS `chromosomes`;
 CREATE TABLE IF NOT EXISTS `chromosomes` (
-  `uid` TINYINT(4) NOT NULL AUTO_INCREMENT,
+  `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `experience` (
   `uid` bigint(20) NOT NULL AUTO_INCREMENT,
   `experiencestringid` text COLLATE utf8_bin NOT NULL,
   `daterealisationexperience` date NOT NULL,
-  `faiteparqui` text COLLATE utf8_bin NOT NULL,
+  `faiteparqui` tinyint(4) NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -89,10 +89,10 @@ DROP TABLE IF EXISTS `experience_listegenotype`;
 CREATE TABLE IF NOT EXISTS `experience_listegenotype` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `idexperience` int(11) NOT NULL,
-  `chromosome1` TINYINT(4) NOT NULL,
-  `chromosome2` TINYINT(4) NOT NULL,
-  `chromosome3` TINYINT(4) NOT NULL,
-  `chromosome4` TINYINT(4) NOT NULL,
+  `chromosome1` tinyint(4) NOT NULL,
+  `chromosome2` tinyint(4) NOT NULL,
+  `chromosome3` tinyint(4) NOT NULL,
+  `chromosome4` tinyint(4) NOT NULL,
   `nbechantillon` int(11) NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
@@ -125,8 +125,8 @@ CREATE TABLE IF NOT EXISTS `experience_resultatdestests` (
 
 DROP TABLE IF EXISTS `initialesexperience`;
 CREATE TABLE IF NOT EXISTS `initialesexperience` (
-  `uid` TINYINT(4) NOT NULL AUTO_INCREMENT,
-  `Nom` text COLLATE utf8_bin NOT NULL,
+  `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `nom` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `initialesexperience` (
 -- Dumping data for table `initialesexperience`
 --
 
-INSERT INTO `initialesexperience` (`uid`, `Nom`) VALUES
+INSERT INTO `initialesexperience` (`uid`, `nom`) VALUES
 (1, 'A'),
 (2, 'B'),
 (3, 'C'),
@@ -148,7 +148,7 @@ INSERT INTO `initialesexperience` (`uid`, `Nom`) VALUES
 
 DROP TABLE IF EXISTS `marquagedesexperiences`;
 CREATE TABLE IF NOT EXISTS `marquagedesexperiences` (
-  `uid` TINYINT(4) NOT NULL AUTO_INCREMENT,
+  `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -170,7 +170,7 @@ INSERT INTO `marquagedesexperiences` (`uid`, `nom`) VALUES
 
 DROP TABLE IF EXISTS `personnes`;
 CREATE TABLE IF NOT EXISTS `personnes` (
-  `uid` TINYINT(4) NOT NULL AUTO_INCREMENT,
+  `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
   `email` text COLLATE utf8_bin NOT NULL,
   `alias` text COLLATE utf8_bin NOT NULL,
@@ -178,12 +178,15 @@ CREATE TABLE IF NOT EXISTS `personnes` (
   `token` text COLLATE utf8_bin NOT NULL,
   `validite` datetime DEFAULT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Dumping data for table `personnes`
 --
 
+INSERT INTO `personnes` (`uid`, `nom`, `email`, `alias`, `passwd`, `token`, `validite`) VALUES
+(1, 'dd', 'dd@dd.com', 'dd', '1aabac6d068eef6a7bad3fdf50a05cc8', '', '2020-01-01 00:00:00'),
+(2, 'cc', 'cc@cc.cc', 'cc', 'e0323a9039add2978bf5b49550572c7c', '', '2020-01-01 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -193,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `personnes` (
 
 DROP TABLE IF EXISTS `territoireexperiences`;
 CREATE TABLE IF NOT EXISTS `territoireexperiences` (
-  `uid` TINYINT(4) NOT NULL AUTO_INCREMENT,
+  `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -215,7 +218,7 @@ INSERT INTO `territoireexperiences` (`uid`, `nom`) VALUES
 
 DROP TABLE IF EXISTS `typedetestdesexperiences`;
 CREATE TABLE IF NOT EXISTS `typedetestdesexperiences` (
-  `uid` TINYINT(4) NOT NULL AUTO_INCREMENT,
+  `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

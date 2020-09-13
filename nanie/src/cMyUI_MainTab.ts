@@ -82,7 +82,7 @@ export default class cMyUI_MainTab extends cMyUI {
             me._logout.addCallBackOnMyDialog();
         });
 
-        $(`#${me._idTabCreation}`).trigger('click');
+        $(`#${me._idTabConsultation}`).trigger('click');
     }
 
     public draw (): string {

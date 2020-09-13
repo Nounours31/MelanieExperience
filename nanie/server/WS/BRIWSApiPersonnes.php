@@ -24,7 +24,7 @@ class BRIWSApiPersonnes extends BRIWSApi
         $err = new BRIError(1, 'Default BRIWSApiPersonnes::executeRequest error');
         $Personnes = new BRIPersonnes('');
         $referenceMsgOut='OK';
-        $this -> logger -> debug('---> OK BRIWSApiPersonnes::executeRequest >>'.$msgIN->getRequete().'<<');
+        $this->logger->debug('(executeRequest) run: >>' . $msgIN->getRequete() . '<<');
         switch ($msgIN->getRequete()) {
             case "getAllPersonnes":
                 $err = $Personnes->getAllPersonnes($referenceMsgOut);
@@ -65,11 +65,11 @@ class BRIWSApiPersonnes extends BRIWSApi
             case "setLogin":
                 $err = $Personnes->setLogin($msgIN->getArgs(), $referenceMsgOut);
                 break;
-                default:
+            
+            default:
                 $err = BRIError::E_NOIMPL();
                 break;
         }
-        $this -> logger -> debug('---> OK BRIWSApiPersonnes::executeRequest >>'.$err->toString().'// message: '.$referenceMsgOut.'<<');
         return $err;
     }
 }
