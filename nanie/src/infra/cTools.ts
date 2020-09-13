@@ -1,3 +1,5 @@
+import { iStringNumberMessage } from '../Services/DB/iOnMessageWithServer';
+
 export interface iMyHtmlInfo {
     class?: string;
     id?: string;
@@ -8,10 +10,11 @@ export interface iMyHtmlInfo {
 }
 
 export class cTools {
-    static BuildSelectFromTab(vals: string[], info: iMyHtmlInfo) : string {
+    static BuildSelectFromTab(vals: iStringNumberMessage[], info: iMyHtmlInfo, isValAndOptionEqual? : boolean) : string {
         let retour = '';
-        let allKeys : string [] = Object.keys(info);
-
+        if (isValAndOptionEqual === undefined) {
+            isValAndOptionEqual = false;
+        }
         retour = `<select `;
         if (info['class'] !== undefined) {
             retour += `class="${info['class']}" `;
@@ -26,10 +29,20 @@ export class cTools {
 
         for (let i : number = 0; i < vals.length; i++) {
             if ((info['indiceselected'] !== undefined) && (i === info['indiceselected'])) {
-                retour += `<option selected value="${vals[i]}">${vals[i]}</option>`;
+                if (isValAndOptionEqual) {
+                    retour += `<option selected value="${vals[i].nom}">${vals[i].nom}</option>`;
+                }
+                else {
+                    retour += `<option selected value="${vals[i].uid}">${vals[i].nom}</option>`;
+                }
             }
             else {
-                retour += `<option value="${vals[i]}">${vals[i]}</option>`;
+                if (isValAndOptionEqual) {
+                    retour += `<option value="${vals[i].nom}">${vals[i].nom}</option>`;
+                }
+                else {
+                    retour += `<option value="${vals[i].uid}">${vals[i].nom}</option>`;
+                }
             }
         }
         retour += `</select>`;

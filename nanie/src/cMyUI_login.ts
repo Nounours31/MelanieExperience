@@ -27,7 +27,7 @@ export default class cMyUI_login extends cMyUI {
                 type = 'alias';
             }
 
-            let pwdDB : string | null = cExperience.getMd5PasswdFromMailorAlias(emailOralias, type);
+            let pwdDB : string | null = cExperience.getPersonneMd5PasswdFromMailorAlias(emailOralias, type);
             let pwdLu : string = $(`#${me._idInputpwd}`).val() as string;
 
             let pwdLuX : encoderMd5.WordArray  = encoderMd5.MD5(pwdLu);

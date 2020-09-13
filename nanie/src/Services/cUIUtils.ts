@@ -101,7 +101,7 @@ export default class cUIUtils {
                 if (x != null) {
                     retour += `
                     <tr>
-                    <td>${allExperienceuid[i]}</td><td>${x.experiencestringid}</td><td>${x.faiteparqui}</td><td>${x.daterealisationexperience}</td><td>${x.dateinsert}</td><td>
+                    <td>${allExperienceuid[i]}</td><td>${x.experiencestringid}</td><td>${x.sFaiteparqui} [${x.faiteparqui}]</td><td>${x.daterealisationexperience}</td><td>${x.dateinsert}</td><td>
                     <button class="ui button green buttonVoirDetail" type="submit" id="${_idOKVoirOneExpButton}_${allExperienceuid[i]}">Details</button></td>
                     </tr>`;
                 }
@@ -212,7 +212,7 @@ export default class cUIUtils {
         </thead>
         <tbody>
         <tr>
-        <td>${iExpUid}</td><td>${x.experiencestringid}</td><td>${x.faiteparqui}</td><td>${x.daterealisationexperience}</td><td>${x.dateinsert}</td>
+        <td>${iExpUid}</td><td>${x.experiencestringid}</td><td>${x.sFaiteparqui} [${x.faiteparqui}]</td><td>${x.daterealisationexperience}</td><td>${x.dateinsert}</td>
         </tr>
         </tbody>
         </table>`;
@@ -225,22 +225,26 @@ export default class cUIUtils {
                 SComparatif: 0.0,
                 SGeneral : 0.0,
                 idexperience : -1,
-                marquage: 'undef',
-                territoire: 'undef',
-                typedetest: 'undef',
+                marquage: 0,
+                territoire: 0,
+                typedetest: 0,
                 Genotype: [],
                 NbGenotype: 0,
-                dateinsert: 'undef',
+                dateinsert: '',
                 experiencestringid: '----',
                 uid: -1
             }];
         }
         if ((infoGenomeExperience == null) || (infoGenomeExperience.length < 1)) {
             infoGenomeExperience = [{
-                chromosome1: '-',
-                chromosome2: '-',
-                chromosome3: '-',
-                chromosome4: '-',
+                chromosome1: 1,
+                chromosome2: 1,
+                chromosome3: 1,
+                chromosome4: 1,
+                sChromosome1: '-',
+                sChromosome2: '-',
+                sChromosome3: '-',
+                sChromosome4: '-',
                 nbechantillon: 0,
                 idexperience: -1,
                 uid: -1
@@ -278,18 +282,18 @@ export default class cUIUtils {
                 myUIForConsult += `
                 <tr>
                 <td>G ${i + 1} ${buttonstring}</td>
-                <td rowspan="${infoGenomeExperience.length}">${uneInfoResultatExperience.territoire}</td>
-                <td>${uneInfoGenomeExperience.chromosome1}</td><td>${uneInfoGenomeExperience.chromosome2}</td><td>${uneInfoGenomeExperience.chromosome3}</td><td>${uneInfoGenomeExperience.chromosome4}</td><td>${uneInfoGenomeExperience.nbechantillon}</td>
-                <td rowspan="${infoGenomeExperience.length}">${uneInfoResultatExperience.marquage}</td>
+                <td rowspan="${infoGenomeExperience.length}">${uneInfoResultatExperience.sTerritoire} [${uneInfoResultatExperience.territoire}]</td>
+                <td>${uneInfoGenomeExperience.sChromosome1}</td><td>${uneInfoGenomeExperience.sChromosome2}</td><td>${uneInfoGenomeExperience.sChromosome3}</td><td>${uneInfoGenomeExperience.sChromosome4}</td><td>${uneInfoGenomeExperience.nbechantillon}</td>
+                <td rowspan="${infoGenomeExperience.length}">${uneInfoResultatExperience.sMarquage} [${uneInfoResultatExperience.marquage}]</td>
                 <td rowspan="${infoGenomeExperience.length}">${uneInfoResultatExperience.SGeneral}</td>
                 <td rowspan="${infoGenomeExperience.length}">${uneInfoResultatExperience.SComparatif}</td>
-                <td rowspan="${infoGenomeExperience.length}">${uneInfoResultatExperience.typedetest}</td>
+                <td rowspan="${infoGenomeExperience.length}">${uneInfoResultatExperience.sTypedetest} [${uneInfoResultatExperience.typedetest}]</td>
                 </tr>`;
             }
             else {
                 myUIForConsult += `
                 <tr>
-                <td>G ${i + 1} ${buttonstring}</td><td>${uneInfoGenomeExperience.chromosome1}</td><td>${uneInfoGenomeExperience.chromosome2}</td><td>${uneInfoGenomeExperience.chromosome3}</td><td>${uneInfoGenomeExperience.chromosome4}</td><td>${uneInfoGenomeExperience.nbechantillon}</td>
+                <td>G ${i + 1} ${buttonstring}</td><td>${uneInfoGenomeExperience.sChromosome1}</td><td>${uneInfoGenomeExperience.sChromosome2}</td><td>${uneInfoGenomeExperience.sChromosome3}</td><td>${uneInfoGenomeExperience.sChromosome4}</td><td>${uneInfoGenomeExperience.nbechantillon}</td>
                 </tr>`;
 
             }

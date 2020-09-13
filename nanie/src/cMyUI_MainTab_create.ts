@@ -95,33 +95,17 @@ export default class cMyUI_MainTab_create extends cMyUI {
     private drawCreateDialog(): string {
         // -----------------------------------------------
         // recup de la liste des personnes qui peuvent realiser une experience, et creation du select UI
-        // -----------------------------------------------
-        let DefaultPersonneNom: string = '';
         let DefaultPersonneNomInitiale: string = '';
-        let allPersonnesOption: string = '';
-        let allPersonnes: string[] = cExperience.getAllPersone();
-        let selected : string = 'selected';
-        for (let i : number  = 0; i < allPersonnes.length; i++) {
-            selected = '';
-            if (i == 0) {
-                selected = 'selected';
-                DefaultPersonneNom = allPersonnes[i];
-                DefaultPersonneNomInitiale = DefaultPersonneNom.charAt (0);
-            }
-            allPersonnesOption += `<option value="${allPersonnes[i]}" ${selected}>${allPersonnes[i]}</option>`;
-        }
+        let infosForHTML = { 'class': 'ui compact selection dropdown', 'id': `${this._idCreationQui}` };
+        let allPersonnesOption: string = cTools.BuildSelectFromTab(cExperience.getAllPersone(), infosForHTML, false);
 
         // -----------------------------------------------
         // recup des initales possibles d'une experience, et creation du select UI
         // -----------------------------------------------
         let AllExperienceInitialeOption: string = '';
-        let AllExperienceInitiale: string[] = cExperience.getAllExperienceInitiale();
-        for (let i : number = 0; i < AllExperienceInitiale.length; i++) {
-            selected = '';
-            if (i == 0)
-                selected = 'selected';
-            AllExperienceInitialeOption += `<option value="${AllExperienceInitiale[i]}" ${selected}>${AllExperienceInitiale[i]}</option>`;
-        }
+        infosForHTML = { 'class': 'ui compact selection dropdown', 'id': `${this._idCreationExperienceExperiencetype}` };
+        AllExperienceInitialeOption = cTools.BuildSelectFromTab(cExperience.getAllExperienceInitiale(), infosForHTML, true);
+
 
 
         // -----------------------------------------------
@@ -137,9 +121,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
                             <input type="text" value="${DefaultPersonneNomInitiale}" id="${this._idCreationExperienceNomPrefixe}">
                             <input type="number" value="0" id="${this._idCreationExperienceNumero}">
                             <p style="font-size: x-large; margin:auto;">-</p>
-                            <select class="ui compact selection dropdown" id="${this._idCreationExperienceExperiencetype}">
-                                ${AllExperienceInitialeOption}
-                            </select>
+                            ${AllExperienceInitialeOption}
                             <input type="number" value="0" id="${this._idCreationExperienceClef}">
                         </div>
                     </div>
@@ -154,9 +136,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
                 <!-- qui a fait le Experience -->
                 <div class="field">
                     <label>Qui a realise l'experience?</label>
-                    <select class="ui compact selection dropdown" id="${this._idCreationQui}">
-                        ${allPersonnesOption}
-                    </select>
+                    ${allPersonnesOption}
                 </div>
 
                 <!-- Fichier associed  -->
@@ -340,16 +320,15 @@ export default class cMyUI_MainTab_create extends cMyUI {
 
         // la personne qui a fait l'exp change
         $(`#${this._idCreationQui}`).on('change', function (event) {
-            // recup de son nom
-            let val: string = <string>$(`#${me._idCreationQui}`).val();
-            let valEntete = val.charAt(0);
 
-            // changement du nom de l'exp
-            $(`#${me._idCreationExperienceNomPrefixe}`).val(valEntete);
-
-            // je pousse l'evenement sur le group qui va prevenir la section ajout de ce changemeny
-            $(`#${me._idCreationExperienceGroupOfInfo}`).trigger('change');
-        });
+            let val: number = <number>$(`#${me._idCreationQui}`).val();
+            let oValEntete : any = cExperience.getPersonneFromUid(val) as any;
+            if ('nom' in oValEntete) {
+                let x: string = oValEntete['nom'];
+                $(`#${me._idCreationExperienceNomPrefixe}`).val(x.charAt(0));
+                $(`#${me._idCreationExperienceGroupOfInfo}`).trigger('change');
+            }
+       });
     }
 
     // ===========================================================================================
@@ -447,10 +426,10 @@ export default class cMyUI_MainTab_create extends cMyUI {
         //          2. qui est re fireed par  lienExprienceId_NomManip de la section 1 de creation
         // --------------------------------------------
         $(`#${me._idCreationExperienceGroupOfInfo}`).on('change', function (event: JQuery.ChangeEvent) {
-            let lettreNomPrefixExpID : string = $(`#${me._idCreationExperienceNomPrefixe}`).val() as string;
-            let chiffreNumExpId : number = $(`#${me._idCreationExperienceNumero}`).val() as number;
-            let lettreTypeExpId : string = $(`#${me._idCreationExperienceExperiencetype}`).val() as string;
-            let chiffreClefExpId : number = $(`#${me._idCreationExperienceClef}`).val() as number;
+            let lettreNomPrefixExpID: string = $(`#${me._idCreationExperienceNomPrefixe}`).val() as string;
+            let chiffreNumExpId: number = $(`#${me._idCreationExperienceNumero}`).val() as number;
+            let lettreTypeExpId: string = $(`#${me._idCreationExperienceExperiencetype}`).val() as string;
+            let chiffreClefExpId: number = $(`#${me._idCreationExperienceClef}`).val() as number;
             let ExpIdName = lettreNomPrefixExpID + chiffreNumExpId.toString() + '-' + lettreTypeExpId + chiffreClefExpId.toString();
             $(`#${me._idUpdateInputExp}`).val(ExpIdName);
         });
@@ -467,19 +446,19 @@ export default class cMyUI_MainTab_create extends cMyUI {
             allInfosFromPage.experiencestringid = <string>$(`#${me._idUpdateInputExp}`).val();
             allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
 
-            allInfosFromPage.marquage = <string>$(`#${me._idUpdateSelectOnMarquage}`).val();
-            allInfosFromPage.territoire = <string>$(`#${me._idUpdateSelectOnTerritoire}`).val();
+            allInfosFromPage.marquage = <number>$(`#${me._idUpdateSelectOnMarquage}`).val();
+            allInfosFromPage.territoire = <number>$(`#${me._idUpdateSelectOnTerritoire}`).val();
             allInfosFromPage.SComparatif = <number>$(`#${me._idUpdateInputSComparatif}`).val();
             allInfosFromPage.SGeneral = <number>$(`#${me._idUpdateInputSGeneral}`).val();
-            allInfosFromPage.typedetest = <string>$(`#${me._idUpdateSelectOnTestType}`).val();
+            allInfosFromPage.typedetest = <number>$(`#${me._idUpdateSelectOnTestType}`).val();
 
             let nbValuatedGenotype: number = 0;
             for (let i = 0; i < me._nbGenotype; i++) {
                 let allInfosFromGenotype: iGenotypeMessage = cExperience.create_iGenotypeMessage();
-                allInfosFromGenotype.chromosome1 = <string>$(`#${me._idUpdateSelectOnchromosome1}_${i}`).val();
-                allInfosFromGenotype.chromosome2 = <string>$(`#${me._idUpdateSelectOnchromosome2}_${i}`).val();
-                allInfosFromGenotype.chromosome3 = <string>$(`#${me._idUpdateSelectOnchromosome3}_${i}`).val();
-                allInfosFromGenotype.chromosome4 = <string>$(`#${me._idUpdateSelectOnchromosome4}_${i}`).val();
+                allInfosFromGenotype.chromosome1 = <number>$(`#${me._idUpdateSelectOnchromosome1}_${i}`).val();
+                allInfosFromGenotype.chromosome2 = <number>$(`#${me._idUpdateSelectOnchromosome2}_${i}`).val();
+                allInfosFromGenotype.chromosome3 = <number>$(`#${me._idUpdateSelectOnchromosome3}_${i}`).val();
+                allInfosFromGenotype.chromosome4 = <number>$(`#${me._idUpdateSelectOnchromosome4}_${i}`).val();
                 allInfosFromGenotype.nbechantillon = <number>$(`#${me._idUpdateInputNbEchantillon}_${i}`).val();
                 if ((allInfosFromPage.Genotype != null) && (allInfosFromGenotype.nbechantillon > 0)) {
                     allInfosFromPage.Genotype.push(allInfosFromGenotype);
@@ -492,7 +471,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
             let id = cExperience.updateDBExperience(allInfosFromPage);
 
             // update de la visu de l'exp depuis la DB
-            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout (allInfosFromPage.idexperience);
+            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout(allInfosFromPage.idexperience);
 
 
             event.stopImmediatePropagation();
@@ -511,7 +490,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
             allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
 
             // update de la visu de l'exp depuis la DB
-            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout (allInfosFromPage.idexperience);
+            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout(allInfosFromPage.idexperience);
             event.stopImmediatePropagation();
             return false;
         });
@@ -542,9 +521,5 @@ export default class cMyUI_MainTab_create extends cMyUI {
         return;
 
     }
-
-
-
-
 }
 
