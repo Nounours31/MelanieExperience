@@ -113,7 +113,10 @@ class BRIExperience extends iBRIModel {
 
     public function getExperience_InfoGenerale($id, &$message) {
         $ret = array();
-        $rc = $this->_DB->selectAsRest("select * from " . BRIConst::DB_NOM_Experience . " where (uid = '" . $id . "') order by uid");
+        $sql = "select exp.*, s.nom as sFaiteparqui from " . BRIConst::DB_NOM_Experience . " exp ";
+        $sql .= " inner join " . BRIConst::DB_NOM_ListedesPersonnes . " s on s.uid = exp.faiteparqui";
+        $sql .= " where (exp.uid = " . $id . ") order by uid";
+        $rc = $this->_DB->selectAsRest($sql);
         if (empty($rc)) {
             $rc = "";
         }
@@ -125,7 +128,15 @@ class BRIExperience extends iBRIModel {
 
     public function getExperience_ResultatGenotype($id, &$message) {
         $ret = array();
-        $rc = $this->_DB->selectAsRest("select * from " . BRIConst::DB_NOM_ExperienceGenotype . " where (idexperience = '" . $id . "') order by uid");
+
+        $sql = "select l.*,  c1.nom as sChromosome1, c2.nom as sChromosome2, c3.nom as sChromosome3, c4.nom as sChromosome4";
+        $sql .= " from " . BRIConst::DB_NOM_ExperienceGenotype . " l ";
+        $sql .= " inner join " . BRIConst::DB_NOM_ListedesChromosomes . " c1 on c1.uid = l.chromosome1 ";
+        $sql .= " inner join " . BRIConst::DB_NOM_ListedesChromosomes . " c2 on c2.uid = l.chromosome2 ";
+        $sql .= " inner join " . BRIConst::DB_NOM_ListedesChromosomes . " c3 on c3.uid = l.chromosome3 ";
+        $sql .= " inner join " . BRIConst::DB_NOM_ListedesChromosomes . " c4 on c4.uid = l.chromosome4 ";
+        $sql .= "where (idexperience = '" . $id . "') order by uid";
+        $rc = $this->_DB->selectAsRest($sql);
         if (empty($rc)) {
             $rc = "";
         }
@@ -137,7 +148,14 @@ class BRIExperience extends iBRIModel {
 
     public function getExperience_ResultatTest($id, &$message) {
         $ret = array();
-        $rc = $this->_DB->selectAsRest("select * from " . BRIConst::DB_NOM_ExperienceResultats . " where (idexperience = '" . $id . "') order by uid");
+        
+        $sql = "select r.*, t.nom as sTerritoire, m.nom as sMarquage, test.nom as sTypedetest from " . BRIConst::DB_NOM_ExperienceResultats . " r ";
+        $sql .= " inner join " . BRIConst::DB_NOM_ListedesTerritoire . " t on t.uid = r.territoire ";
+        $sql .= " inner join " . BRIConst::DB_NOM_ListedesMarquages . " m on m.uid = r.marquage ";
+        $sql .= " inner join " . BRIConst::DB_NOM_ListedesTypeExperience . " test on test.uid = r.typedetest ";
+        $sql .= "where (idexperience = '" . $id . "') order by uid";
+
+        $rc = $this->_DB->selectAsRest($sql);
         if (empty($rc)) {
             $rc = "";
         }
@@ -164,7 +182,9 @@ class BRIExperience extends iBRIModel {
         $rc = $this->_DB->selectAsRest("select uid, nom from " . BRIConst::DB_NOM_ListedesInitiales . " order by uid");
         if (!empty($rc)) {
             for ($i = 0; $i < count($rc); $i++) {
-                array_push($ret, $rc[$i]['nom']);
+                $unTag['nom'] = $rc[$i]['nom'];
+                $unTag['uid'] = $rc[$i]['uid'];
+                array_push($ret, $unTag);
             }
         }
 
@@ -183,7 +203,9 @@ class BRIExperience extends iBRIModel {
         $rc = $this->_DB->selectAsRest('select uid, nom from ' . BRIConst::DB_NOM_ListedesChromosomes . ' order by uid');
         if (!empty($rc)) {
             for ($i = 0; $i < count($rc); $i++) {
-                array_push($ret, $rc[$i]['nom']);
+                $unTag['nom'] = $rc[$i]['nom'];
+                $unTag['uid'] = $rc[$i]['uid'];
+                array_push($ret, $unTag);
             }
         }
 
@@ -202,7 +224,9 @@ class BRIExperience extends iBRIModel {
         $rc = $this->_DB->selectAsRest('select uid, nom from ' . BRIConst::DB_NOM_ListedesTerritoire . ' order by uid');
         if (!empty($rc)) {
             for ($i = 0; $i < count($rc); $i++) {
-                array_push($ret, $rc[$i]['nom']);
+                $unTag['nom'] = $rc[$i]['nom'];
+                $unTag['uid'] = $rc[$i]['uid'];
+                array_push($ret, $unTag);
             }
         }
 
@@ -221,7 +245,9 @@ class BRIExperience extends iBRIModel {
         $rc = $this->_DB->selectAsRest('select uid, nom from ' . BRIConst::DB_NOM_ListedesMarquages . ' order by uid');
         if (!empty($rc)) {
             for ($i = 0; $i < count($rc); $i++) {
-                array_push($ret, $rc[$i]['nom']);
+                $unTag['nom'] = $rc[$i]['nom'];
+                $unTag['uid'] = $rc[$i]['uid'];
+                array_push($ret, $unTag);
             }
         }
 
@@ -240,7 +266,9 @@ class BRIExperience extends iBRIModel {
         $rc = $this->_DB->selectAsRest('select uid, nom from ' . BRIConst::DB_NOM_ListedesTypeExperience . ' order by uid');
         if (!empty($rc)) {
             for ($i = 0; $i < count($rc); $i++) {
-                array_push($ret, $rc[$i]['nom']);
+                $unTag['nom'] = $rc[$i]['nom'];
+                $unTag['uid'] = $rc[$i]['uid'];
+                array_push($ret, $unTag);
             }
         }
 

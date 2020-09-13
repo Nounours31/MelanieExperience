@@ -8,7 +8,7 @@ abstract class eConfigConnues
 }
 
 class BRIConfigs {
-    const _currentConfig = eConfigConnues::Paps;
+    const _currentConfig = eConfigConnues::Nanie;
 
      const _DBUser = [ 'root', 'root' ];
      const _DBPassword = [ '', '' ];

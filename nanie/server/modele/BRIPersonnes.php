@@ -30,10 +30,13 @@ class BRIPersonnes extends iBRIModel {
     // ---------------------------------------------------------------
     public function getAllPersonnes(&$message) {
         $ret = array();
-        $rc = $this->_DB->selectAsRest('select nom from ' . BRIConst::DB_NOM_ListedesPersonnes);
+        $rc = $this->_DB->selectAsRest('select uid, nom from ' . BRIConst::DB_NOM_ListedesPersonnes);
         if (!empty($rc)) {
             for ($i = 0; $i < count($rc); $i++) {
-                array_push($ret, $rc[$i]['nom']);
+                $oneret = array();
+                $oneret['uid'] = $rc[$i]['uid'];
+                $oneret['nom'] = $rc[$i]['nom'];
+                array_push($ret, $oneret);
             }
         }
 
@@ -125,6 +128,31 @@ class BRIPersonnes extends iBRIModel {
         return $err;
     }
 
+    
+    
+    // ---------------------------------------------------------------
+    // recup du passwd ...
+    // ---------------------------------------------------------------
+    public function getPersonneFromUid($args, &$message) {
+        $message = '';
+        $retour = array();
+        $sql = 'select * from ' . BRIConst::DB_NOM_ListedesPersonnes;
+        $sql .= " where (uid = " . $args['uid'] . ")";
+        $rc = $this->_DB->selectAsRest($sql);
+        if (!empty($rc)) {
+            $retour = ($rc[0]);
+        }
+
+        if (count($rc) < 1) {
+            $err = new BRIError(1, 'Pas de nom trouve en table');
+        } else {
+            $err = BRIError::S_OK();
+        }
+        $message = json_encode($retour);
+        return $err;
+    }
+
+    
     // ---------------------------------------------------------------
     // recup du passwd ...
     // ---------------------------------------------------------------

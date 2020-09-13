@@ -1,3 +1,4 @@
+import { iStringNumberMessage } from '../Services/DB/iOnMessageWithServer';
 export interface iMyHtmlInfo {
     class?: string;
     id?: string;
@@ -7,7 +8,7 @@ export interface iMyHtmlInfo {
     style?: string;
 }
 export declare class cTools {
-    static BuildSelectFromTab(vals: string[], info: iMyHtmlInfo): string;
+    static BuildSelectFromTab(vals: iStringNumberMessage[], info: iMyHtmlInfo, isValAndOptionEqual?: boolean): string;
     static BuildInputInt(val: string, info: iMyHtmlInfo): string;
     static isImageFileFromName(fileName: string): boolean;
 }

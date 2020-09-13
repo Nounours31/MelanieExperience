@@ -38,6 +38,10 @@ class BRIWSApiPersonnes extends BRIWSApi
                 $err = $Personnes->createUserInDB($msgIN->getArgs(), $referenceMsgOut);
                 break;
 
+            case "getPersonneFromUid":
+                $err = $Personnes->getPersonneFromUid($msgIN->getArgs(), $referenceMsgOut);
+                break;
+    
             case "getMd5PasswdFromMailorAlias":
                 $err = $Personnes->getMd5PasswdFromMailorAlias($msgIN->getArgs(), $referenceMsgOut);
                 break;

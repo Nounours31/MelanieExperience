@@ -36,7 +36,7 @@ class NanieApps {
             if ((rootDiv != null) && (newHTML != null)) {
                 rootDiv.append(newHTML);
             }
-            inscription.addCallBackOnMyDialog();        
+            inscription.addCallBackOnMyDialog();
         }
         else if (uri.startsWith('recup')){
             recup.parseURI(uri);
@@ -44,7 +44,7 @@ class NanieApps {
             if ((rootDiv != null) && (newHTML != null)) {
                 rootDiv.append(newHTML);
             }
-            recup.addCallBackOnMyDialog();        
+            recup.addCallBackOnMyDialog();
         }
         else {
             // ------------------------------------------------------------
