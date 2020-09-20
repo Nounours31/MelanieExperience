@@ -130,7 +130,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
                 <!-- date de le Experience -->
                 <div class="field">
                     <label>Date de l'experience</label>
-                    <input type="date" name="date-exp" value="2020-10-01" min="2019-09-01" id="${this._idCreationDateExp}"/>
+                    <input type="date" name="date-exp" value="2020-10-01" min="2019-01-01" id="${this._idCreationDateExp}"/>
                 </div>
 
                 <!-- qui a fait le Experience -->

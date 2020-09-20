@@ -31,7 +31,7 @@ class BRIWSApiPersonnes extends BRIWSApi
                 break;
             
             case "isUserExistInDB":
-                $err = $Personnes->isUserExistInDB($msgIN->getArgs(), $referenceMsgOut);
+                $err = $Personnes->isUserExistInDBForCreate($msgIN->getArgs(), $referenceMsgOut);
                 break;
 
             case "createUserInDB":

@@ -109,13 +109,12 @@ class BRIPersonnes extends iBRIModel {
             $sql = 'update ' . BRIConst::DB_NOM_ListedesPersonnes . " set token = '" . $token . "', validite = '" . $maxTime . "' where uid = " . $uid . "";
             $rc = $this->_DB->updateAsRest($sql);
 
-            print_r($_SERVER);
             $uri = $_SERVER['HTTP_REFERER'] . '&recup_token=' . $token . '&mode=navigo';
             $uri = '<a href="' . $uri . '">' . $uri . '</a>';
             $mailHTML = 'Coucou, <br/>';
             $mailHTML .= 'Lien pour mettre ajour notre mot de passe: ' . $uri . '<br/>';
             $mailHTML .= 'A plus dans le bus,<br/>Nanie.';
-            $rc = $this->smtpMailer('pfs@3ds.com', 'code.fages@gmail.com', 'Nanie', 'Lien pour mettre a jour notre mot de passe', $mailHTML);
+            $rc = $this->smtpMailer($email, BRIEnvt::SMTP_GMAIL_USER, 'MelanieFages Experiences', 'Lien pour mettre a jour notre mot de passe', $mailHTML);
             $message = "success";
             if ($rc === FALSE)
                 $message = "failed";
@@ -221,19 +220,16 @@ class BRIPersonnes extends iBRIModel {
             return $err;
         }
         if (!isset($args['email']) || (strlen($args['email']) < 1)) {
-            $message = "false";
+            $message = "true";
             return $err;
         }
         if (!isset($args['alias']) || (strlen($args['alias']) < 1)) {
-            $message = "false";
+            $message = "true";
             return $err;
         }
 
         $sql = 'select uid from ' . BRIConst::DB_NOM_ListedesPersonnes;
-        $whereClause = " where ((email ='" . $args['email'] . "') or (nom ='" . $args['nom'] . "'))";
-
-        if (isset($args['alias']) && (strlen($args['alias']) > 0))
-            $whereClause = " where ((email ='" . $args['email'] . "') or (alias ='" . $args['alias'] . "') or (nom ='" . $args['nom'] . "'))";
+        $whereClause = " where ((email ='" . $args['email'] . "') or (alias ='" . $args['alias'] . "') or (nom ='" . $args['nom'] . "'))";
 
         $sql = $sql . $whereClause;
         $rc = $this->_DB->selectAsRest($sql);
@@ -251,7 +247,7 @@ class BRIPersonnes extends iBRIModel {
         $maxTime = date('Y-m-d H:i:s', strtotime("+1 hour"));
 
         $sql = 'update ' . BRIConst::DB_NOM_ListedesPersonnes . " set token = '" . $token . "', validite ='" . $maxTime . "' ";
-        $whereClause = " where ((email ='" . $args['emailOralias'] . "') or (alias ='" . $args['emailOralias'] . "') or (nom ='" . $args['emailOralias'] . "'))";
+        $whereClause = " where ((email ='" . $args['emailOralias'] . "') or (alias ='" . $args['emailOralias'] . "'))";
 
         $sql = $sql . $whereClause;
         $rc = $this->_DB->updateAsRest($sql);
