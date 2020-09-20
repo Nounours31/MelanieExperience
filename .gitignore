@@ -70,3 +70,5 @@ java/
 nanie/logs/
 .vscode/
 nanie/server/vault/
+
+nanie/server/nbproject/
