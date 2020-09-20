@@ -470,6 +470,9 @@ export default class cMyUI_MainTab_create extends cMyUI {
                     allInfosFromPage.Genotype.push(allInfosFromGenotype);
                     nbValuatedGenotype++;
                 }
+
+                // reset des champs echantillons a 0 ...
+                $(`#${me._idUpdateInputNbEchantillon}_${i}`).val(0);
             }
             allInfosFromPage.NbGenotype = nbValuatedGenotype;
 
