@@ -130,7 +130,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
                 <!-- date de le Experience -->
                 <div class="field">
                     <label>Date de l'experience</label>
-                    <input type="date" name="date-exp" value="2020-10-01" min="2020-10-01" id="${this._idCreationDateExp}"/>
+                    <input type="date" name="date-exp" value="2020-10-01" min="2019-09-01" id="${this._idCreationDateExp}"/>
                 </div>
 
                 <!-- qui a fait le Experience -->
@@ -318,7 +318,9 @@ export default class cMyUI_MainTab_create extends cMyUI {
     private lienExprienceId_NomManip(): void {
         let me: cMyUI_MainTab_create = this;
 
+        // --------------------------------------------------
         // la personne qui a fait l'exp change
+        // --------------------------------------------------
         $(`#${this._idCreationQui}`).on('change', function (event) {
 
             let val: number = <number>$(`#${me._idCreationQui}`).val();
@@ -328,7 +330,11 @@ export default class cMyUI_MainTab_create extends cMyUI {
                 $(`#${me._idCreationExperienceNomPrefixe}`).val(x.charAt(0));
                 $(`#${me._idCreationExperienceGroupOfInfo}`).trigger('change');
             }
-       });
+        });
+        // --------------------------------------------------
+        // Et au premier draw je dois le faire aussi ...
+        // --------------------------------------------------
+        $(`#${this._idCreationQui}`).trigger ('change');
     }
 
     // ===========================================================================================

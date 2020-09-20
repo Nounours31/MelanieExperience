@@ -87,10 +87,7 @@ class BRIPersonnes extends iBRIModel {
         $message = '';
 
         $email = $alias = $nom = '-';
-        if (isset($args['nom']) && (strlen($args['nom']) > 0)) {
-            $nom = $args['nom'];
-            $sql = 'select uid, email from ' . BRIConst::DB_NOM_ListedesPersonnes . " where nom = '" . $nom . "'";
-        } else if (isset($args['alias']) && (strlen($args['alias']) > 0)) {
+        if (isset($args['alias']) && (strlen($args['alias']) > 0)) {
             $alias = $args['alias'];
             $sql = 'select uid, email from ' . BRIConst::DB_NOM_ListedesPersonnes . " where alias = '" . $alias . "'";
         } else if (isset($args['email']) && (strlen($args['email']) > 0)) {
@@ -159,7 +156,7 @@ class BRIPersonnes extends iBRIModel {
     public function getMd5PasswdFromMailorAlias($args, &$message) {
         $message = '';
         $sql = 'select passwd from ' . BRIConst::DB_NOM_ListedesPersonnes;
-        $sql .= " where ((email ='" . $args['emailOralias'] . "') or (alias ='" . $args['emailOralias'] . "') or (nom ='" . $args['emailOralias'] . "'))";
+        $sql .= " where ((email ='" . $args['emailOralias'] . "') or (alias ='" . $args['emailOralias'] . "'))";
         $rc = $this->_DB->selectAsRest($sql);
         if (!empty($rc)) {
             $message = ($rc[0]['passwd']);
@@ -198,7 +195,7 @@ class BRIPersonnes extends iBRIModel {
         }
 
         $testUser = '';
-        BRIPersonnes::isUserExistInDB($args, $testUser);
+        BRIPersonnes::isUserExistInDBForCreate($args, $testUser);
         if (strcmp($testUser, 'true') == 0) {
             $message = "false";
             return $err;
@@ -215,15 +212,19 @@ class BRIPersonnes extends iBRIModel {
         return $err;
     }
 
-    public function isUserExistInDB($args, &$message) {
+    public function isUserExistInDBForCreate($args, &$message) {
         $message = '';
 
         $err = new BRIError(54, 'Nom ou email invalid');
         if (!isset($args['nom']) || (strlen($args['nom']) < 1)) {
-            $message = "false";
+            $message = "true";
             return $err;
         }
         if (!isset($args['email']) || (strlen($args['email']) < 1)) {
+            $message = "false";
+            return $err;
+        }
+        if (!isset($args['alias']) || (strlen($args['alias']) < 1)) {
             $message = "false";
             return $err;
         }
