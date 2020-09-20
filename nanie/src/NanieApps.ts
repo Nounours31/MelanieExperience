@@ -1,3 +1,9 @@
+/*
+** @quick review 9/9/2020
+** Copyright Nanie 2020 - licence MIT
+** 
+** Point d'entree dans mon app
+*/
 import '../sass/myApps.scss';
 import $ from 'jquery';
 import cMyUI_MainTab from './cMyUI_MainTab';
@@ -32,19 +38,25 @@ class NanieApps {
         uri = uri.toLowerCase();
         
         if (uri.startsWith('inscription')) {
+            // ---------------------------------------------------
+            // ici http://xxx/nanie/?inscription
+            // ---------------------------------------------------
             let newHTML: string = inscription.draw();
             if ((rootDiv != null) && (newHTML != null)) {
                 rootDiv.append(newHTML);
             }
-            inscription.addCallBackOnMyDialog();        
+            inscription.addCallBackOnMyDialog();
         }
         else if (uri.startsWith('recup')){
+            // ---------------------------------------------------
+            // ici http://xxx/nanie/?recup&token=titi&pass=navigo
+            // ---------------------------------------------------
             recup.parseURI(uri);
             let newHTML: string = recup.draw();
             if ((rootDiv != null) && (newHTML != null)) {
                 rootDiv.append(newHTML);
             }
-            recup.addCallBackOnMyDialog();        
+            recup.addCallBackOnMyDialog();
         }
         else {
             // ------------------------------------------------------------
@@ -52,11 +64,16 @@ class NanieApps {
             // ------------------------------------------------------------
             let isTokenOK : boolean = false;
             let myStorage : Storage = localStorage;
+
+            // --------------------------------
+            // si token et qu'il est valide on ne se log pas
+            // --------------------------------
             if (myStorage.hasOwnProperty (cEnvt._tokenName)) {
                 isTokenOK = cExperience.checkToken (myStorage.getItem (cEnvt._tokenName) as string);
             }
 
             if (!isTokenOK) {
+                // pas de login
                 let newHTML: string = login.draw();
                 if ((rootDiv != null) && (newHTML != null)) {
                     rootDiv.append(newHTML);
@@ -64,15 +81,12 @@ class NanieApps {
                 login.addCallBackOnMyDialog();
             }
             else {
+                // page de login
                 let newHTML: string = dialog.draw();
                 if ((rootDiv != null) && (newHTML != null)) {
                     rootDiv.append(newHTML);
                 }
-
-                // ------------------------------------------------------------
-                // chargement des callback
-                // ------------------------------------------------------------
-                dialog.addCallBackOnMyDialog(); 
+                dialog.addCallBackOnMyDialog();
             }
         }
     }

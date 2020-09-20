@@ -24,20 +24,24 @@ class BRIWSApiPersonnes extends BRIWSApi
         $err = new BRIError(1, 'Default BRIWSApiPersonnes::executeRequest error');
         $Personnes = new BRIPersonnes('');
         $referenceMsgOut='OK';
-        $this -> logger -> debug('---> OK BRIWSApiPersonnes::executeRequest >>'.$msgIN->getRequete().'<<');
+        $this->logger->debug('(executeRequest) run: >>' . $msgIN->getRequete() . '<<');
         switch ($msgIN->getRequete()) {
             case "getAllPersonnes":
                 $err = $Personnes->getAllPersonnes($referenceMsgOut);
                 break;
             
             case "isUserExistInDB":
-                $err = $Personnes->isUserExistInDB($msgIN->getArgs(), $referenceMsgOut);
+                $err = $Personnes->isUserExistInDBForCreate($msgIN->getArgs(), $referenceMsgOut);
                 break;
 
             case "createUserInDB":
                 $err = $Personnes->createUserInDB($msgIN->getArgs(), $referenceMsgOut);
                 break;
 
+            case "getPersonneFromUid":
+                $err = $Personnes->getPersonneFromUid($msgIN->getArgs(), $referenceMsgOut);
+                break;
+    
             case "getMd5PasswdFromMailorAlias":
                 $err = $Personnes->getMd5PasswdFromMailorAlias($msgIN->getArgs(), $referenceMsgOut);
                 break;
@@ -61,11 +65,11 @@ class BRIWSApiPersonnes extends BRIWSApi
             case "setLogin":
                 $err = $Personnes->setLogin($msgIN->getArgs(), $referenceMsgOut);
                 break;
-                default:
+            
+            default:
                 $err = BRIError::E_NOIMPL();
                 break;
         }
-        $this -> logger -> debug('---> OK BRIWSApiPersonnes::executeRequest >>'.$err->toString().'// message: '.$referenceMsgOut.'<<');
         return $err;
     }
 }

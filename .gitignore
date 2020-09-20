@@ -1,4 +1,4 @@
-/bin/
+active/bin/
 
 .metadata
 bin/
@@ -70,5 +70,6 @@ java/
 nanie/logs/
 .vscode/
 nanie/server/vault/
+/nanie/server/nbproject/private/
+/nanie/server/nbproject/
 
-nanie/server/nbproject/

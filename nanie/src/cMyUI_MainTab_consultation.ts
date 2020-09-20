@@ -34,9 +34,9 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
             // recup des infos demandee
             // ---------------------------------------------------
             let territoire: string  = $(`#${me.id_territoire_select}`).val() as string;
-            let chromos: string[] = [];
+            let chromos: number[] = [];
             for (let i : number = 0; i < 4; i++) {
-                chromos[i] = $(`#${me.id_selectchromosome}_${i}`).val() as string;
+                chromos[i] = $(`#${me.id_selectchromosome}_${i}`).val() as number;
             }
             let SComparatif: number = $(`#${me._idSComparatif}`).val() as number;
 
@@ -57,7 +57,7 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
                 hasresultatInFiltre = true;
             }
 
-            if (cUIUtils.isValidStringInput(territoire, '-')) {
+            if (cUIUtils.isValidNumberInput(territoire, 1)) {
                 if (hasprevious) sqlWhere += ' and ';
                 sqlWhere += ` (res.territoire = '${territoire}') `;
                 hasprevious = true;
@@ -65,7 +65,7 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
             }
 
             for (let i: number = 0; i < 4; i++) {
-                if (cUIUtils.isValidStringInput(chromos[i], '-')) {
+                if (cUIUtils.isValidNumberInput(chromos[i], 1)) {
                     if (hasprevious) sqlWhere += ' and ';
                     sqlWhere += ` (geno.chromosome${i + 1} = '${chromos[i]}') `;
                     hasprevious = true;
