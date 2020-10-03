@@ -10,20 +10,21 @@ import cMyUI from './cMyUI';
 
 export default class cMyUI_MainTab_consultation extends cMyUI {
     private readonly _idOKChercheButton: string = 'OKChercheButton';
+    private readonly id_experience_select : string = 'SelectParExperienceID';
     private readonly id_territoire_select: string = 'consultation_id_territoire_select';
     private readonly id_selectchromosome: string = 'consultationid_selectchromosome';
     private readonly _idSComparatif: string = 'consultationid__idSComparatif';
     private readonly _idOKVoirOneExpButton: string = 'consultationid__idOKVoirOneExpButton';
-    
+
     constructor () {
         super('cMyUI_MainTab_consultation');
     }
 
-    
+
     public addCallBackOnMyDialog(): void {
         let me: cMyUI_MainTab_consultation = this;
         $(`#${this._idOKChercheButton}`).on('click', function (event: JQuery.ClickEvent) {
-            
+
             // ---------------------------------------------------
             // afiicher dans <div id="${this._idResultatDB}"></div>
             // ---------------------------------------------------
@@ -31,63 +32,80 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
 
 
             // ---------------------------------------------------
-            // recup des infos demandee
+            // La requete a faire passer
             // ---------------------------------------------------
-            let territoire: string  = $(`#${me.id_territoire_select}`).val() as string;
-            let chromos: number[] = [];
-            for (let i : number = 0; i < 4; i++) {
-                chromos[i] = $(`#${me.id_selectchromosome}_${i}`).val() as number;
-            }
-            let SComparatif: number = $(`#${me._idSComparatif}`).val() as number;
+            let sql: string = '';
+
 
             // ---------------------------------------------------
-            // build de la requette sql
+            // Estce qu'une experience ID a ete saisie ?
             // ---------------------------------------------------
-            let hasprevious: boolean = false;
-            let hasgenotypeInFiltre: boolean = false;
-            let hasresultatInFiltre: boolean = false;
-            let sqlSelect: string = 'SELECT exp.uid FROM experience exp ';
-            let sqlJointForGenotype: string = ' INNER JOIN experience_listegenotype    geno ON (geno.idexperience = exp.uid) ';
-            let sqlJointForResultat: string = ' INNER JOIN experience_resultatdestests res  ON (res.idexperience = exp.uid) ';
-            let sqlWhere : string = '';
-
-            if (cUIUtils.isValidNumberInput(SComparatif, 0)) {
-                sqlWhere = ` (res.SComparatif < ${SComparatif}) `;
-                hasprevious = true;
-                hasresultatInFiltre = true;
+            let ExperienceIDSelect: string = $(`#${me.id_experience_select}`).val() as string;
+            if ((ExperienceIDSelect != null) && (ExperienceIDSelect.length > 0)) {
+                sql = 'SELECT uid FROM experience exp ';
+                sql += ` where (lower(experiencestringid) = lower('${ExperienceIDSelect}'))`;
             }
+            else {
 
-            if (cUIUtils.isValidNumberInput(territoire, 1)) {
-                if (hasprevious) sqlWhere += ' and ';
-                sqlWhere += ` (res.territoire = '${territoire}') `;
-                hasprevious = true;
-                hasresultatInFiltre = true;
-            }
 
-            for (let i: number = 0; i < 4; i++) {
-                if (cUIUtils.isValidNumberInput(chromos[i], 1)) {
-                    if (hasprevious) sqlWhere += ' and ';
-                    sqlWhere += ` (geno.chromosome${i + 1} = '${chromos[i]}') `;
-                    hasprevious = true;
-                    hasgenotypeInFiltre = true;
+                // ---------------------------------------------------
+                // recup des infos demandee
+                // ---------------------------------------------------
+                let territoire: string  = $(`#${me.id_territoire_select}`).val() as string;
+                let chromos: number[] = [];
+                for (let i : number = 0; i < 4; i++) {
+                    chromos[i] = $(`#${me.id_selectchromosome}_${i}`).val() as number;
                 }
-            }
+                let SComparatif: number = $(`#${me._idSComparatif}`).val() as number;
 
-            let sql : string = '';
-            sql += sqlSelect;
-            if (hasgenotypeInFiltre)
-                sql += sqlJointForGenotype;
-            if (hasresultatInFiltre)
-                sql += sqlJointForResultat;
-            sql +=  ' where (';
+                // ---------------------------------------------------
+                // build de la requette sql
+                // ---------------------------------------------------
+                let hasprevious: boolean = false;
+                let hasgenotypeInFiltre: boolean = false;
+                let hasresultatInFiltre: boolean = false;
+                let sqlSelect: string = 'SELECT exp.uid FROM experience exp ';
+                let sqlJointForGenotype: string = ' INNER JOIN experience_listegenotype    geno ON (geno.idexperience = exp.uid) ';
+                let sqlJointForResultat: string = ' INNER JOIN experience_resultatdestests res  ON (res.idexperience = exp.uid) ';
+                let sqlWhere : string = '';
 
-            // si pas de filtre mettre tout le monde ...
-            if (sqlWhere.length < 1) {
-                sqlWhere = 'true';
+                if (cUIUtils.isValidNumberInput(SComparatif, 0)) {
+                    sqlWhere = ` (res.SComparatif < ${SComparatif}) `;
+                    hasprevious = true;
+                    hasresultatInFiltre = true;
+                }
+
+                if (cUIUtils.isValidNumberInput(territoire, 1)) {
+                    if (hasprevious) sqlWhere += ' and ';
+                    sqlWhere += ` (res.territoire = '${territoire}') `;
+                    hasprevious = true;
+                    hasresultatInFiltre = true;
+                }
+
+                for (let i: number = 0; i < 4; i++) {
+                    if (cUIUtils.isValidNumberInput(chromos[i], 1)) {
+                        if (hasprevious) sqlWhere += ' and ';
+                        sqlWhere += ` (geno.chromosome${i + 1} = '${chromos[i]}') `;
+                        hasprevious = true;
+                        hasgenotypeInFiltre = true;
+                    }
+                }
+
+                sql += sqlSelect;
+                if (hasgenotypeInFiltre)
+                    sql += sqlJointForGenotype;
+                if (hasresultatInFiltre)
+                    sql += sqlJointForResultat;
+                sql +=  ' where (';
+
+                // si pas de filtre mettre tout le monde ...
+                if (sqlWhere.length < 1) {
+                    sqlWhere = 'true';
+                }
+
+                sql += sqlWhere;
+                sql += ')';
             }
-            
-            sql += sqlWhere;
-            sql += ')';
 
             // ---------------------------------------------------
             // recup des info
@@ -105,7 +123,7 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
             return false;
         });
     }
- 
+
     public draw (): string {
         let retour : string;
 
@@ -123,29 +141,42 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
 
         retour = `
            <form class="pure-form">
-                <fieldset class="pure-group pure-input-1-4" style="border-style: none;">
-                    <label for="${this.id_territoire_select}">Territoire</label>
-                    ${selectTerritoire}
-                </fieldset>
-                <fieldset>
-                    <legend>selection genotype</legend>`;
+                <div>
+                    <fieldset class="pure-group pure-input" style="border-color: red;">
+                        <legend>selection par l'ID de l'experience (pas de filtrage)</legend>
+                        <label for="${this.id_experience_select}">Selection de l'ID d'experience</label>
+                        <input type="te" placeholder="[lettre][chiffre]-[lettre][chiffre]" value="" id="${this.id_experience_select}"/>
+                    </fieldset>
+                </div>
+                <div style="text-align: right;">
+                    <button class="ui button primary voir" type="submit" id="${this._idOKChercheButton}" style="margin-top: 5px !important;">Cherche ...</button></td>
+                </div>
+
+                <div>
+                    <fieldset class="pure-group pure-input" style="border-color: red;">
+                        <legend>selection par filtrage</legend>
+                        <fieldset class="pure-group pure-input-1-4" style="border-style: none;">
+                            <label for="${this.id_territoire_select}">Territoire</label>
+                            ${selectTerritoire}
+                        </fieldset>
+                        <fieldset>
+                            <legend>selection genotype</legend>`;
         for (let i: number = 0; i < 4; i++) {
             retour += `
-                <label for="${this.id_selectchromosome}_${i}">chromosome${i + 1}</label>
-                ${selectchromosome[i]}
-                `;
+                            <label for="${this.id_selectchromosome}_${i}">chromosome${i + 1}</label>
+                            ${selectchromosome[i]}
+                            `;
         }
         retour += `
-                </fieldset>
-                <fieldset class="pure-group pure-input-1-4"  style="border-style: none;">
-                    <label for="Scomparatif_input">S comparatif (&lt; 0.05)</label>
-                    <input type="number" placeholder="1.0e-2" min="0" max="0.05" step="any" value="0" id="${this._idSComparatif}"/>
-                </fieldset>
-                <fieldset class="pure-group pure-input-1-4"  style="border-style: none;">
-                    <button class="ui button primary voir" type="submit" id="${this._idOKChercheButton}">Cherche ...</button></td>
-                </fieldset>
-            </form>
-            <div id="${this._idResultatDB}">Resultats</div>
+                        </fieldset>
+                        <fieldset class="pure-group pure-input-1-4"  style="border-style: none;">
+                            <label for="Scomparatif_input">S comparatif (&lt; 0.05)</label>
+                            <input type="number" placeholder="1.0e-2" min="0" max="0.05" step="any" value="0" id="${this._idSComparatif}"/>
+                        </fieldset>
+                    </fieldset>
+                </div>
+        </form>
+            <div id="${this._idResultatDB}" style="margin-top: 5px;">Resultats</div>
         `;
 
         return retour;
