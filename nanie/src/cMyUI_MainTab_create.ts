@@ -21,7 +21,6 @@ export default class cMyUI_MainTab_create extends cMyUI {
     private readonly _idCreationExperienceGroupOfInfo: string = 'cMyUI_MainTab_create_SaisieExperience_ExpIDGroup';
     private readonly _idCreationDateExp: string = 'cMyUI_MainTab_create_SaisieExperience_DateExp';
     private readonly _idCreationQui: string = 'cMyUI_MainTab_create_SaisieExperience_Qui';
-    private readonly _idCreationFiles: string = 'cMyUI_MainTab_create_SaisieExperience_Files';
     private readonly _idCreationDivForMessageInfo: string = 'cMyUI_MainTab_create_MainTab_DivForForm_Info';
     private readonly _idCreationExperienceNomPrefixe: string = 'cMyUI_MainTab_create_MainTab_UI_Info_ExperienceAsLettre';
     private readonly _idCreationExperienceExperiencetype: string = 'cMyUI_MainTab_create_MainTab_UI_Info__idExperienceExperiencetype';
@@ -45,6 +44,11 @@ export default class cMyUI_MainTab_create extends cMyUI {
 
 
     private readonly _idCreationExperience_drawInfoApresCreation: string = 'cMyUI_MainTab_ajout__idCreationExperience_drawInfoApresCreation';
+
+    private readonly _idInputUpdateFile_ExpIDVal: string = 'cMyUI_MainTab_updtaeFileInput';
+    private readonly _idInputUpdateFile_SelectFiles: string = 'cMyUI_MainTab_ajout_updtaeFilexxxx';
+    private readonly _idInputUpdateFile_DivMessage: string = 'cMyUI_MainTab_ajout__idCzzzzzzzz';
+    private readonly _idInputUpdateFile_okButton: string = 'cMyUI_MainTab_ajout__idCeeeeeeeeee';
 
 
     // ----------------------------------------------------
@@ -72,6 +76,14 @@ export default class cMyUI_MainTab_create extends cMyUI {
         retour += '</fieldset></div>';
 
         // Le separateur
+        retour += '<div class="ui horizontal divider">Fichiers associ&eacute;s</div>';
+
+        // affichage de la zone de mise a jour de l'experience
+        retour += '<div style="margin-left: 10px;"><fieldset><legend> Mise &agrave; jour des fichiers associ&eacute;s &agrave; une experience en base </legend>';
+        retour += this.drawUpdateFichier();
+        retour += '</fieldset></div>';
+
+        // Le separateur
         retour += '<div class="ui horizontal divider">G&eacute;notypes associ&eacute;s</div>';
 
         // affichage de la zone de mise a jour de l'experience
@@ -85,6 +97,8 @@ export default class cMyUI_MainTab_create extends cMyUI {
         retour += '</fieldset></div>';
         return retour;
     }
+
+
 
 
 
@@ -139,12 +153,6 @@ export default class cMyUI_MainTab_create extends cMyUI {
                     ${allPersonnesOption}
                 </div>
 
-                <!-- Fichier associed  -->
-                <div class="field">
-                    <label>Lien vers les images</label>
-                    <input type="file" name="expImage" accept="*" multiple id="${this._idCreationFiles}">
-                </div>
-
                 <!-- Zone a message  -->
                 <div id="${this._idCreationDivForMessageInfo}"></div>
 
@@ -154,6 +162,42 @@ export default class cMyUI_MainTab_create extends cMyUI {
 
         return retour;
     }
+
+
+
+    // ===========================================================================================
+    // La section de mise a jour des fichiers de l'experiences
+    // ===========================================================================================
+    private drawUpdateFichier(): string {
+        // -----------------------------------------------
+        // creation du dialogue
+        // -----------------------------------------------
+        let retour: string = `
+            <form class="ui form">
+                <div class="ui labeled input">
+                    <div class="ui label">
+                        Experience Id
+                    </div>
+                    <input type="text" placeholder="[lettre][chiffre]-[lettre][chiffre]" id="${this._idInputUpdateFile_ExpIDVal}"/>
+                </div>
+
+                <!-- Fichier associed  -->
+                <div class="field">
+                    <label>Lien vers les images</label>
+                    <input type="file" name="expImage" accept="*" multiple id="${this._idInputUpdateFile_SelectFiles}">
+                </div>
+
+                <!-- Zone a message  -->
+                <div id="${this._idInputUpdateFile_DivMessage}"></div>
+
+                <!-- Validation  -->
+                <button class="ui button pink right floated" type="submit" id="${this._idInputUpdateFile_okButton}">Ajout de fichier</button>
+            </form>`;
+
+        return retour;
+    }
+
+
 
 
 
@@ -295,8 +339,55 @@ export default class cMyUI_MainTab_create extends cMyUI {
     // ===========================================================================================
     public addCallBackOnMyDialog(): void {
         this.addCallBackOnMyDialog_create();
+        this.addCallBackOnMyDialog_ajoutFiles();
         this.addCallBackOnMyDialog_ajout();
+
+        // --------------------------------------------------
+        // Et au premier draw je dois simuler un update de l'experience pour que le nom par defaut se propsga partout ...
+        // --------------------------------------------------
+        $(`#${this._idCreationQui}`).trigger('change');
+
         return;
+    }
+
+
+    // ===========================================================================================
+    // Gestion des callback de la section de l'updtae des fichier.
+    // Je dois juste brancher les OK Ajout
+    // ===========================================================================================
+    private addCallBackOnMyDialog_ajoutFiles(): void {
+        let me: cMyUI_MainTab_create = this;
+        $(`#${this._idInputUpdateFile_okButton}`).on('click', function (event : any) {
+            let files: FileList = $(`#${me._idInputUpdateFile_SelectFiles}`).prop('files');
+            if (files.length < 1) {
+                alert ('Il faut choisir au moins un fichier');
+            }
+            else {
+                // si experience cree, on pousse les fichiers dessus
+                let ExpIdName : string = $(`#${me._idInputUpdateFile_ExpIDVal}`).val() as string;
+                if ((ExpIdName == null) || (ExpIdName == undefined) || (ExpIdName.length < 5)) {
+                    alert('Il faut une experience Id');
+                }
+                else {
+                    let idExp: number = cExperience.getExperienceUidFromExperienceStringid(ExpIdName);
+                    if (idExp > 0) {
+                        cExperience.uploadFiles(idExp, files);
+                        
+                        // nettoyage de la zone de fichiers
+                        $(`#${me._idInputUpdateFile_SelectFiles}`).val('');
+
+                        // demande de mise a jour de la section 3  de consultation
+                        me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout(idExp);
+                    }
+                    else {
+                        alert("Il n'y a pas d'experience avec cet ID en base");
+                    }
+                }
+            }
+
+            event.stopPropagation();
+            return false;
+        });
     }
 
 
@@ -331,10 +422,6 @@ export default class cMyUI_MainTab_create extends cMyUI {
                 $(`#${me._idCreationExperienceGroupOfInfo}`).trigger('change');
             }
         });
-        // --------------------------------------------------
-        // Et au premier draw je dois le faire aussi ...
-        // --------------------------------------------------
-        $(`#${this._idCreationQui}`).trigger ('change');
     }
 
     // ===========================================================================================
@@ -349,7 +436,6 @@ export default class cMyUI_MainTab_create extends cMyUI {
             // les 3 champs a controler
             let date: string = <string>$(`#${me._idCreationDateExp}`).val();
             let qui: string = <string>$(`#${me._idCreationQui}`).val();
-            let files: FileList = $(`#${me._idCreationFiles}`).prop('files');
 
             // errurs si 1 manque
             let onError: boolean = false;
@@ -360,14 +446,6 @@ export default class cMyUI_MainTab_create extends cMyUI {
                             Pb de date
                         </div>
                         <p> Il faut choisir une date </p>`;
-                onError = true;
-            }
-            if (files.length < 1) {
-                onErrorMessage += `
-                        <div class="header">
-                            Image
-                        </div>
-                        <p> Il faut choisir au moins une image </p>`;
                 onError = true;
             }
             onErrorMessage += '</div>';
@@ -389,15 +467,13 @@ export default class cMyUI_MainTab_create extends cMyUI {
 
                 let id: number = cExperience.createDBExperience(experienceId, date, qui);
                 if (id > 0) {
-                    // si experience cree, on pousse les fichiers dessus
-                    cExperience.uploadFiles(id, files);
 
                     let onOKMessage: string = `<div class="ui positive message ${me._My_Message_Classe}"><i class="close icon"></i>`;
                     onOKMessage += `
                                 <div class="header">
                                     Creation experience en DB -- OK
                                 </div>
-                                <p> ${experienceId}, ${date}, ${qui}, ${files} </p>`;
+                                <p> ${experienceId}, ${date}, ${qui} </p>`;
                     onOKMessage += '</div>';
                     $(`#${me._idCreationDivForMessageInfo}`).append(onOKMessage);
                     $(`#${me._idCreationDivForMessageInfo}`).on('click', function () {
@@ -438,6 +514,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
             let chiffreClefExpId: number = $(`#${me._idCreationExperienceClef}`).val() as number;
             let ExpIdName = lettreNomPrefixExpID + chiffreNumExpId.toString() + '-' + lettreTypeExpId + chiffreClefExpId.toString();
             $(`#${me._idUpdateInputExp}`).val(ExpIdName);
+            $(`#${me._idInputUpdateFile_ExpIDVal}`).val(ExpIdName);
         });
 
 
