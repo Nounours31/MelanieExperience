@@ -48,7 +48,7 @@ class BRIWSApi extends iBRIWSApi
 
         # debug
         $content = trim(file_get_contents("php://input"));
-        $this -> logger ->debug("decodeInput:: input is -->" . $content . "<--");
+        $this -> logger ->debug("BRIWSApi::decodeInput\nPHP input is:\n -->" . $content . "<--");
         # end debug
         
         //Make sure that it is a POST request.
@@ -58,7 +58,7 @@ class BRIWSApi extends iBRIWSApi
 
         // selon le contenu parsing different
         $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
-        $this -> logger -> debug("decodeInput:: contentType is -->" . $contentType . "<--");
+        $this -> logger -> debug("BRIWSApi::decodeInput contentType is -->" . $contentType . "<--");
         if (strstr($contentType, 'application/json') === FALSE) {
             if (strstr($contentType, 'x-www-form-urlencoded') === FALSE) {
                 if (strstr($contentType, 'multipart/form-data') === FALSE) {
@@ -86,7 +86,7 @@ class BRIWSApi extends iBRIWSApi
     // Private Inputs parser selon les infos entrees
     // --------------------------------------------------------------------------------------
     private function _decodeJSONInput() {
-        $this -> logger -> all("_decodeJSONInput::StepIn");
+        $this -> logger -> debug("BRIWSApi::_decodeJSONInput --> try to decode input as JSON ...");
 
         //Receive the RAW post data.
         $content = trim(file_get_contents("php://input"));
@@ -94,16 +94,16 @@ class BRIWSApi extends iBRIWSApi
         //Attempt to decode the incoming RAW post data from JSON.
         $decoded = json_decode($content, true);
         if ($decoded == null) {
-            $this -> logger ->debug("JSONTools.php -- json decoded: NULL");
+            $this -> logger ->debug("BRIWSApi::_decodeJSONInput -- json decoded: NULL");
             throw new Exception('iBRIWSApi::_decodeJSONInput # unable to parse -- invalid json format test it first ...');
         }
         else 
-            $this -> logger ->debugTab("JSONTools.php -- json decoded: ", $decoded);
+            $this -> logger ->debugTab("BRIWSApi::_decodeJSONInput --> json:\n", $decoded);
         return $decoded;
     }
 
     private function _decodeFormURLEncodedInput() {
-        $this -> logger-> all("StepInto _decodeFormURLEncodedInput");
+        $this -> logger-> debug("BRIWSApi::_decodeFormURLEncodedInput --> try to decode input as FORMurlEncoded ...");
         foreach ($_POST as $key => $value) {
             $msg .= '['.$key.'] = ';
             if (is_array($value))
@@ -112,7 +112,7 @@ class BRIWSApi extends iBRIWSApi
                 $msg .= $value;
             $msg .= '; ';
         }
-        $this -> logger-> all($msg);
+        $this -> logger-> debug("BRIWSApi::_decodeFormURLEncodedInput --> POST Vlaues are:\n".$msg);
         
         
         $decode = array();
@@ -123,13 +123,12 @@ class BRIWSApi extends iBRIWSApi
     }
 
     private function _decodeMultiPartFormData() {
-        $this -> logger->all("StepInto _decodeMultiPartFormData");
+        $this -> logger->debug("BRIWSApi::_decodeFormURLEncodedInput --> try to decode input as MULTIPART");
 
         $decode = array();
         if (isset($_POST)) {
             $this -> logger->debugTab("decode POST:", $_POST);
             $decode['_args'] = array();
-            // "_args":[{"nom":"ExperienceId","val":"F0-A0"},{"nom":"date","val":"2020-10-01"},{"nom":"qui","val":"Fages"},{"nom":"files","val":"sassInfo.png"}]
             foreach ($_POST as $key => $value) {
                 if (substr( $key, 0, 1 ) === "_") {
                     $decode [$key] = $value;
@@ -141,10 +140,11 @@ class BRIWSApi extends iBRIWSApi
                     array_push ($decode['_args'], $UnArg);
                 }
             }
+            $this -> logger-> debugTab ("BRIWSApi::_decodeFormURLEncodedInput --> POST Values are:\n", $decode);
         }
 
         if (isset($_FILES)) {
-            $this -> logger->debugTab("decode FILES:", $_FILES);
+            $this -> logger->debugTab("BRIWSApi::_decodeFormURLEncodedInput --> FILES:", $_FILES);
             $decode['__FILES__'] = array();
             foreach ($_FILES as $key => $value) {
                 $isMultipleUpload = false;
@@ -178,7 +178,7 @@ class BRIWSApi extends iBRIWSApi
                         $unFichier['type'] = $_FILES[$key]['type'][$i];
                         $unFichier['absolute_path'] = $_FILES[$key]['tmp_name'][$i];
                         $decode['__FILES__'][BRITools::UUID()] = $unFichier;
-                        $this -> logger->debugTab("FILES decode Interne: ", $decode);
+                        $this -> logger->debugTab("BRIWSApi::_decodeFormURLEncodedInput --> FILES decode Interne: ", $decode);
                     }
                 }
             }

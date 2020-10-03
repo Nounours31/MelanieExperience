@@ -30,7 +30,7 @@ class BRIWSMessageServer2Client implements JsonSerializable {
     // ctor
     // --------------------------------------------------------------------------------------
     function __construct() {
-        $this-> logger =  new BRILogger ('iBRIWSMessageOUT');
+        $this-> logger =  new BRILogger ('BRIWSMessageServer2Client');
         $this -> type = BRIConst::_MSG_TYPE_UNDEF;
         $this -> data[BRIConst::_MSG_TYPE_ERRORNO] = -1;
         $this -> data[BRIConst::_MSG_TYPE_MESSAGE] = '';
@@ -97,24 +97,15 @@ class BRIWSMessageServer2Client implements JsonSerializable {
     }
 
     public function toJSON () {
-        $this->logger -> debug("---> BRIWSMessageServer2Client::ToJson de :");
-        $this -> Dump();
-
-/*        $json = '{type : "'.$this -> type.'",';
-        if ($this -> data[BRIConst::_MSG_TYPE_ERRORNO] >= 0) {
-           $json .= 'data: [{errno: '.$this -> data[BRIConst::_MSG_TYPE_ERRORNO].'}, {data:"'. 
-                   BRITools::echapJSONPourMessageOut($this -> data[BRIConst::_MSG_TYPE_MESSAGE]).'"}]}';
+        $this->logger -> debug("(toJSON) step into");
+        $jsonData = json_encode (json_decode("{}")); 
+        try {
+            $jsonData = json_encode($this);
         }
-        else {
-            $json .= 'data: "'.BRITools::echapJSONPourMessageOut($this -> data[BRIConst::_MSG_TYPE_MESSAGE]).'"}';
+        catch (Exception $e) {
+            $jsonData = json_encode($e);
         }
-        $r = json_encode ($json);
-        if ($r === FALSE) {
-            $this->logger -> fatal ('Error PARSING TO JSON');
-            BRIError::GenerateJSONErrorMessage(json_last_error(), $this->logger);
-        }
-        return  $r; */
-        $jsonData = json_encode($this);
+        $this->logger -> debug('(toJSON) -- '.$jsonData);
         return $jsonData;
     }
 

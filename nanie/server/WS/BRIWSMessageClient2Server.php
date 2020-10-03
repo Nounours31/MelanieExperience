@@ -25,6 +25,7 @@ class BRIWSMessageClient2Server {
     private $type = 'none';              // le type de la requete
     private $Args = array();              // le type de la requete
     private $Files= array();              // le type de la requete
+    private $Token = '';              // le type de la requete
     
     // --------------------------------------------------------------------------------------
     // ctor
@@ -38,48 +39,55 @@ class BRIWSMessageClient2Server {
     public function getType() { return $this->type;}
     public function getArgs() { return $this->Args;}
     public function getFiles() { return $this->Files;}
+    public function getToken() { return $this->Token;}
     
     // --------------------------------------------------------------------------------------
     // prend un ensemble de valeur lue dans le php://input et 
     // en fait un message comprehensible pour les WS qui vont etre appelles
     // --------------------------------------------------------------------------------------
     function buildFromArray ($ArrayOfArgsEnvoyedParLeClient) {
-        $this->logger->debug("::buildFromArray - Test contenu du tab");
+        $this->logger->debug("BRIWSMessageClient2Server::buildFromArray - Is input valid ?");
         if (!isset($ArrayOfArgsEnvoyedParLeClient)) {
             $err = new BRIError (5, "BRIWSMessageClient2Server - Pas de message a parser");
             return $err;
         }
         
         // est ce que le type de la requete est dans la demande
+        $this->logger->debug("BRIWSMessageClient2Server::buildFromArray - Is input has _classe attribute ?");
         if (!isset ($ArrayOfArgsEnvoyedParLeClient['_classe'])) {
             $err = new BRIError (5, "BRIWSMessageClient2Server - Pas de requete dans le message");
             return $err;
         }
+        $this -> type = $ArrayOfArgsEnvoyedParLeClient['_classe'];
         
         
         // est ce que le nom de la requete est dans la demande
+        $this->logger->debug("BRIWSMessageClient2Server::buildFromArray - Is input has _requete attribute ?");
         if (!isset ($ArrayOfArgsEnvoyedParLeClient['_requete'])) {
             $err = new BRIError (5, "BRIWSMessageClient2Server - Pas de requete dans le message");
             return $err;
         }
+        $this -> requete = $ArrayOfArgsEnvoyedParLeClient['_requete'];
        
+
+        // est ce que le nom de la requete est dans la demande
+        if (isset ($ArrayOfArgsEnvoyedParLeClient['nanie_token'])) {
+            $this->logger->debug("BRIWSMessageClient2Server::buildFromArray - Is input has _Token attribute ?");
+            $this -> Token = $ArrayOfArgsEnvoyedParLeClient['nanie_token'];
+        }
         
         // recupe de la requete
-        $this -> type = $ArrayOfArgsEnvoyedParLeClient['_classe'];
-
-        // recupe de la requete
-        $this -> requete = $ArrayOfArgsEnvoyedParLeClient['_requete'];
-
-        // recupe de la requete
-        // {"_args":[{"nom":"ExperienceId","val":"F0-A0"},{"nom":"date","val":"2020-10-01"},{"nom":"qui","val":"Fages"},{"nom":"files","val":"sassInfo.png"}]
+        $this->logger->debug("BRIWSMessageClient2Server::buildFromArray - OK input - set classe info");
         if (isset ($ArrayOfArgsEnvoyedParLeClient['_args'])) {
             if (is_array($ArrayOfArgsEnvoyedParLeClient['_args'])) {
+                // "_args":[{"nom":"uid","val":"7"}
+                $this->logger->debug("BRIWSMessageClient2Server::buildFromArray - convert Json {nom:, val:} To PHP [nom]=val");
                 foreach ($ArrayOfArgsEnvoyedParLeClient['_args'] as $OneArrayValue) {
                     $this->Args[$OneArrayValue['nom']]=$OneArrayValue['val'];
                 }          
             }
         }
-        $this->logger->debugTab("::buildFromArray - Args ... ", $this->Args);
+        $this->logger->debugTab("BRIWSMessageClient2Server::buildFromArray - Args are: \n", $this->Args);
 
         if (isset ($ArrayOfArgsEnvoyedParLeClient['__FILES__'])) {
             $this->Files = $ArrayOfArgsEnvoyedParLeClient['__FILES__'];
@@ -99,13 +107,18 @@ class BRIWSMessageClient2Server {
     }
     
     public function toString () {
-        $retour = "{Requete: ".$this -> requete.";   Args: }";
+        $retour = "{\n"
+                . "\tClasse: ".$this -> type."\n"
+                . "\tRequete: ".$this -> requete."\n"
+                . "\tArgs: ". BRITools::arrayToString ($this -> Args)."\n"
+                . "\tFiles: ". BRITools::arrayToString ($this -> Files)."\n"
+                ."}";
         return $retour;
     }
 
     
     public function Dump () {
-        $this->logger -> debug($this -> toString());
+        $this->logger -> debug("Message input: \n" . $this -> toString());
     }
 }
 ?>

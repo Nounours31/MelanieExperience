@@ -30,10 +30,13 @@ class BRIPersonnes extends iBRIModel {
     // ---------------------------------------------------------------
     public function getAllPersonnes(&$message) {
         $ret = array();
-        $rc = $this->_DB->selectAsRest('select nom from ' . BRIConst::DB_NOM_ListedesPersonnes);
+        $rc = $this->_DB->selectAsRest('select uid, nom from ' . BRIConst::DB_NOM_ListedesPersonnes);
         if (!empty($rc)) {
             for ($i = 0; $i < count($rc); $i++) {
-                array_push($ret, $rc[$i]['nom']);
+                $oneret = array();
+                $oneret['uid'] = $rc[$i]['uid'];
+                $oneret['nom'] = $rc[$i]['nom'];
+                array_push($ret, $oneret);
             }
         }
 
@@ -84,10 +87,7 @@ class BRIPersonnes extends iBRIModel {
         $message = '';
 
         $email = $alias = $nom = '-';
-        if (isset($args['nom']) && (strlen($args['nom']) > 0)) {
-            $nom = $args['nom'];
-            $sql = 'select uid, email from ' . BRIConst::DB_NOM_ListedesPersonnes . " where nom = '" . $nom . "'";
-        } else if (isset($args['alias']) && (strlen($args['alias']) > 0)) {
+        if (isset($args['alias']) && (strlen($args['alias']) > 0)) {
             $alias = $args['alias'];
             $sql = 'select uid, email from ' . BRIConst::DB_NOM_ListedesPersonnes . " where alias = '" . $alias . "'";
         } else if (isset($args['email']) && (strlen($args['email']) > 0)) {
@@ -109,13 +109,12 @@ class BRIPersonnes extends iBRIModel {
             $sql = 'update ' . BRIConst::DB_NOM_ListedesPersonnes . " set token = '" . $token . "', validite = '" . $maxTime . "' where uid = " . $uid . "";
             $rc = $this->_DB->updateAsRest($sql);
 
-            print_r($_SERVER);
             $uri = $_SERVER['HTTP_REFERER'] . '&recup_token=' . $token . '&mode=navigo';
             $uri = '<a href="' . $uri . '">' . $uri . '</a>';
             $mailHTML = 'Coucou, <br/>';
             $mailHTML .= 'Lien pour mettre ajour notre mot de passe: ' . $uri . '<br/>';
             $mailHTML .= 'A plus dans le bus,<br/>Nanie.';
-            $rc = $this->smtpMailer('pfs@3ds.com', 'code.fages@gmail.com', 'Nanie', 'Lien pour mettre a jour notre mot de passe', $mailHTML);
+            $rc = $this->smtpMailer($email, BRIEnvt::SMTP_GMAIL_USER, 'MelanieFages Experiences', 'Lien pour mettre a jour notre mot de passe', $mailHTML);
             $message = "success";
             if ($rc === FALSE)
                 $message = "failed";
@@ -125,13 +124,38 @@ class BRIPersonnes extends iBRIModel {
         return $err;
     }
 
+    
+    
+    // ---------------------------------------------------------------
+    // recup du passwd ...
+    // ---------------------------------------------------------------
+    public function getPersonneFromUid($args, &$message) {
+        $message = '';
+        $retour = array();
+        $sql = 'select * from ' . BRIConst::DB_NOM_ListedesPersonnes;
+        $sql .= " where (uid = " . $args['uid'] . ")";
+        $rc = $this->_DB->selectAsRest($sql);
+        if (!empty($rc)) {
+            $retour = ($rc[0]);
+        }
+
+        if (count($rc) < 1) {
+            $err = new BRIError(1, 'Pas de nom trouve en table');
+        } else {
+            $err = BRIError::S_OK();
+        }
+        $message = json_encode($retour);
+        return $err;
+    }
+
+    
     // ---------------------------------------------------------------
     // recup du passwd ...
     // ---------------------------------------------------------------
     public function getMd5PasswdFromMailorAlias($args, &$message) {
         $message = '';
         $sql = 'select passwd from ' . BRIConst::DB_NOM_ListedesPersonnes;
-        $sql .= " where ((email ='" . $args['emailOralias'] . "') or (alias ='" . $args['emailOralias'] . "') or (nom ='" . $args['emailOralias'] . "'))";
+        $sql .= " where ((email ='" . $args['emailOralias'] . "') or (alias ='" . $args['emailOralias'] . "'))";
         $rc = $this->_DB->selectAsRest($sql);
         if (!empty($rc)) {
             $message = ($rc[0]['passwd']);
@@ -170,7 +194,7 @@ class BRIPersonnes extends iBRIModel {
         }
 
         $testUser = '';
-        BRIPersonnes::isUserExistInDB($args, $testUser);
+        BRIPersonnes::isUserExistInDBForCreate($args, $testUser);
         if (strcmp($testUser, 'true') == 0) {
             $message = "false";
             return $err;
@@ -187,24 +211,25 @@ class BRIPersonnes extends iBRIModel {
         return $err;
     }
 
-    public function isUserExistInDB($args, &$message) {
+    public function isUserExistInDBForCreate($args, &$message) {
         $message = '';
 
         $err = new BRIError(54, 'Nom ou email invalid');
         if (!isset($args['nom']) || (strlen($args['nom']) < 1)) {
-            $message = "false";
+            $message = "true";
             return $err;
         }
         if (!isset($args['email']) || (strlen($args['email']) < 1)) {
-            $message = "false";
+            $message = "true";
+            return $err;
+        }
+        if (!isset($args['alias']) || (strlen($args['alias']) < 1)) {
+            $message = "true";
             return $err;
         }
 
         $sql = 'select uid from ' . BRIConst::DB_NOM_ListedesPersonnes;
-        $whereClause = " where ((email ='" . $args['email'] . "') or (nom ='" . $args['nom'] . "'))";
-
-        if (isset($args['alias']) && (strlen($args['alias']) > 0))
-            $whereClause = " where ((email ='" . $args['email'] . "') or (alias ='" . $args['alias'] . "') or (nom ='" . $args['nom'] . "'))";
+        $whereClause = " where ((email ='" . $args['email'] . "') or (alias ='" . $args['alias'] . "') or (nom ='" . $args['nom'] . "'))";
 
         $sql = $sql . $whereClause;
         $rc = $this->_DB->selectAsRest($sql);
@@ -222,7 +247,7 @@ class BRIPersonnes extends iBRIModel {
         $maxTime = date('Y-m-d H:i:s', strtotime("+1 hour"));
 
         $sql = 'update ' . BRIConst::DB_NOM_ListedesPersonnes . " set token = '" . $token . "', validite ='" . $maxTime . "' ";
-        $whereClause = " where ((email ='" . $args['emailOralias'] . "') or (alias ='" . $args['emailOralias'] . "') or (nom ='" . $args['emailOralias'] . "'))";
+        $whereClause = " where ((email ='" . $args['emailOralias'] . "') or (alias ='" . $args['emailOralias'] . "'))";
 
         $sql = $sql . $whereClause;
         $rc = $this->_DB->updateAsRest($sql);

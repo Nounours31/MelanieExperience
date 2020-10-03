@@ -23,11 +23,12 @@ class BRIWSApiExperience extends BRIWSApi {
         $err = new BRIError(0);
         $Experience = new BRIExperience('');
         $referenceMsgOut = 'OK';
-        $this->logger->debug('---> OK BRIWSApiExperience::executeRequest >>' . $msgIN->getRequete() . '<<');
+        $this->logger->debug('(executeRequest) run: >>' . $msgIN->getRequete() . '<<');
         switch ($msgIN->getRequete()) {
             case "getAllExperienceInitiale":
                 $err = $Experience->getAllExperienceInitiale($referenceMsgOut);
                 break;
+            
             case "create":
                 $ExperienceId = '';
                 $date = '';
@@ -127,15 +128,12 @@ class BRIWSApiExperience extends BRIWSApi {
                 $err = $Experience->deleteFileFronuid($msgIN->getArgs(), $referenceMsgOut);
                 break;
 
-
             default:
                 $err = BRIError::E_NOIMPL();
                 break;
         }
-        $this->logger->debug('---> OK BRIWSApiExperience::executeRequest >>' . $err->toString() . '<<');
         return $err;
     }
-
 }
 ?>
 

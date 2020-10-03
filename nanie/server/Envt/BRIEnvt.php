@@ -11,11 +11,11 @@ class BRIEnvt {
     const isLOCALSERVER = true;
     const _DEBUGLEVEL = BRIConst::_ALL;
     const _DEBUGMAIL = true;
-    const _DEBUGMAIL_EMAIL = 'melanie.fages@free.fr';
+    const _DEBUGMAIL_EMAIL = 'planninglabo.mel@gmail.com';
     
     const SMTP_GMAIL = 'smtp.gmail.com';
-    const SMTP_GMAIL_USER = 'cedssections.bricolage@gmail.com';
-    const SMTP_GMAIL_USER_PWD = 'Gilles.Collin';
+    const SMTP_GMAIL_USER = 'planninglabo.mel@gmail.com';
+    const SMTP_GMAIL_USER_PWD = 'wylgyrobtfqxuijm';
 
     
     // Cookie de cnx

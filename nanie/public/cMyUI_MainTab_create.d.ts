@@ -4,7 +4,6 @@ export default class cMyUI_MainTab_create extends cMyUI {
     private readonly _idCreationExperienceGroupOfInfo;
     private readonly _idCreationDateExp;
     private readonly _idCreationQui;
-    private readonly _idCreationFiles;
     private readonly _idCreationDivForMessageInfo;
     private readonly _idCreationExperienceNomPrefixe;
     private readonly _idCreationExperienceExperiencetype;
@@ -24,16 +23,22 @@ export default class cMyUI_MainTab_create extends cMyUI {
     private readonly _idUpdateInputSGeneral;
     private readonly _idUpdateInputSComparatif;
     private readonly _idCreationExperience_drawInfoApresCreation;
+    private readonly _idInputUpdateFile_ExpIDVal;
+    private readonly _idInputUpdateFile_SelectFiles;
+    private readonly _idInputUpdateFile_DivMessage;
+    private readonly _idInputUpdateFile_okButton;
     private readonly _nbGenotype;
     constructor();
     draw(): string;
     private drawCreateDialog;
+    private drawUpdateFichier;
     private drawUpdateDialog;
     drawInfoExperienceDialog(): string;
     addCallBackOnMyDialog(): void;
-    private addCallBackOnMyDialog_ajout;
-    private UpdateDeLaZONEBilanViSuDBApresCreateOuAjout;
+    private addCallBackOnMyDialog_ajoutFiles;
     private addCallBackOnMyDialog_create;
     private lienExprienceId_NomManip;
     private checkFormContenu;
+    private addCallBackOnMyDialog_ajout;
+    private UpdateDeLaZONEBilanViSuDBApresCreateOuAjout;
 }

@@ -9,6 +9,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/WS/BRIWSApiExperience.php'
 include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIError.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRITools.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIUID.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/modele/BRIPersonnes.php';
 
 /*********************************************************************************************
  * Classe mere de tous les WS de la section brico
@@ -19,7 +20,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/tools/BRIUID.php';
  ********************************************************************************************/
 
 // le logger
-$l = new BRILogger ('BRIWSUserServices');
+$l = new BRILogger ('BRIWS');
 
 // le message de sortie
 $msgOut = new BRIWSMessageServer2Client();
@@ -31,33 +32,46 @@ $rc = new BRIError(0) ;
 // on entre ...
 if ($rc->SUCCEEDED()) {
     try {
+        $l -> debug('========================================================================================');
+        $l -> debug('== Stat One WS');
+        $l -> debug('========================================================================================');
         // decodage des inputs
         $wsApi = new BRIWSApi();    
         $msgIn = $wsApi -> decodeInput();
-        $l -> debug('---> OK decode input');
         $msgIn -> cleanInput();             // ici faire de la secu !!!!
         $msgIn -> Dump();
         $rc = $msgIn -> validateInputMessage();
-        $l -> debug('---> OK validateInputMessage');
 
+        $token = $msgIn->getToken();
+        if (strlen ($token > 1)) {
+            $tokenupdater = new BRIPersonnes('tokenupdater');
+            $tokenupdater->updateToken($token);
+            $l -> debug('token has ben updated');
+        }
+        
         // si OK alors selon la demande du WS on eguille par type
         $referenceOutputData = null;
         if ($rc) {
+            $isClasseFind = false;
             switch ($msgIn -> getType()) {
                 case 'personnes' : 
-                    $l -> debug('---> OK Api personnes');
+                    $l -> debug('classe detected: personnes --> delegation to BRIWSApiPersonnes classe');
+                    $isClasseFind = true;
                     $api = new BRIWSApiPersonnes ();
                     $err = $api ->executeRequest($msgIn, $referenceOutputData);
                     break;
 
                 case 'experience' : 
-                    $l -> debug('---> OK Api experience');
+                    $l -> debug('classe detected: experience --> delegation to BRIWSApiPersonnes classe');
+                    $isClasseFind = true;
                     $api = new BRIWSApiExperience ();
                     $err = $api ->executeRequest($msgIn, $referenceOutputData);
                     break;
 
                 default:
-                    throw new Exception("Unknown type: ".$msgIn -> getType());
+                    $isClasseFind = false;
+                    $err = BRIError::E_NOIMPL();
+                    break;
             }
         }
         else {
@@ -71,6 +85,7 @@ if ($rc->SUCCEEDED()) {
                 $referenceOutputData = "No msg";
             $msgOut->buildFromMessage ($referenceOutputData);
         }
+        
     }
     catch (Exception $e) {
         $l -> fatal($e); 
@@ -79,9 +94,8 @@ if ($rc->SUCCEEDED()) {
     }
 }
 
-// on crache le massage de sortie
+// on crache le message de sortie
 $jsonMsg= $msgOut -> toJSON();
-$l -> debug('JSON message OUT: -->'.$jsonMsg.'<--');
 print $jsonMsg;
 ?>
 

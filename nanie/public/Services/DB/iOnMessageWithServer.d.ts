@@ -1,21 +1,32 @@
+export interface iStringNumberMessage {
+    uid: number;
+    nom: string;
+}
 export interface iGenotypeMessage {
     uid?: number;
-    chromosome1: string;
-    chromosome2: string;
-    chromosome3: string;
-    chromosome4: string;
+    chromosome1: number;
+    chromosome2: number;
+    chromosome3: number;
+    chromosome4: number;
     nbechantillon: number;
     idexperience?: number;
+    sChromosome1?: string;
+    sChromosome2?: string;
+    sChromosome3?: string;
+    sChromosome4?: string;
 }
 export interface iResultatMessage {
     uid?: number;
     experiencestringid?: string;
     idexperience: number;
-    territoire: string;
-    marquage: string;
+    territoire: number;
+    sTerritoire?: string;
+    marquage: number;
+    sMarquage?: string;
     SGeneral: number;
     SComparatif: number;
-    typedetest: string;
+    typedetest: number;
+    sTypedetest?: string;
     NbGenotype?: number;
     dateinsert?: string;
     Genotype?: iGenotypeMessage[];
@@ -23,9 +34,10 @@ export interface iResultatMessage {
 export interface iExperienceIDMessage {
     uid?: number;
     experiencestringid: string;
-    faiteparqui: string;
     daterealisationexperience: string;
     dateinsert: string;
+    faiteparqui: number;
+    sFaiteparqui?: string;
 }
 export interface iExperienceFilesMessage {
     uid?: number;

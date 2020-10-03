@@ -82,7 +82,7 @@ export default class cMyUI_MainTab extends cMyUI {
             me._logout.addCallBackOnMyDialog();
         });
 
-        $(`#${me._idTabCreation}`).trigger('click');
+        $(`#${me._idTabConsultation}`).trigger('click');
     }
 
     public draw (): string {
@@ -93,11 +93,11 @@ export default class cMyUI_MainTab extends cMyUI {
             <div id="infotabs">
                 <div class="ui menu">
                     <div class="container">
-                        <a class="item active " data-tab="Creation" id="${this._idTabCreation}">
-                            <span class="mobile hidden">Cr&eacute;ation</span>
-                        </a>
-                        <a class="item"  data-tab="Consultation" id="${this._idTabConsultation}">
+                        <a class="item active"  data-tab="Consultation" id="${this._idTabConsultation}">
                             <span class="mobile hidden">Consultation</span>
+                        </a>
+                        <a class="item" data-tab="Creation" id="${this._idTabCreation}">
+                            <span class="mobile hidden">Cr&eacute;ation</span>
                         </a>
                         <a class="item"  data-tab="Aucasou" id="${this._idTabAuCasOuTab}">
                             <span class="mobile hidden">Au cas o&ugrave; ...</span>
@@ -111,10 +111,10 @@ export default class cMyUI_MainTab extends cMyUI {
                 </div>
             </div>
 
-            <div class="ui tab basic active segment myDialogTopContainer" data-tab="Creation" id="${this._idContainerCreation}"></div>
-            <div class="ui tab basic segment myDialogTopContainer" data-tab="Consultation" id="${this._idContainerConsultation}">Consultation</div>
-            <div class="ui tab basic segment myDialogTopContainer" data-tab="Aucasou" id="${this._idContainerAuCasOuTab}">Aucasou</div>
-            <div class="ui tab basic segment myDialogTopContainer" data-tab="Logout" id="${this._idContainerLogout}">Logout</div>
+            <div class="ui tab basic segment myDialogTopContainer"        data-tab="Creation" id="${this._idContainerCreation}">Creation</div>
+            <div class="ui tab basic segment myDialogTopContainer active" data-tab="Consultation" id="${this._idContainerConsultation}">Consultation</div>
+            <div class="ui tab basic segment myDialogTopContainer"        data-tab="Aucasou" id="${this._idContainerAuCasOuTab}">Aucasou</div>
+            <div class="ui tab basic segment myDialogTopContainer"        data-tab="Logout" id="${this._idContainerLogout}">Logout</div>
             <div>&copy; Nanie Fages (octobre 2020) - UVSQ - Licence MIT</div>
             `;
         return retour;
