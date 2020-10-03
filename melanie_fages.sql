@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.9
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3307
--- Generation Time: Sep 13, 2020 at 08:40 PM
--- Server version: 10.2.14-MariaDB
--- PHP Version: 5.6.35
+-- Hôte : 127.0.0.1:3307
+-- Généré le : sam. 03 oct. 2020 à 11:13
+-- Version du serveur :  10.4.13-MariaDB
+-- Version de PHP : 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,15 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `melanie_fages`
+-- Base de données : `melanie_fages`
 --
-CREATE DATABASE IF NOT EXISTS `melanie_fages` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
-USE `melanie_fages`;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chromosomes`
+-- Structure de la table `chromosomes`
 --
 
 DROP TABLE IF EXISTS `chromosomes`;
@@ -35,22 +32,35 @@ CREATE TABLE IF NOT EXISTS `chromosomes` (
   `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Dumping data for table `chromosomes`
+-- Déchargement des données de la table `chromosomes`
 --
 
 INSERT INTO `chromosomes` (`uid`, `nom`) VALUES
 (1, '-'),
-(2, 'Pink'),
-(3, 'Decl'),
-(4, 'vlacz');
+(15, 'PINK1[5]/Y'),
+(14, 'UAS LacZ/+'),
+(13, 'Vg-Gla4/+'),
+(12, 'W1118/Y'),
+(6, 'White/white'),
+(7, 'Rbf1/TM6 Tb Sb'),
+(8, 'PINK1[5]/FM7'),
+(9, 'Vg UAS Debcl /SM5 ^ TM6'),
+(10, 'mtKeima/mtKeima'),
+(11, 'UAS LacZ/TM Tb Sb'),
+(16, 'Vg UAS D2 /+'),
+(17, 'Vg UAS D3 /+'),
+(18, 'UAS Rbf1/+'),
+(19, '+/Y'),
+(20, 'UAS LacZ/mtKeima'),
+(21, 'UAS Rbf1/mtKeima');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `experience`
+-- Structure de la table `experience`
 --
 
 DROP TABLE IF EXISTS `experience`;
@@ -61,12 +71,21 @@ CREATE TABLE IF NOT EXISTS `experience` (
   `faiteparqui` tinyint(4) NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Déchargement des données de la table `experience`
+--
+
+INSERT INTO `experience` (`uid`, `experiencestringid`, `daterealisationexperience`, `faiteparqui`, `dateinsert`) VALUES
+(6, 'F1-A2', '2020-02-04', 3, '2020-10-02 10:56:28'),
+(5, 'F1-A1', '2019-04-30', 3, '2020-10-02 10:44:04'),
+(4, 'd0-A0', '2019-01-03', 1, '2020-09-29 19:49:48');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `experience_file`
+-- Structure de la table `experience_file`
 --
 
 DROP TABLE IF EXISTS `experience_file`;
@@ -77,12 +96,22 @@ CREATE TABLE IF NOT EXISTS `experience_file` (
   `path` text COLLATE utf8_bin NOT NULL,
   `url` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Déchargement des données de la table `experience_file`
+--
+
+INSERT INTO `experience_file` (`uid`, `idexperience`, `nom`, `path`, `url`) VALUES
+(5, 5, '190403Dcp-1PINK1RBF1.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/5/190403Dcp-1PINK1RBF1.xlsx', 'server/vault/5/190403Dcp-1PINK1RBF1.xlsx'),
+(4, 4, 'Contrat doctoral M%6D%65%20%46%41%47%45%53%20%4D%C3%A9%6C%61%6E%69%65%20%20%32%30%32%30%2D%32%30%32%33%2E%70%64%66_3.pdf', 'C:/WS/tools/wamp64/www/nanie/server/vault/4/Contrat-doctoral-M%6D%65%20%46%41%47%45%53%20%4D%C3%A9%6C%61%6E%69%65%20%20%32%30%32%30%2D%32%30%32%33%2E%70%64%66_3.pdf', 'server/vault/4/Contrat-doctoral-M%6D%65%20%46%41%47%45%53%20%4D%C3%A9%6C%61%6E%69%65%20%20%32%30%32%30%2D%32%30%32%33%2E%70%64%66_3.pdf'),
+(7, 6, '200204Dcp-1PINK1RBF1.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/6/200204Dcp-1PINK1RBF1.xlsx', 'server/vault/6/200204Dcp-1PINK1RBF1.xlsx'),
+(8, 6, 'Graphique stat F1-A2.jpg', 'C:/WS/tools/wamp64/www/nanie/server/vault/6/Graphique-stat-F1-A2.jpg', 'server/vault/6/Graphique-stat-F1-A2.jpg');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `experience_listegenotype`
+-- Structure de la table `experience_listegenotype`
 --
 
 DROP TABLE IF EXISTS `experience_listegenotype`;
@@ -96,12 +125,31 @@ CREATE TABLE IF NOT EXISTS `experience_listegenotype` (
   `nbechantillon` int(11) NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Déchargement des données de la table `experience_listegenotype`
+--
+
+INSERT INTO `experience_listegenotype` (`uid`, `idexperience`, `chromosome1`, `chromosome2`, `chromosome3`, `chromosome4`, `nbechantillon`, `dateinsert`) VALUES
+(1, 1, 3, 5, 1, 1, 8, '2020-09-20 07:42:45'),
+(2, 1, 4, 5, 1, 1, 9, '2020-09-20 07:42:45'),
+(3, 1, 5, 3, 1, 1, 2, '2020-09-20 07:42:45'),
+(4, 1, 4, 1, 1, 1, 30, '2020-09-20 07:42:45'),
+(6, 2, 4, 1, 1, 1, 15, '2020-09-20 08:56:51'),
+(7, 3, 6, 1, 7, 1, 8, '2020-09-21 14:43:26'),
+(8, 3, 6, 1, 11, 1, 1, '2020-09-21 14:43:26'),
+(9, 3, 8, 1, 7, 1, 14, '2020-09-21 14:43:26'),
+(10, 3, 8, 1, 11, 1, 1, '2020-09-21 14:43:26'),
+(11, 5, 12, 13, 14, 1, 9, '2020-10-02 10:48:18'),
+(12, 5, 8, 13, 14, 1, 13, '2020-10-02 10:48:18'),
+(13, 5, 12, 13, 18, 1, 11, '2020-10-02 10:48:18'),
+(14, 5, 8, 13, 18, 1, 11, '2020-10-02 10:48:18');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `experience_resultatdestests`
+-- Structure de la table `experience_resultatdestests`
 --
 
 DROP TABLE IF EXISTS `experience_resultatdestests`;
@@ -115,12 +163,22 @@ CREATE TABLE IF NOT EXISTS `experience_resultatdestests` (
   `typedetest` text COLLATE utf8_bin NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Déchargement des données de la table `experience_resultatdestests`
+--
+
+INSERT INTO `experience_resultatdestests` (`uid`, `idexperience`, `territoire`, `marquage`, `SGeneral`, `SComparatif`, `typedetest`, `dateinsert`) VALUES
+(1, 1, '3', '3', 8, 30, '3', '2020-09-20 07:43:46'),
+(2, 2, '3', '3', -9, -19, '3', '2020-09-20 08:56:51'),
+(3, 3, '2', '2', 6, 1, '1', '2020-09-21 14:43:26'),
+(4, 5, '2', '2', 0.0000012, 0.00002, '3', '2020-10-02 10:48:18');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `initialesexperience`
+-- Structure de la table `initialesexperience`
 --
 
 DROP TABLE IF EXISTS `initialesexperience`;
@@ -128,22 +186,23 @@ CREATE TABLE IF NOT EXISTS `initialesexperience` (
   `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Dumping data for table `initialesexperience`
+-- Déchargement des données de la table `initialesexperience`
 --
 
 INSERT INTO `initialesexperience` (`uid`, `nom`) VALUES
 (1, 'A'),
 (2, 'B'),
 (3, 'C'),
-(4, 'D');
+(4, 'D'),
+(5, 'E');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `marquagedesexperiences`
+-- Structure de la table `marquagedesexperiences`
 --
 
 DROP TABLE IF EXISTS `marquagedesexperiences`;
@@ -151,21 +210,22 @@ CREATE TABLE IF NOT EXISTS `marquagedesexperiences` (
   `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Dumping data for table `marquagedesexperiences`
+-- Déchargement des données de la table `marquagedesexperiences`
 --
 
 INSERT INTO `marquagedesexperiences` (`uid`, `nom`) VALUES
 (1, '-'),
 (2, 'Dcp1'),
-(3, 'Kema');
+(3, 'Keima'),
+(4, 'Ailes');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personnes`
+-- Structure de la table `personnes`
 --
 
 DROP TABLE IF EXISTS `personnes`;
@@ -178,20 +238,21 @@ CREATE TABLE IF NOT EXISTS `personnes` (
   `token` text COLLATE utf8_bin NOT NULL,
   `validite` datetime DEFAULT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Dumping data for table `personnes`
+-- Déchargement des données de la table `personnes`
 --
 
 INSERT INTO `personnes` (`uid`, `nom`, `email`, `alias`, `passwd`, `token`, `validite`) VALUES
-(1, 'dd', 'dd@dd.com', 'dd', '1aabac6d068eef6a7bad3fdf50a05cc8', '', '2020-01-01 00:00:00'),
-(2, 'cc', 'cc@cc.cc', 'cc', 'e0323a9039add2978bf5b49550572c7c', '', '2020-01-01 00:00:00');
+(1, 'dd', 'dd@dd.com', 'dd', '1aabac6d068eef6a7bad3fdf50a05cc8', '831b57736b738c32ead9174ea5830389', '2020-10-02 11:53:25'),
+(2, 'cc', 'cc@cc.cc', 'cc', 'e0323a9039add2978bf5b49550572c7c', '', '2020-01-01 00:00:00'),
+(3, 'FAGES', '', '', '', '', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `territoireexperiences`
+-- Structure de la table `territoireexperiences`
 --
 
 DROP TABLE IF EXISTS `territoireexperiences`;
@@ -202,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `territoireexperiences` (
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Dumping data for table `territoireexperiences`
+-- Déchargement des données de la table `territoireexperiences`
 --
 
 INSERT INTO `territoireexperiences` (`uid`, `nom`) VALUES
@@ -213,7 +274,7 @@ INSERT INTO `territoireexperiences` (`uid`, `nom`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `typedetestdesexperiences`
+-- Structure de la table `typedetestdesexperiences`
 --
 
 DROP TABLE IF EXISTS `typedetestdesexperiences`;
@@ -224,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `typedetestdesexperiences` (
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Dumping data for table `typedetestdesexperiences`
+-- Déchargement des données de la table `typedetestdesexperiences`
 --
 
 INSERT INTO `typedetestdesexperiences` (`uid`, `nom`) VALUES
