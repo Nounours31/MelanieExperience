@@ -499,6 +499,28 @@ class BRIExperience extends iBRIModel {
         }
 
         if ($uid > 0) {
+            // ---------------------------------------
+            // move du fichier sur disque au cas ou ...
+            // ---------------------------------------
+            $this->_logger ->debug("deleteFileFronuid -- Try to delete uid:".$uid);
+            $sql = 'select path from ' . BRIConst::DB_NOM_ExperienceFichier . ' where (uid = ' . $uid . ')';
+            $rc = $this->_DB->selectAsRest($sql);
+            if (!empty($rc)) {
+                $pathFileToDelete = $rc[0]['path'];
+                $this->_logger ->debug("deleteFileFronuid -- file on disk: ".$pathFileToDelete);
+                if (file_exists ($pathFileToDelete)) {
+                    $newNameFile = (dirname($pathFileToDelete) . '/DeletedFile_' . basename ($pathFileToDelete). '_' . BRITools::UUID());
+                    $rccopie = rename($pathFileToDelete, $newNameFile);
+                    $this->_logger ->debug("deleteFileFronuid -- file renamed to (no deletion): ".$newNameFile."  --->> rc copie:".($rccopie === TRUE ? 'true' : 'false'));
+                }
+            }
+            else {
+                $this->_logger ->debug("deleteFileFronuid -- No file found");
+            }
+            
+            // ---------------------------------------
+            // delete en DB
+            // ---------------------------------------
             $sql = 'delete from ' . BRIConst::DB_NOM_ExperienceFichier . ' where (uid = ' . $uid . ')';
             $rc = $this->_DB->deleteAsRest($sql);
             $message = "false";
