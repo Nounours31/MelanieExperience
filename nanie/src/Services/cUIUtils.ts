@@ -329,12 +329,14 @@ export default class cUIUtils {
                 }
 
                 imagestring = '';
+                let urlToFile: String = y.origin + y.pathname + infoFileExperience[i].url;
                 if (cTools.isImageFileFromName(infoFileExperience[i].nom as string)) {
-                    imagestring = `<img src="${y.href}/${infoFileExperience[i].url}" alt="${infoFileExperience[i].path}" width="400" height="341" title="image ${i}" />
-                                 ou <a href="${y.href}/${infoFileExperience[i].url}" download="${infoFileExperience[i].nom}" class="anchorLikebutton">Downloader</a>`;
+                    imagestring = `<img src="${urlToFile}" alt="${infoFileExperience[i].path}" width="400" height="341" title="image ${i}" />
+                                 ou <a href="${urlToFile}" download="${infoFileExperience[i].nom}" class="anchorLikebutton">Downloader</a>`;
                 }
                 else {
-                    imagestring = `<a href="${y.href}/${infoFileExperience[i].url}" class="anchorLikebutton" target="_blank">Voir</a> ou <a href="${y.href}/${infoFileExperience[i].url}" download="${infoFileExperience[i].nom}" class="anchorLikebutton">Downloader</a>`;
+                    imagestring = `<a href="${urlToFile}" class="anchorLikebutton" target="_blank">Voir</a> ou
+                    <a href="${urlToFile}" download="${infoFileExperience[i].nom}" class="anchorLikebutton">Downloader</a>`;
                 }
 
                 myUIForConsult += `
