@@ -31,24 +31,9 @@ export default class cMyUI_MainTab_create extends cMyUI {
 
     private readonly _idUpdateOKButton: string = 'cMyUI_MainTab_ajout_idOKButton';
     private readonly _idUpdateInputExp: string = 'cMyUI_MainTab_ajout_idInputExp';
-    private readonly _idUpdateSelectOnchromosome1: string = 'cMyUI_MainTab_ajout_idSelectOnchromosome1';
-    private readonly _idUpdateSelectOnchromosome2: string = 'cMyUI_MainTab_ajout_idSelectOnchromosome2';
-    private readonly _idUpdateSelectOnchromosome3: string = 'cMyUI_MainTab_ajout_idSelectOnchromosome3';
-    private readonly _idUpdateSelectOnchromosome4: string = 'cMyUI_MainTab_ajout_idSelectOnchromosome4';
-    private readonly _idUpdateSelectOnTestType: string = 'cMyUI_MainTab_ajout_idSelectOnTestType';
-    private readonly _idUpdateSelectOnMarquage: string = 'cMyUI_MainTab_ajout_idSelectOnMarquage';
-    private readonly _idUpdateSelectOnTerritoire: string = 'cMyUI_MainTab_ajout_idSelectOnTerritoire';
-    private readonly _idUpdateInputNbEchantillon: string = 'cMyUI_MainTab_ajout_idInputNbEchantillon';
-    private readonly _idUpdateInputSGeneral: string = 'cMyUI_MainTab_ajout__idInputSGeneral';
-    private readonly _idUpdateInputSComparatif: string = 'cMyUI_MainTab_ajout_idInputSComparatif';
-
 
     private readonly _idCreationExperience_drawInfoApresCreation: string = 'cMyUI_MainTab_ajout__idCreationExperience_drawInfoApresCreation';
 
-    private readonly _idInputUpdateFile_ExpIDVal: string = 'cMyUI_MainTab_updtaeFileInput';
-    private readonly _idInputUpdateFile_SelectFiles: string = 'cMyUI_MainTab_ajout_updtaeFilexxxx';
-    private readonly _idInputUpdateFile_DivMessage: string = 'cMyUI_MainTab_ajout__idCzzzzzzzz';
-    private readonly _idInputUpdateFile_okButton: string = 'cMyUI_MainTab_ajout__idCeeeeeeeeee';
 
 
     // ----------------------------------------------------
@@ -75,26 +60,6 @@ export default class cMyUI_MainTab_create extends cMyUI {
         retour += this.drawCreateDialog();
         retour += '</fieldset></div>';
 
-        // Le separateur
-        retour += '<div class="ui horizontal divider">Fichiers associ&eacute;s</div>';
-
-        // affichage de la zone de mise a jour de l'experience
-        retour += '<div style="margin-left: 10px;"><fieldset><legend> Mise &agrave; jour des fichiers associ&eacute;s &agrave; une experience en base </legend>';
-        retour += this.drawUpdateFichier();
-        retour += '</fieldset></div>';
-
-        // Le separateur
-        retour += '<div class="ui horizontal divider">G&eacute;notypes associ&eacute;s</div>';
-
-        // affichage de la zone de mise a jour de l'experience
-        retour += '<div style="margin-left: 10px;"><fieldset><legend> Mise &agrave; jour des g&eacute;notypes associ&eacute;s &agrave; une experience en base </legend>';
-        retour += this.drawUpdateDialog();
-        retour += '</fieldset></div>';
-
-        // affichage de la zone info de l'experience
-        retour += '<div style="margin-left: 10px;"><fieldset class="visuexperience"><legend> En base: </legend>';
-        retour += this.drawInfoExperienceDialog();
-        retour += '</fieldset></div>';
         return retour;
     }
 
@@ -164,163 +129,6 @@ export default class cMyUI_MainTab_create extends cMyUI {
     }
 
 
-
-    // ===========================================================================================
-    // La section de mise a jour des fichiers de l'experiences
-    // ===========================================================================================
-    private drawUpdateFichier(): string {
-        // -----------------------------------------------
-        // creation du dialogue
-        // -----------------------------------------------
-        let retour: string = `
-            <form class="ui form">
-                <div class="ui labeled input">
-                    <div class="ui label">
-                        Experience Id
-                    </div>
-                    <input type="text" placeholder="[lettre][chiffre]-[lettre][chiffre]" id="${this._idInputUpdateFile_ExpIDVal}"/>
-                </div>
-
-                <!-- Fichier associed  -->
-                <div class="field">
-                    <label>Lien vers les images</label>
-                    <input type="file" name="expImage" accept="*" multiple id="${this._idInputUpdateFile_SelectFiles}">
-                </div>
-
-                <!-- Zone a message  -->
-                <div id="${this._idInputUpdateFile_DivMessage}"></div>
-
-                <!-- Validation  -->
-                <button class="ui button pink right floated" type="submit" id="${this._idInputUpdateFile_okButton}">Ajout de fichier</button>
-            </form>`;
-
-        return retour;
-    }
-
-
-
-
-
-    // ===========================================================================================
-    // La section d'ajout des experiences
-    // ===========================================================================================
-    private drawUpdateDialog(): string {
-        let retour: string;
-
-        // ----------------------------------------------------
-        // Nb genotype par defaut
-        // ----------------------------------------------------
-        const nbLigne = this._nbGenotype;
-
-        // ----------------------------------------------------
-        // Les infos a afficher dans l'UI
-        // ----------------------------------------------------
-        let infosForHTML: iMyHtmlInfo;
-        let selectchromosome1: string[] = ['', '', '', ''];
-        let selectchromosome2: string[] = ['', '', '', ''];
-        let selectchromosome3: string[] = ['', '', '', ''];
-        let selectchromosome4: string[] = ['', '', '', ''];
-        let InputNbEchantillon: string[] = ['', '', '', ''];
-        let selectTypeTest: string;
-        let selectMarquage: string;
-        let selectTerritoire: string;
-        let InputSGeneral: string;
-        let InputSComparatif: string;
-
-        // ----------------------------------------------------
-        // Recup des info en DB et construction des Select generiques
-        // ----------------------------------------------------
-        for (let i = 0; i < nbLigne; i++) {
-            infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnchromosome1}_${i}` };
-            selectchromosome1[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome1(), infosForHTML);
-
-            infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnchromosome2}_${i}` };
-            selectchromosome2[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome2(), infosForHTML);
-
-            infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnchromosome3}_${i}` };
-            selectchromosome3[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome3(), infosForHTML);
-
-            infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnchromosome4}_${i}` };
-            selectchromosome4[i] = cTools.BuildSelectFromTab(cExperience.getAllchromosome4(), infosForHTML);
-
-            infosForHTML = { 'class': 'myInputInt', 'type': 'number', 'id': `${this._idUpdateInputNbEchantillon}_${i}` };
-            InputNbEchantillon[i] = cTools.BuildInputInt('0', infosForHTML);
-        }
-        infosForHTML = { 'class': 'myInputFloat', 'type': 'number', 'id': `${this._idUpdateInputSGeneral}`, 'placeholder': '1.79e-11' };
-        InputSGeneral = cTools.BuildInputInt('1', infosForHTML);
-
-        infosForHTML = { 'class': 'myInputFloat', 'type': 'number', 'id': `${this._idUpdateInputSComparatif}`, 'placeholder': '1.79e-11' };
-        InputSComparatif = cTools.BuildInputInt('1', infosForHTML);
-
-
-        infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnTestType}` };
-        selectTypeTest = cTools.BuildSelectFromTab(cExperience.getAllTestType(), infosForHTML);
-
-        infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnMarquage}` };
-        selectMarquage = cTools.BuildSelectFromTab(cExperience.getAllMarquage(), infosForHTML);
-
-        infosForHTML = { 'class': 'mySelect', 'id': `${this._idUpdateSelectOnTerritoire}` };
-        selectTerritoire = cTools.BuildSelectFromTab(cExperience.getAllTerritoire(), infosForHTML);
-
-
-        // ----------------------------------------------------
-        // Contructin de l'UI
-        // ----------------------------------------------------
-        retour = `
-            <form class="ui form">
-                <button class="ui button pink right floated" type="submit" id="${this._idUpdateOKButton}">OK !</button>
-                <div class="ui labeled input">
-                    <div class="ui label">
-                        Experience Id
-                    </div>
-                    <!-- Recup du nom de l'exprience de l'UI OU par callback ATTENTION-->
-                    <input type="text" placeholder="[lettre][chiffre]-[lettre][chiffre]" id="${this._idUpdateInputExp}"/>
-                </div>
-                <table class="ui celled table">
-                <thead>
-                    <tr>
-                        <th>Genotype</th><th>territoire</th><th>chromosomesome 1</th> <th>chromosomesome 2</th> <th>chromosomesome 3</th><th>chromosomesome 4</th>
-                            <th>Nb Echantillon</th><th>Marquage</th><th>S general</th><th>S comparatif</th><th>Type test</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-        for (let i = 0; i < nbLigne; i++) {
-            if (i == 0) {
-                retour += `
-                    <tr>
-                        <td>G ${i + 1}</td>
-                            <!-- le territoire de tous les chromosomes -->
-                            <td rowspan="${nbLigne}">${selectTerritoire}</td>
-
-                            <!-- les chromosomes -->
-                            <td>${selectchromosome1[i]}</td><td>${selectchromosome2[i]}</td><td>${selectchromosome3[i]}</td><td>${selectchromosome4[i]}</td> <td>${InputNbEchantillon[i]}</td>
-
-                            <!-- les info de tous les chromo -->
-                            <td rowspan="${nbLigne}">${selectMarquage}</td>
-                            <td rowspan="${nbLigne}">${InputSGeneral}</td>
-                            <td rowspan="${nbLigne}">${InputSComparatif}</td>
-                            <td rowspan="${nbLigne}">${selectTypeTest}</td>
-                    </tr>`;
-            }
-            else {
-                retour += `
-                    <tr>
-                        <td>G ${i + 1}</td>
-
-                        <!-- les chromosomes -->
-                        <td>${selectchromosome1[i]}</td><td>${selectchromosome2[i]}</td><td>${selectchromosome3[i]}</td><td>${selectchromosome4[i]}</td><td>${InputNbEchantillon[i]}</td>
-                    </tr>`;
-            }
-        }
-        retour += `
-                </tbody>
-                </table>
-            </form>
-        `;
-
-        return retour;
-    }
-
     // ===========================================================================================
     // La section de consultation vide tant que rien de creer
     // ===========================================================================================
@@ -339,57 +147,8 @@ export default class cMyUI_MainTab_create extends cMyUI {
     // ===========================================================================================
     public addCallBackOnMyDialog(): void {
         this.addCallBackOnMyDialog_create();
-        this.addCallBackOnMyDialog_ajoutFiles();
-        this.addCallBackOnMyDialog_ajout();
-
-        // --------------------------------------------------
-        // Et au premier draw je dois simuler un update de l'experience pour que le nom par defaut se propsga partout ...
-        // --------------------------------------------------
-        $(`#${this._idCreationQui}`).trigger('change');
-
         return;
     }
-
-
-    // ===========================================================================================
-    // Gestion des callback de la section de l'updtae des fichier.
-    // Je dois juste brancher les OK Ajout
-    // ===========================================================================================
-    private addCallBackOnMyDialog_ajoutFiles(): void {
-        let me: cMyUI_MainTab_create = this;
-        $(`#${this._idInputUpdateFile_okButton}`).on('click', function (event : any) {
-            let files: FileList = $(`#${me._idInputUpdateFile_SelectFiles}`).prop('files');
-            if (files.length < 1) {
-                alert ('Il faut choisir au moins un fichier');
-            }
-            else {
-                // si experience cree, on pousse les fichiers dessus
-                let ExpIdName : string = $(`#${me._idInputUpdateFile_ExpIDVal}`).val() as string;
-                if ((ExpIdName == null) || (ExpIdName == undefined) || (ExpIdName.length < 5)) {
-                    alert('Il faut une experience Id');
-                }
-                else {
-                    let idExp: number = cExperience.getExperienceUidFromExperienceStringid(ExpIdName);
-                    if (idExp > 0) {
-                        cExperience.uploadFiles(idExp, files);
-                        
-                        // nettoyage de la zone de fichiers
-                        $(`#${me._idInputUpdateFile_SelectFiles}`).val('');
-
-                        // demande de mise a jour de la section 3  de consultation
-                        me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout(idExp);
-                    }
-                    else {
-                        alert("Il n'y a pas d'experience avec cet ID en base");
-                    }
-                }
-            }
-
-            event.stopPropagation();
-            return false;
-        });
-    }
-
 
 
     // ===========================================================================================
@@ -399,6 +158,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
     private addCallBackOnMyDialog_create(): void {
         this.checkFormContenu();
         this.lienExprienceId_NomManip();
+        $(`#${this._idCreationQui}`).trigger('change');
     }
 
 
@@ -493,94 +253,7 @@ export default class cMyUI_MainTab_create extends cMyUI {
         });
     }
 
-    // ===========================================================================================
-    // Callback du OK - update experience [ajout de resultats]
-    //      1. check du contenu du formulaire
-    //      2. envoie en DB si OK
-    // ===========================================================================================
-    private addCallBackOnMyDialog_ajout(): void {
-        let me: cMyUI_MainTab_create = this;
 
-        // -------------------------------------------
-        // ce call back permet de mettre  ajour le nom d el'expID dnas la zone d'update
-        // le "fire" est fait par
-        //      1. le call back de changement de nom de qui,
-        //          2. qui est re fireed par  lienExprienceId_NomManip de la section 1 de creation
-        // --------------------------------------------
-        $(`#${me._idCreationExperienceGroupOfInfo}`).on('change', function (event: JQuery.ChangeEvent) {
-            let lettreNomPrefixExpID: string = $(`#${me._idCreationExperienceNomPrefixe}`).val() as string;
-            let chiffreNumExpId: number = $(`#${me._idCreationExperienceNumero}`).val() as number;
-            let lettreTypeExpId: string = $(`#${me._idCreationExperienceExperiencetype}`).val() as string;
-            let chiffreClefExpId: number = $(`#${me._idCreationExperienceClef}`).val() as number;
-            let ExpIdName = lettreNomPrefixExpID + chiffreNumExpId.toString() + '-' + lettreTypeExpId + chiffreClefExpId.toString();
-            $(`#${me._idUpdateInputExp}`).val(ExpIdName);
-            $(`#${me._idInputUpdateFile_ExpIDVal}`).val(ExpIdName);
-        });
-
-
-        // -------------------------------------------
-        // call back de lecture du formulaire pour l'envoye en db
-        // check et push en DB
-        // --------------------------------------------
-        $(`#${me._idUpdateOKButton}`).on('click', function (event: JQuery.ClickEvent) {
-
-            // lecture des infos
-            let allInfosFromPage: iResultatMessage = cExperience.create_iResultatMessage();
-            allInfosFromPage.experiencestringid = <string>$(`#${me._idUpdateInputExp}`).val();
-            allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
-
-            allInfosFromPage.marquage = <number>$(`#${me._idUpdateSelectOnMarquage}`).val();
-            allInfosFromPage.territoire = <number>$(`#${me._idUpdateSelectOnTerritoire}`).val();
-            allInfosFromPage.SComparatif = <number>$(`#${me._idUpdateInputSComparatif}`).val();
-            allInfosFromPage.SGeneral = <number>$(`#${me._idUpdateInputSGeneral}`).val();
-            allInfosFromPage.typedetest = <number>$(`#${me._idUpdateSelectOnTestType}`).val();
-
-            let nbValuatedGenotype: number = 0;
-            for (let i = 0; i < me._nbGenotype; i++) {
-                let allInfosFromGenotype: iGenotypeMessage = cExperience.create_iGenotypeMessage();
-                allInfosFromGenotype.chromosome1 = <number>$(`#${me._idUpdateSelectOnchromosome1}_${i}`).val();
-                allInfosFromGenotype.chromosome2 = <number>$(`#${me._idUpdateSelectOnchromosome2}_${i}`).val();
-                allInfosFromGenotype.chromosome3 = <number>$(`#${me._idUpdateSelectOnchromosome3}_${i}`).val();
-                allInfosFromGenotype.chromosome4 = <number>$(`#${me._idUpdateSelectOnchromosome4}_${i}`).val();
-                allInfosFromGenotype.nbechantillon = <number>$(`#${me._idUpdateInputNbEchantillon}_${i}`).val();
-                if ((allInfosFromPage.Genotype != null) && (allInfosFromGenotype.nbechantillon > 0)) {
-                    allInfosFromPage.Genotype.push(allInfosFromGenotype);
-                    nbValuatedGenotype++;
-                }
-
-                // reset des champs echantillons a 0 ...
-                $(`#${me._idUpdateInputNbEchantillon}_${i}`).val(0);
-            }
-            allInfosFromPage.NbGenotype = nbValuatedGenotype;
-
-            // push en DB des info
-            let id = cExperience.updateDBExperience(allInfosFromPage);
-
-            // update de la visu de l'exp depuis la DB
-            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout(allInfosFromPage.idexperience);
-
-
-            event.stopImmediatePropagation();
-            return false;
-        });
-
-
-        // -------------------------------------------
-        // USER_EVENT
-        // call back du user event envoye par le delete d'un objet afin de demander le redraw de la section info (section 3)
-        // --------------------------------------------
-        $(`#${me._idUpdateOKButton}`).on('Event_DeleteFileOrGenotype', function (event: any) {
-            // recherche de l'id de l'exp
-            let allInfosFromPage: iResultatMessage = cExperience.create_iResultatMessage();
-            allInfosFromPage.experiencestringid = <string>$(`#${me._idUpdateInputExp}`).val();
-            allInfosFromPage.idexperience = cExperience.getExperienceUidFromExperienceStringid(allInfosFromPage.experiencestringid);
-
-            // update de la visu de l'exp depuis la DB
-            me.UpdateDeLaZONEBilanViSuDBApresCreateOuAjout(allInfosFromPage.idexperience);
-            event.stopImmediatePropagation();
-            return false;
-        });
-    }
 
     // ==========================================================================
     // affichage de la zone d'info
