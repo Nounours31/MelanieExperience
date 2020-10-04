@@ -283,65 +283,77 @@ class BRIExperience extends iBRIModel {
     }
 
     public function uploadFiles($aargs, $afiles, &$message) {
-        $id_exp = $aargs['experienceId'];
-        $ficDest = $_SERVER['DOCUMENT_ROOT'] . BRIEnvt::PathToVault;
-        $ficDest = $ficDest . "/" . $id_exp;
-        //$urlfile = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . BRIEnvt::PathToVault . '/' . $id_exp;
-        $urlfile =  BRIEnvt::ShortPathToVault . '/' . $id_exp;
+        $onError = false;
+        try {
+            $this->_logger->Debug('::uploadfile - Start Upload File');
+        
+            $id_exp = $aargs['experienceId'];
+            $ficDest = $_SERVER['DOCUMENT_ROOT'] . BRIEnvt::PathToVault;
+            $ficDest = $ficDest . "/" . $id_exp;
+            $urlfile =  BRIEnvt::ShortPathToVault . '/' . $id_exp;
 
-        $this->_logger->Debug('Test de ' . $ficDest);
-        if (!file_exists($ficDest)) {
-            $rc = mkdir($ficDest, 777, true);
-            $this->_logger->Debug('mkdir ' . $ficDest . '    rc:' . $rc);
-        }
-
-        $isKO = false;
-        foreach ($afiles as $key => $value) {
-            // [FBAB06F8-BDAC-40FC-859C-FAC31392A22E : [[key : {file-0}][name : {sassInfo.png}][type : {image/png}][absolute_path : {E:\wamp64\tmp\php35A9.tmp}]]]
-            $nomfile = $value ['name'];
-            $this->_logger->debug('Nom originel:' . $nomfile);
-
-            $nomfileCopie = str_replace("'", "-", $nomfile);
-            $this->_logger->debug('passe1:' . $nomfileCopie);
-
-            $nomfileCopie = str_replace(" ", "-", $nomfileCopie);
-            $this->_logger->debug('passe1:' . $nomfileCopie);
-
-            $nomfileCopie = preg_replace('/[[:^print:]]/', '', $nomfileCopie);
-            $this->_logger->debug('passe2:' . $nomfileCopie);
-
-            $nomfileCopie = filter_var($nomfileCopie, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-            $this->_logger->debug('passe3:' . $nomfileCopie);
-
-            $pathfile = $value ['absolute_path'];
-
-            if (file_exists($ficDest . "/" . $nomfileCopie)) {
-                $nomfileCopie = $nomfileCopie . BRITools::UUID();
+            $this->_logger->Debug('::uploadFiles - Test de ' . $ficDest);
+            if (!file_exists($ficDest)) {
+                $rc = mkdir($ficDest, 777, true);
+                $this->_logger->Debug('mkdir ' . $ficDest . '    rc:' . $rc);
             }
 
-            $this->_logger->Debug('cp ' . $pathfile . '   vers ' . $ficDest . "/" . $nomfileCopie);
-            $rc = copy($pathfile, $ficDest . "/" . $nomfileCopie);
+            $isKO = false;
+            foreach ($afiles as $key => $value) {
+                // [FBAB06F8-BDAC-40FC-859C-FAC31392A22E : [[key : {file-0}][name : {sassInfo.png}][type : {image/png}][absolute_path : {E:\wamp64\tmp\php35A9.tmp}]]]
+                $nomfile = $value ['name'];
+                $this->_logger->debug('Nom originel:' . $nomfile);
 
-            if ($rc === TRUE) {
-                $message .= "Copie de " . $nomfile . " vers " . $ficDest . "/" . $nomfileCopie;
-                $sql = 'insert into ' . BRIConst::DB_NOM_ExperienceFichier . ' (idexperience, nom, path, url) VALUES ';
-                $sql .= "(" . $id_exp . ", '" . str_replace("'", "\'", $value ['name']) . "', '" . $ficDest . "/" . $nomfileCopie . "', '" . $urlfile . "/" . $nomfileCopie . "')";
+                $nomfileCopie = str_replace("'", "-", $nomfile);
+                $this->_logger->debug('passe1:' . $nomfileCopie);
 
-                $ret = array();
-                $rc = $this->_DB->insertAsRest($sql);
-                if ($rc === FALSE) {
-                    $isKO = true;
-                    $message .= "Impossible de mettre en DB " . $nomfile;
+                $nomfileCopie = str_replace(" ", "-", $nomfileCopie);
+                $this->_logger->debug('passe1:' . $nomfileCopie);
+
+                $nomfileCopie = preg_replace('/[[:^print:]]/', '', $nomfileCopie);
+                $this->_logger->debug('passe2:' . $nomfileCopie);
+
+                $nomfileCopie = filter_var($nomfileCopie, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+                $this->_logger->debug('passe3:' . $nomfileCopie);
+
+                $pathfile = $value ['absolute_path'];
+
+                if (file_exists($ficDest . "/" . $nomfileCopie)) {
+                    $nomfileCopie = $nomfileCopie . BRITools::UUID();
                 }
-            } else {
-                $message .= "ECHEC copie " . $nomfile;
-                $isKO = true;
+
+                $this->_logger->Debug('::uploadfiles -- cp ' . $pathfile . '   vers ' . $ficDest . "/" . $nomfileCopie);
+                $rc = copy($pathfile, $ficDest . "/" . $nomfileCopie);
+
+                if ($rc === TRUE) {
+                    $message .= "Copie de " . $nomfile . " vers " . $ficDest . "/" . $nomfileCopie;
+                    $sql = 'insert into ' . BRIConst::DB_NOM_ExperienceFichier . ' (idexperience, nom, path, url) VALUES ';
+                    $sql .= "(" . $id_exp . ", '" . str_replace("'", "\'", $value ['name']) . "', '" . $ficDest . "/" . $nomfileCopie . "', '" . $urlfile . "/" . $nomfileCopie . "')";
+
+                    $ret = array();
+                    $rc = $this->_DB->insertAsRest($sql);
+                    if ($rc === FALSE) {
+                        $isKO = true;
+                        $message .= "Impossible de mettre en DB " . $nomfile;
+                    }
+                    $this->_logger->Debug('::uploadfile - done');
+                } else {
+                    $message .= "ECHEC copie " . $nomfile;
+                    $isKO = true;
+                }
             }
         }
-        if (!$isKO) {
-            $err = BRIError::S_OK();
-        } else {
-            $err = new BRIError(5, $message);
+        catch (Exception $e) {
+            $this->_logger->fatal('exception at file upload'. $e->getMessage());
+            $err = BRIError::BuildFromException($e);
+            $onError = true;
+        }
+        if ($onError != true) {
+            if (!$isKO) {
+                $err = BRIError::S_OK();
+            } else {
+                $err = new BRIError(5, $message);
+            }
         }
         return $err;
     }

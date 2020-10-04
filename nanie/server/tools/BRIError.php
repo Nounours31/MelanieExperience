@@ -79,6 +79,17 @@ class BRIError {
         return new BRIError(BRIError::$_S_OK);
     }
     
+    static function BuildFromException ($f) {
+        $msg = 'Exception.message='.$f -> getMessage();
+        $msg = '<br/> Exception.Code='.$f ->getCode();
+        $msg = '<br/> Exception.File='.$f ->getFile();
+        $msg = '<br/> Exception.Line='.$f ->getLine();
+        $msg = '<br/> Exception.StackTrace='.$f ->getTraceAsString();
+        
+        $err = new BRIError($f->getCode(), $msg);
+        return $err;
+    }
+    
     function FAILED () {
         if ($this -> _errcode == BRIError::$_S_OK) {
             return false;
