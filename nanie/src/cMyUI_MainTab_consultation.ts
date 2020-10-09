@@ -43,7 +43,7 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
             let ExperienceIDSelect: string = $(`#${me.id_experience_select}`).val() as string;
             if ((ExperienceIDSelect != null) && (ExperienceIDSelect.length > 0)) {
                 sql = 'SELECT uid FROM experience exp ';
-                sql += ` where (lower(experiencestringid) = lower('${ExperienceIDSelect}'))`;
+                sql += ` where (lower(experiencestringid) like lower('${ExperienceIDSelect}%'))`;
             }
             else {
 
