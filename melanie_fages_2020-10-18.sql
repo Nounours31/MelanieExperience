@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3307
--- Généré le : Dim 04 oct. 2020 à 16:03
+-- Généré le : Dim 18 oct. 2020 à 16:35
 -- Version du serveur :  10.4.13-MariaDB
 -- Version de PHP : 7.3.21
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `melanie_fages`
 --
+CREATE DATABASE IF NOT EXISTS `melanie_fages` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+USE `melanie_fages`;
 
 -- --------------------------------------------------------
 
@@ -32,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `chromosomes` (
   `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Déchargement des données de la table `chromosomes`
@@ -55,7 +57,8 @@ INSERT INTO `chromosomes` (`uid`, `nom`) VALUES
 (18, 'UAS Rbf1/+'),
 (19, '+/Y'),
 (20, 'UAS LacZ/mtKeima'),
-(21, 'UAS Rbf1/mtKeima');
+(21, 'UAS Rbf1/mtKeima'),
+(24, 'PINK1[B9]/Y');
 
 -- --------------------------------------------------------
 
@@ -71,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `experience` (
   `faiteparqui` tinyint(4) NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Déchargement des données de la table `experience`
@@ -87,7 +90,9 @@ INSERT INTO `experience` (`uid`, `experiencestringid`, `daterealisationexperienc
 (10, 'F2-A2', '2019-05-28', 3, '2020-10-04 09:32:18'),
 (11, 'F2-A3', '2020-03-13', 3, '2020-10-04 09:34:35'),
 (12, 'F5-A1', '2019-06-19', 3, '2020-10-04 09:44:36'),
-(15, 'd0-A0', '2020-10-01', 1, '2020-10-04 15:09:33');
+(16, 'B1-B1', '2019-01-01', 4, '2020-10-09 11:33:45'),
+(17, 'F2-B1', '2018-11-09', 3, '2020-10-12 13:38:00'),
+(18, 'F2-B2', '2019-05-25', 3, '2020-10-12 13:38:33');
 
 -- --------------------------------------------------------
 
@@ -103,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `experience_file` (
   `path` text COLLATE utf8_bin NOT NULL,
   `url` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=86 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=99 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Déchargement des données de la table `experience_file`
@@ -112,41 +117,42 @@ CREATE TABLE IF NOT EXISTS `experience_file` (
 INSERT INTO `experience_file` (`uid`, `idexperience`, `nom`, `path`, `url`) VALUES
 (20, 6, 'Marquage Dcp1 PINK1[5] Rbf1.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/6/Marquage-Dcp1-PINK1[5]-Rbf1.odp', 'server/vault/6/Marquage-Dcp1-PINK1[5]-Rbf1.odp'),
 (5, 5, '190403Dcp-1PINK1RBF1.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/5/190403Dcp-1PINK1RBF1.xlsx', 'server/vault/5/190403Dcp-1PINK1RBF1.xlsx'),
-(24, 5, 'Graph_stat_F1-A1', 'C:/WS/tools/wamp64/www/nanie/server/vault/5/Graph_stat_F1-A18C6BB1BD-22E7-4C1E-B24E-7EDDFD65CE5C', 'server/vault/5/Graph_stat_F1-A18C6BB1BD-22E7-4C1E-B24E-7EDDFD65CE5C'),
+(92, 6, 'Graph_stat_F1-A2.png', 'C:/WS/tools/wamp64/www/nanie/server/vault/6/Graph_stat_F1-A2.png', 'server/vault/6/Graph_stat_F1-A2.png'),
 (19, 5, 'Marquage Dcp1 PINK1[5] Rbf1.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/5/Marquage-Dcp1-PINK1[5]-Rbf1.odp', 'server/vault/5/Marquage-Dcp1-PINK1[5]-Rbf1.odp'),
-(25, 7, 'Graph_stat_F1-A3', 'C:/WS/tools/wamp64/www/nanie/server/vault/7/Graph_stat_F1-A3A1F59142-F930-431A-A6DC-C5EC719E5970', 'server/vault/7/Graph_stat_F1-A3A1F59142-F930-431A-A6DC-C5EC719E5970'),
+(94, 9, 'Graph_stat_F2-A1.png', 'C:/WS/tools/wamp64/www/nanie/server/vault/9/Graph_stat_F2-A1.png', 'server/vault/9/Graph_stat_F2-A1.png'),
 (7, 6, '200204Dcp-1PINK1RBF1.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/6/200204Dcp-1PINK1RBF1.xlsx', 'server/vault/6/200204Dcp-1PINK1RBF1.xlsx'),
 (55, 12, 'Marquage Keima Rbf1 (Posterieur).odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/12/Marquage-Keima-Rbf1-(Posterieur).odp', 'server/vault/12/Marquage-Keima-Rbf1-(Posterieur).odp'),
 (9, 7, '200313Dcp-1PINK1RBF1.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/7/200313Dcp-1PINK1RBF1.xlsx', 'server/vault/7/200313Dcp-1PINK1RBF1.xlsx'),
 (26, 7, 'Marquage Dcp1 PINK1[5] Rbf1.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/7/Marquage-Dcp1-PINK1[5]-Rbf1.odp', 'server/vault/7/Marquage-Dcp1-PINK1[5]-Rbf1.odp'),
-(11, 8, 'Graphique stat F1-A2.jpg', 'C:/WS/tools/wamp64/www/nanie/server/vault/8/Graphique-stat-F1-A2.jpg', 'server/vault/8/Graphique-stat-F1-A2.jpg'),
-(27, 6, 'Graph_stat_F1-A2', 'C:/WS/tools/wamp64/www/nanie/server/vault/6/Graph_stat_F1-A27AAE621D-2AEE-456A-8347-4C2BEA0CD3A4', 'server/vault/6/Graph_stat_F1-A27AAE621D-2AEE-456A-8347-4C2BEA0CD3A4'),
-(28, 9, 'Graph_stat_F2-A1', 'C:/WS/tools/wamp64/www/nanie/server/vault/9/Graph_stat_F2-A1', 'server/vault/9/Graph_stat_F2-A1'),
+(87, 17, 'Comptage des ailes Phenotype Mutant PINK1 Debcl VS Debcl 181109.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/17/Comptage-des-ailes-Phenotype-Mutant-PINK1-Debcl-VS-Debcl-181109.xlsx', 'server/vault/17/Comptage-des-ailes-Phenotype-Mutant-PINK1-Debcl-VS-Debcl-181109.xlsx'),
+(93, 7, 'Graph_stat_F1-A3.png', 'C:/WS/tools/wamp64/www/nanie/server/vault/7/Graph_stat_F1-A3.png', 'server/vault/7/Graph_stat_F1-A3.png'),
+(95, 10, 'Graph_stat_F2-A2.png', 'C:/WS/tools/wamp64/www/nanie/server/vault/10/Graph_stat_F2-A2.png', 'server/vault/10/Graph_stat_F2-A2.png'),
 (29, 9, '190430Dcp-1PINK1DEBCL.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/9/190430Dcp-1PINK1DEBCL.xlsx', 'server/vault/9/190430Dcp-1PINK1DEBCL.xlsx'),
 (30, 9, 'Marquage Dcp1 PINK1[5] Debcl.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/9/Marquage-Dcp1-PINK1[5]-Debcl.odp', 'server/vault/9/Marquage-Dcp1-PINK1[5]-Debcl.odp'),
-(31, 10, 'Graph_stat_F2-A2', 'C:/WS/tools/wamp64/www/nanie/server/vault/10/Graph_stat_F2-A2', 'server/vault/10/Graph_stat_F2-A2'),
+(96, 11, 'Graph_stat_F2-A3.png', 'C:/WS/tools/wamp64/www/nanie/server/vault/11/Graph_stat_F2-A3.png', 'server/vault/11/Graph_stat_F2-A3.png'),
 (32, 10, '190528Dcp-1PINK1DEBCL.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/10/190528Dcp-1PINK1DEBCL.xlsx', 'server/vault/10/190528Dcp-1PINK1DEBCL.xlsx'),
 (33, 10, 'Marquage Dcp1 PINK1[5] Debcl.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/10/Marquage-Dcp1-PINK1[5]-Debcl.odp', 'server/vault/10/Marquage-Dcp1-PINK1[5]-Debcl.odp'),
 (34, 11, 'Marquage Dcp1 PINK1[5] Debcl.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/11/Marquage-Dcp1-PINK1[5]-Debcl.odp', 'server/vault/11/Marquage-Dcp1-PINK1[5]-Debcl.odp'),
 (35, 11, '200313Dcp-1PINK1DEBCL.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/11/200313Dcp-1PINK1DEBCL.xlsx', 'server/vault/11/200313Dcp-1PINK1DEBCL.xlsx'),
-(37, 11, 'Graph_stat_F2-A3', 'C:/WS/tools/wamp64/www/nanie/server/vault/11/Graph_stat_F2-A34E1B740F-C87F-4B19-9CDC-C675BF3B6E11', 'server/vault/11/Graph_stat_F2-A34E1B740F-C87F-4B19-9CDC-C675BF3B6E11'),
+(97, 13, 'Grap_stat_F5-A2.png', 'C:/WS/tools/wamp64/www/nanie/server/vault/13/Grap_stat_F5-A2.png', 'server/vault/13/Grap_stat_F5-A2.png'),
 (40, 12, '190619KeimaRbf1.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/12/190619KeimaRbf1.xlsx0DE81C35-BB1E-4C95-A197-2FA7AB7552CA', 'server/vault/12/190619KeimaRbf1.xlsx0DE81C35-BB1E-4C95-A197-2FA7AB7552CA'),
-(39, 12, 'Graph_stat_F5-A1', 'C:/WS/tools/wamp64/www/nanie/server/vault/12/Graph_stat_F5-A1', 'server/vault/12/Graph_stat_F5-A1'),
+(91, 5, 'Graph_stat_F1-A1.png', 'C:/WS/tools/wamp64/www/nanie/server/vault/5/Graph_stat_F1-A1.png', 'server/vault/5/Graph_stat_F1-A1.png'),
 (58, 12, 'Graph_stat_F5-A1.png', 'C:/WS/tools/wamp64/www/nanie/server/vault/12/Graph_stat_F5-A1.png9CEBCD8F-5EB3-4FCA-800B-63B2F294A983', 'server/vault/12/Graph_stat_F5-A1.png9CEBCD8F-5EB3-4FCA-800B-63B2F294A983'),
-(59, 13, '200312KeimaRbf1.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/13/200312KeimaRbf1.xlsx', 'server/vault/13/200312KeimaRbf1.xlsx'),
-(60, 13, 'Grap_stat_F5-A2', 'C:/WS/tools/wamp64/www/nanie/server/vault/13/Grap_stat_F5-A2', 'server/vault/13/Grap_stat_F5-A2'),
+(86, 16, 'Graph_stat_B1B1.crtx', 'C:/WS/tools/wamp64/www/nanie/server/vault/16/Graph_stat_B1B1.crtx', 'server/vault/16/Graph_stat_B1B1.crtx'),
+(98, 14, 'Graph-stat_F5-B1.png', 'C:/WS/tools/wamp64/www/nanie/server/vault/14/Graph-stat_F5-B1.png', 'server/vault/14/Graph-stat_F5-B1.png'),
 (61, 13, 'Marquage Keima Rbf1 (Posterieur).odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/13/Marquage-Keima-Rbf1-(Posterieur).odp', 'server/vault/13/Marquage-Keima-Rbf1-(Posterieur).odp'),
 (62, 13, 'Marquage Keima Rbf1 anterieur vs posterieur.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/13/Marquage-Keima-Rbf1-anterieur-vs-posterieur.odp', 'server/vault/13/Marquage-Keima-Rbf1-anterieur-vs-posterieur.odp'),
 (63, 14, '190619KeimaDebcl.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/14/190619KeimaDebcl.xlsx', 'server/vault/14/190619KeimaDebcl.xlsx'),
 (56, 12, 'Marquage Keima Rbf1 anterieur vs posterieur.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/12/Marquage-Keima-Rbf1-anterieur-vs-posterieur.odp', 'server/vault/12/Marquage-Keima-Rbf1-anterieur-vs-posterieur.odp'),
-(51, 5, 'toto.txt', 'C:/WS/tools/wamp64/www/nanie/server/vault/5/toto.txt', 'server/vault/5/toto.txt'),
-(64, 14, 'Graph-stat_F5-B1', 'C:/WS/tools/wamp64/www/nanie/server/vault/14/Graph-stat_F5-B1', 'server/vault/14/Graph-stat_F5-B1'),
 (65, 14, 'Marquage Keima Debcl - Anterieur.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/14/Marquage-Keima-Debcl---Anterieur.odp', 'server/vault/14/Marquage-Keima-Debcl---Anterieur.odp'),
 (85, 15, 'toto.txt', 'C:/WS/tools/wamp64/www/nanie/server/vault/15/toto.txt2C5CF076-5A9F-40A6-A70E-77355DBFB7DD', 'server/vault/15/toto.txt2C5CF076-5A9F-40A6-A70E-77355DBFB7DD'),
 (84, 15, 'Mix Rbf1 et Debcl 200312 et 190619.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/15/Mix-Rbf1-et-Debcl-200312-et-190619.xlsx613ABB14-FEA8-4D4B-A21B-6843871E66AB', 'server/vault/15/Mix-Rbf1-et-Debcl-200312-et-190619.xlsx613ABB14-FEA8-4D4B-A21B-6843871E66AB'),
 (83, 15, 'Marquage Keima Rbf1 anterieur vs posterieur.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/15/Marquage-Keima-Rbf1-anterieur-vs-posterieur.odp7CB66562-5CBD-442B-8CD7-071CD62207B3', 'server/vault/15/Marquage-Keima-Rbf1-anterieur-vs-posterieur.odp7CB66562-5CBD-442B-8CD7-071CD62207B3'),
 (81, 15, 'Marquage Keima Debcl - Anterieur.odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/15/Marquage-Keima-Debcl---Anterieur.odpBD69509D-2472-44D9-A97A-55D378016608', 'server/vault/15/Marquage-Keima-Debcl---Anterieur.odpBD69509D-2472-44D9-A97A-55D378016608'),
-(82, 15, 'Marquage Keima Rbf1 (Posterieur).odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/15/Marquage-Keima-Rbf1-(Posterieur).odp6E73CE1B-8689-4CAC-ABE5-AE0B8A441E67', 'server/vault/15/Marquage-Keima-Rbf1-(Posterieur).odp6E73CE1B-8689-4CAC-ABE5-AE0B8A441E67');
+(82, 15, 'Marquage Keima Rbf1 (Posterieur).odp', 'C:/WS/tools/wamp64/www/nanie/server/vault/15/Marquage-Keima-Rbf1-(Posterieur).odp6E73CE1B-8689-4CAC-ABE5-AE0B8A441E67', 'server/vault/15/Marquage-Keima-Rbf1-(Posterieur).odp6E73CE1B-8689-4CAC-ABE5-AE0B8A441E67'),
+(88, 17, 'Graph_stat_F2_B1.JPG', 'C:/WS/tools/wamp64/www/nanie/server/vault/17/Graph_stat_F2_B1.JPG', 'server/vault/17/Graph_stat_F2_B1.JPG'),
+(89, 18, 'Comptage des ailes Phenotype Mutant PINK1 Debcl VS Debcl  190525.xlsx', 'C:/WS/tools/wamp64/www/nanie/server/vault/18/Comptage-des-ailes-Phenotype-Mutant-PINK1-Debcl-VS-Debcl--190525.xlsx', 'server/vault/18/Comptage-des-ailes-Phenotype-Mutant-PINK1-Debcl-VS-Debcl--190525.xlsx'),
+(90, 18, 'Graph_stat_F2_B2.JPG', 'C:/WS/tools/wamp64/www/nanie/server/vault/18/Graph_stat_F2_B2.JPG', 'server/vault/18/Graph_stat_F2_B2.JPG');
 
 -- --------------------------------------------------------
 
@@ -165,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `experience_listegenotype` (
   `nbechantillon` int(11) NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Déchargement des données de la table `experience_listegenotype`
@@ -211,7 +217,14 @@ INSERT INTO `experience_listegenotype` (`uid`, `idexperience`, `chromosome1`, `c
 (42, 13, 19, 13, 21, 1, 4, '2020-10-04 13:29:05'),
 (43, 14, 19, 13, 20, 1, 4, '2020-10-04 13:30:44'),
 (44, 14, 19, 13, 21, 1, 5, '2020-10-04 13:30:44'),
-(47, 15, 6, 8, 16, 1, 3, '2020-10-04 15:11:20');
+(47, 15, 6, 8, 16, 1, 3, '2020-10-04 15:11:20'),
+(48, 16, 12, 13, 18, 1, 383, '2020-10-09 11:42:07'),
+(51, 16, 24, 13, 18, 1, 159, '2020-10-09 11:46:52'),
+(50, 16, 22, 13, 18, 1, 159, '2020-10-09 11:44:01'),
+(52, 17, 12, 16, 17, 1, 16, '2020-10-12 13:46:23'),
+(53, 17, 15, 16, 17, 1, 16, '2020-10-12 13:46:23'),
+(54, 18, 12, 16, 17, 1, 210, '2020-10-12 13:51:01'),
+(55, 18, 15, 16, 17, 1, 144, '2020-10-12 13:51:01');
 
 -- --------------------------------------------------------
 
@@ -230,7 +243,7 @@ CREATE TABLE IF NOT EXISTS `experience_resultatdestests` (
   `typedetest` text COLLATE utf8_bin NOT NULL,
   `dateinsert` datetime NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Déchargement des données de la table `experience_resultatdestests`
@@ -250,7 +263,10 @@ INSERT INTO `experience_resultatdestests` (`uid`, `idexperience`, `territoire`, 
 (11, 12, '2', '3', 1, 0.004, '4', '2020-10-04 13:03:37'),
 (12, 13, '2', '3', 1, 0.029, '4', '2020-10-04 13:29:05'),
 (13, 14, '2', '3', 1, 0.016, '4', '2020-10-04 13:30:44'),
-(14, 15, '2', '1', 1, 1, '1', '2020-10-04 15:11:20');
+(14, 15, '2', '1', 1, 1, '1', '2020-10-04 15:11:20'),
+(15, 16, '2', '4', -9.45, 1e-19, '4', '2020-10-09 11:46:59'),
+(16, 17, '2', '4', 0, 2.2e-16, '5', '2020-10-12 13:46:29'),
+(17, 18, '2', '4', 1, 2.2e-16, '5', '2020-10-12 13:51:01');
 
 -- --------------------------------------------------------
 
@@ -315,16 +331,17 @@ CREATE TABLE IF NOT EXISTS `personnes` (
   `token` text COLLATE utf8_bin NOT NULL,
   `validite` datetime DEFAULT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Déchargement des données de la table `personnes`
 --
 
 INSERT INTO `personnes` (`uid`, `nom`, `email`, `alias`, `passwd`, `token`, `validite`) VALUES
-(1, 'dd', 'dd@dd.com', 'dd', '1aabac6d068eef6a7bad3fdf50a05cc8', 'ea9ea1be88e99f774372be84e550cf71', '2020-10-04 16:21:19'),
+(1, 'dd', 'dd@dd.com', 'dd', '1aabac6d068eef6a7bad3fdf50a05cc8', 'b1ff59710199aa50edc8d50ca5af16cb', '2020-10-18 11:08:48'),
 (2, 'cc', 'cc@cc.cc', 'cc', 'e0323a9039add2978bf5b49550572c7c', '', '2020-01-01 00:00:00'),
-(3, 'FAGES', '', '', '', '', NULL);
+(3, 'FAGES', '', '', '', '', NULL),
+(4, 'Brusson', '', '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -359,7 +376,7 @@ CREATE TABLE IF NOT EXISTS `typedetestdesexperiences` (
   `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `nom` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Déchargement des données de la table `typedetestdesexperiences`
@@ -369,7 +386,8 @@ INSERT INTO `typedetestdesexperiences` (`uid`, `nom`) VALUES
 (1, '-'),
 (2, 'Student'),
 (3, 'Wallis'),
-(4, 'Wilcoxon');
+(4, 'Wilcoxon'),
+(5, 'Khi2');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
