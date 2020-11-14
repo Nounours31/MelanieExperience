@@ -30,7 +30,7 @@ export default class cMyUI_CSV extends cMyUI {
 
     public generateCSVData () : string {
         let retour : string = '';
-        retour += 'Code;Experimentateur;Iteration;Objectif;Test;; Nb de rept;Concluante;Code Base MAX \r\n';
+        retour += 'Code;Experimentateur;Identification;Objectif;typetest;Test; Nb de rept;Concluante;Code Base MAX \r\n';
         
         // -------------------------------------------------
         // les SQL de decortiquange des info
@@ -39,15 +39,16 @@ export default class cMyUI_CSV extends cMyUI {
         const sExperimentateurInSQL: string = 'p.nom as Experimentateur';
         const sObjectifInSQL: string = '\"manque objectif\" as Objectif';
         const sTestInSQL: string = '\"manque test\" as Test';
-        const sNbRepInSQL: string = '\"manque nb rep\" as NbTest';
-        const sConcluanteInSQL: string = '\"manque concluante\" as Concluante';
-        const sCodeBaseMaxInSQL: string = '\"manque CodeBase\" as CodeBase';
 
         // -------------------------------------------------
         // recup de toute les exp triees sans les iterations
         // -------------------------------------------------
         let sqlOnCode = `select distinct ${sCodeInSQL}`;
         sqlOnCode += ' from experience exp ';
+        sqlOnCode += " order by cast(substring(exp.experiencestringid, 2, INSTR(exp.experiencestringid, '-')-2) as signed integer) asc";
+        sqlOnCode += ", (substring(exp.experiencestringid, 1, 2)) asc";
+        console.log(sqlOnCode);
+
         let allCode: object[] = cExperience.launchSQL(sqlOnCode);
         allCode.forEach(element => {
             let oneCodeExpValue = element as iCodeInfo;
@@ -64,9 +65,11 @@ export default class cMyUI_CSV extends cMyUI {
             let sqlMaxIte = `select exp.experiencestringid`;
             sqlMaxIte += ' from experience exp ';
             sqlMaxIte += ` where (exp.experiencestringid like \'${oneCodeExpValue.Code}%\')`;
+            console.log(sqlMaxIte);
+            
             let allIteration: object[] = cExperience.launchSQL(sqlMaxIte);
-            allIteration.forEach(element => {
-                let oneIterationValue = element as iCodeInfo;
+            allIteration.forEach(element2 => {
+                let oneIterationValue = element2 as iCodeInfo;
                 let s : string = oneIterationValue.experiencestringid as string;
                 let i: number = parseInt (s.substring(s.indexOf('-') + 2, s.length));
                 if (i > iMaxIte)
@@ -77,37 +80,46 @@ export default class cMyUI_CSV extends cMyUI {
             // ----------------------
             // Recup du Concluant ?
             // ----------------------
-            let sConcluante: string = '';
+            let sConcluante: string = '-';
             let sqlConcluante = `select exp.experiencestringid`;
             sqlConcluante += ' from experience exp ';
             sqlConcluante += ' inner join experience_resultatdestests res on (exp.uid = res.idexperience)';
             sqlConcluante += ` where ((exp.experiencestringid like \'${oneCodeExpValue.Code}%\') and (res.sComparatif < 0.05))`;
+            console.log(sqlConcluante);
+
             let iLoop : number = 0;
-            let allConcluante: object[] = cExperience.launchSQL(sqlMaxIte);
-            allConcluante.forEach(element => {
-                let oneCoeOfAConcluanteExp = element as iCodeInfo;
+            let allConcluante: object[] = cExperience.launchSQL(sqlConcluante);
+            allConcluante.forEach(element3 => {
+                console.log('element3 :');
+                console.log(element3);
+
+                let oneCoeOfAConcluanteExp = element3 as iCodeInfo;
                 let s: string = oneCoeOfAConcluanteExp.experiencestringid as string;
                 let i: number = parseInt(s.substring(s.indexOf('-') + 2, s.length));
                 iLoop++;
                 if (iLoop > 1)
-                    sConcluante = sConcluante + ', ';
-                sConcluante = sConcluante + i.toString();
+                    sConcluante = sConcluante + ', ' + i.toString();
+                else
+                    sConcluante = i.toString();
             });
             iAllCSVValues.Concluante = sConcluante;
             iAllCSVValues.CodeBase = iAllCSVValues.Code + iAllCSVValues.MaxIter;
             // ----------------------
             // pour chaqun des codes recup des info
             // ----------------------
-            let sql = `select ${sCodeInSQL}, ${sExperimentateurInSQL}, ${sObjectifInSQL}, ${sTestInSQL}, ${sNbRepInSQL}, ${sConcluanteInSQL}, ${sCodeBaseMaxInSQL}`;
+            let sql = `select ${sExperimentateurInSQL}, ${sObjectifInSQL}, ${sTestInSQL}`;
             sql += ' from experience exp ';
             sql += ' inner join personnes p on (p.uid = exp.faiteparqui)';
             sql += ` where(exp.experiencestringid like \'${oneCodeExpValue.Code}%\')`;
+            console.log(sql);
 
             let allInfoForCSV: object[] = cExperience.launchSQL(sql);
-            allInfoForCSV.forEach(element => {
-                let y = element as iCSVInfo;
-                retour += y.Code + ';' + y.Experimentateur + ';' + iAllCSVValues.ObjectifAsInt + ';' + y.Objectif + ';' + iAllCSVValues.TestAsLetter + ';' + y.Test + ';' + iAllCSVValues.MaxIter + ';' + iAllCSVValues.Concluante + ';' + iAllCSVValues.CodeBase + '\r\n' ;
-            });
+            let y = allInfoForCSV[0] as iCSVInfo;
+            iAllCSVValues.Experimentateur = y.Experimentateur as string;
+            iAllCSVValues.Objectif = y.Objectif as string;
+            iAllCSVValues.Test = y.Test as string;
+            retour += y.Code + ';' + iAllCSVValues.Experimentateur + ';' + iAllCSVValues.ObjectifAsInt + ';' + iAllCSVValues.Objectif + ';';
+            retour += iAllCSVValues.TestAsLetter + ';' + iAllCSVValues.Test + ';' + iAllCSVValues.MaxIter + ';' + iAllCSVValues.Concluante + ';' + iAllCSVValues.CodeBase + '\r\n' ;
         });
         return retour;
     }
