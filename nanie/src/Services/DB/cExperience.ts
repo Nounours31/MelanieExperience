@@ -270,6 +270,23 @@ export class cExperience {
 
     
     
+    
+    static launchSQL(sql: string): object[] {
+        let me: cExperience = cExperience.getInstance();
+        me._ajax.reset();
+        let retour: object[] = [];
+
+        let args: iAjaxSendMessageArgs[] = [];
+        let arg: iAjaxSendMessageArgs = cAjaxSendMessage.buildArgsFromString('sql', sql);
+        args.push(arg);
+        let msg: cAjaxSendMessage = cAjaxSendMessage.buildFromString('experience', 'launchSQLListUIDExperience', args);
+        me._ajax.postData(cEnvt.getAjaxURLWS(), msg);
+        if (me._ajax.getStatus() == 0) {
+            let response: string = me._ajax.getData();
+            retour = JSON.parse(response) as object[];
+        }
+        return retour;
+    }
 
     static launchSQLListUIDExperience(sql: string): number[] {
         let me: cExperience = cExperience.getInstance();

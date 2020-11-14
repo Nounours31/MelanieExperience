@@ -4,6 +4,7 @@ import cMyUI_MainTab_create from './cMyUI_MainTab_create';
 import cMyUI_MainTab_consultation from './cMyUI_MainTab_consultation';
 import cMyUI_MainTab_aucasou from './cMyUI_MainTab_aucasou';
 import cMyUI_logout from './cMyUI_logout';
+import cMyUI_CSV from './cMyUI_CSV';
 import cMyUI_MainTab_update from './cMyUI_MainTab_update';
 
 export default class cMyUI_MainTab extends cMyUI {
@@ -14,7 +15,8 @@ export default class cMyUI_MainTab extends cMyUI {
     private  _consultDialog: cMyUI_MainTab_consultation;
     private  _consultUpdate: cMyUI_MainTab_update;
     private  _AuCasOuDialog: cMyUI_MainTab_aucasou;
-    private  _logout: cMyUI_logout;
+    private _logout: cMyUI_logout;
+    private _CSV: cMyUI_CSV;
 
     // -------------------------------------
     // les tag de mon dialog pour les tab (le menu)
@@ -24,6 +26,7 @@ export default class cMyUI_MainTab extends cMyUI {
     private _idTabConsultation: string;
     private _idTabAuCasOuTab: string;
     private _idTabLogout: string;
+    private _idTabCSV: string;
     private _idTabUpdate: string;
 
     // -------------------------------------
@@ -34,6 +37,7 @@ export default class cMyUI_MainTab extends cMyUI {
     private _idContainerConsultation: string;
     private _idContainerAuCasOuTab: string;
     private _idContainerLogout: string;
+    private _idContainerCSV: string;
     private _idContainerUpdate: string;
 
 
@@ -44,17 +48,20 @@ export default class cMyUI_MainTab extends cMyUI {
         this._consultUpdate = new cMyUI_MainTab_update();
         this._AuCasOuDialog = new cMyUI_MainTab_aucasou();
         this._logout = new cMyUI_logout();
+        this._CSV = new cMyUI_CSV();
 
         this._idTabCreation = this._idTabPrefix + "Creation";
         this._idTabConsultation = this._idTabPrefix + "Cconsultation";
         this._idTabAuCasOuTab = this._idTabPrefix + "AuCasOu";
         this._idTabLogout = this._idTabPrefix + "LogOut";
+        this._idTabCSV = this._idTabPrefix + "CSV";
         this._idTabUpdate = this._idTabPrefix + "Update";
 
         this._idContainerCreation = this._idContainerPrefix + "Creation";
         this._idContainerConsultation = this._idContainerPrefix + "Cconsultation";
         this._idContainerAuCasOuTab = this._idContainerPrefix + "AuCasOu";
         this._idContainerLogout = this._idContainerPrefix + "LogOut";
+        this._idContainerCSV = this._idContainerPrefix + "CSV";
         this._idContainerUpdate = this._idContainerPrefix + "Update";
     }
 
@@ -94,6 +101,12 @@ export default class cMyUI_MainTab extends cMyUI {
             me._logout.addCallBackOnMyDialog();
         });
 
+        $(`#${me._idTabCSV}`).on('click', function (event: JQuery.ClickEvent) {
+            $(`.myDialogTopContainer`).empty();
+            $(`#${me._idContainerCSV}`).append(me._CSV.draw());
+            me._CSV.addCallBackOnMyDialog();
+        });
+
         $(`#${me._idTabConsultation}`).trigger('click');
     }
 
@@ -119,6 +132,9 @@ export default class cMyUI_MainTab extends cMyUI {
                         </a>
                     </div>
                     <div class="ui menu right">
+                        <a class="item" data-tab="CSV" id="${this._idTabCSV}">
+                            <span class="mobile hidden">CSV</span>
+                        </a>
                         <a class="item" data-tab="Logout" id="${this._idTabLogout}">
                             <span class="mobile hidden">Logout</span>
                         </a>
@@ -130,6 +146,7 @@ export default class cMyUI_MainTab extends cMyUI {
             <div class="ui tab basic segment myDialogTopContainer"        data-tab="Update" id="${this._idContainerUpdate}">Update</div>
             <div class="ui tab basic segment myDialogTopContainer active" data-tab="Consultation" id="${this._idContainerConsultation}">Consultation</div>
             <div class="ui tab basic segment myDialogTopContainer"        data-tab="Aucasou" id="${this._idContainerAuCasOuTab}">Aucasou</div>
+            <div class="ui tab basic segment myDialogTopContainer"        data-tab="CSV" id="${this._idContainerCSV}">CSV</div>
             <div class="ui tab basic segment myDialogTopContainer"        data-tab="Logout" id="${this._idContainerLogout}">Logout</div>
             <div>&copy; Nanie Fages (octobre 2020) - UVSQ - Licence MIT</div>
             `;

@@ -16,6 +16,7 @@ export declare class cExperience {
     static deleteGenotypeFromuid(uid: number): boolean;
     static deleteFileFronuid(uid: number): boolean;
     static checkToken(token: string): boolean;
+    static launchSQL(sql: string): object[];
     static launchSQLListUIDExperience(sql: string): number[];
     static getAllExperienceInitiale(): iStringNumberMessage[];
     static createDBExperience(experienceId: string, date: string, qui: string): number;
