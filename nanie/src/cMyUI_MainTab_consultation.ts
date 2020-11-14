@@ -42,8 +42,8 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
             // ---------------------------------------------------
             let ExperienceIDSelect: string = $(`#${me.id_experience_select}`).val() as string;
             if ((ExperienceIDSelect != null) && (ExperienceIDSelect.length > 0)) {
-                sql = 'SELECT uid FROM experience exp ';
-                sql += ` where (lower(experiencestringid) like lower('${ExperienceIDSelect}%'))`;
+                sql = 'SELECT exp.uid FROM experience exp ';
+                sql += ` where (lower(exp.experiencestringid) like lower('${ExperienceIDSelect}%'))`;
             }
             else {
 
@@ -106,6 +106,9 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
                 sql += sqlWhere;
                 sql += ')';
             }
+
+            // mettre dans l'ordre des noms d'experiences
+            sql += '  order by exp.experiencestringid';
 
             // ---------------------------------------------------
             // recup des info
