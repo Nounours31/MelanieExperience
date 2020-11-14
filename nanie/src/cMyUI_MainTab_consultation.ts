@@ -108,7 +108,8 @@ export default class cMyUI_MainTab_consultation extends cMyUI {
             }
 
             // mettre dans l'ordre des noms d'experiences
-            sql += '  order by exp.experiencestringid';
+            // sql += '  order by exp.experiencestringid';
+            sql += " order by cast(substring(exp.experiencestringid, 2, INSTR(exp.experiencestringid, '-')-2) as signed integer) asc";
 
             // ---------------------------------------------------
             // recup des info
