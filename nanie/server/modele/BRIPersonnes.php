@@ -44,7 +44,7 @@ class BRIPersonnes extends iBRIModel {
             $err = new BRIError(1, 'Pas de nom trouve en table');
         } else {
             $err = BRIError::S_OK();
-            $message = json_encode($ret);
+            $message = BRITools::myJsonEncode($ret);
         }
 
         return $err;
@@ -144,7 +144,7 @@ class BRIPersonnes extends iBRIModel {
         } else {
             $err = BRIError::S_OK();
         }
-        $message = json_encode($retour);
+        $message = BRITools::myJsonEncode($retour);
         return $err;
     }
 

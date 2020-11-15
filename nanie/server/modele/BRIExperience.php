@@ -62,10 +62,10 @@ class BRIExperience extends iBRIModel {
             // retour de l'uid a l'UI
             // ------------------------------
             if (isset($ret['uid'])) {
-                $referenceMsgOut = json_encode($rc);
+                $referenceMsgOut = BRITools::myJsonEncode($rc);
                 $err = BRIError::S_OK();
             } else {
-                $referenceMsgOut = json_encode($rc);
+                $referenceMsgOut = BRITools::myJsonEncode($rc);
                 $err = new BRIError(3, 'Impossible de creer un experience');
             }
         } catch (Exception $e) {
@@ -82,7 +82,10 @@ class BRIExperience extends iBRIModel {
                 array_push($ret, $value);
             }
         }
-        $message = json_encode($ret);
+        $this->_logger ->debugTab(" ************** Retour SQL", $ret);
+        $this->_logger ->debug("message", $message);
+        $message = BRITools::myJsonEncode($ret);
+        $this->_logger ->debug("message", $message);
         $err = BRIError::S_OK();
         return $err;
     }
@@ -91,7 +94,7 @@ class BRIExperience extends iBRIModel {
         $ret = array();
         $rc = $this->_DB->selectAsRest("select uid from " . BRIConst::DB_NOM_Experience . " where (experiencestringid = '" . $experiencestringid . "') order by uid");
         if (!empty($rc)) {
-            $message = json_encode(intval($rc[0]['uid']));
+            $message = BRITools::myJsonEncode(intval($rc[0]['uid']));
         }
         $err = BRIError::S_OK();
         return $err;
@@ -106,7 +109,7 @@ class BRIExperience extends iBRIModel {
             }
         }
         $err = BRIError::S_OK();
-        $message = json_encode($ret);
+        $message = BRITools::myJsonEncode($ret);
 
         return $err;
     }
@@ -121,7 +124,7 @@ class BRIExperience extends iBRIModel {
             $rc = "";
         }
         $err = BRIError::S_OK();
-        $message = json_encode($rc);
+        $message = BRITools::myJsonEncode($rc);
 
         return $err;
     }
@@ -141,7 +144,7 @@ class BRIExperience extends iBRIModel {
             $rc = "";
         }
         $err = BRIError::S_OK();
-        $message = json_encode($rc);
+        $message = BRITools::myJsonEncode($rc);
 
         return $err;
     }
@@ -160,7 +163,7 @@ class BRIExperience extends iBRIModel {
             $rc = "";
         }
         $err = BRIError::S_OK();
-        $message = json_encode($rc);
+        $message = BRITools::myJsonEncode($rc);
 
         return $err;
     }
@@ -172,7 +175,7 @@ class BRIExperience extends iBRIModel {
             $rc = "";
         }
         $err = BRIError::S_OK();
-        $message = json_encode($rc);
+        $message = BRITools::myJsonEncode($rc);
 
         return $err;
     }
@@ -192,7 +195,7 @@ class BRIExperience extends iBRIModel {
             $err = new BRIError(1, 'Pas de nom trouve en table');
         } else {
             $err = BRIError::S_OK();
-            $message = json_encode($ret);
+            $message = BRITools::myJsonEncode($ret);
         }
 
         return $err;
@@ -213,7 +216,7 @@ class BRIExperience extends iBRIModel {
             $err = new BRIError(1, 'Pas de nom trouve en table');
         } else {
             $err = BRIError::S_OK();
-            $message = json_encode($ret);
+            $message = BRITools::myJsonEncode($ret);
         }
 
         return $err;
@@ -234,7 +237,7 @@ class BRIExperience extends iBRIModel {
             $err = new BRIError(1, 'Pas de nom trouve en table');
         } else {
             $err = BRIError::S_OK();
-            $message = json_encode($ret);
+            $message = BRITools::myJsonEncode($ret);
         }
 
         return $err;
@@ -255,7 +258,7 @@ class BRIExperience extends iBRIModel {
             $err = new BRIError(1, 'Pas de nom trouve en table');
         } else {
             $err = BRIError::S_OK();
-            $message = json_encode($ret);
+            $message = BRITools::myJsonEncode($ret);
         }
 
         return $err;
@@ -276,7 +279,7 @@ class BRIExperience extends iBRIModel {
             $err = new BRIError(1, 'Pas de nom trouve en table');
         } else {
             $err = BRIError::S_OK();
-            $message = json_encode($ret);
+            $message = BRITools::myJsonEncode($ret);
         }
 
         return $err;

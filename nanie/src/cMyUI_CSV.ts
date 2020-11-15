@@ -9,6 +9,7 @@ import cEnvt from './infra/cEnvt';
 interface iCodeInfo {
     Code?: string;
     experiencestringid?: string;
+    Experimentateur?:string
 }
 
 interface iCSVInfo {
@@ -37,14 +38,13 @@ export default class cMyUI_CSV extends cMyUI {
         // -------------------------------------------------
         const sCodeInSQL: string = "substring(exp.experiencestringid, 1, INSTR(exp.experiencestringid, '-')+1) as Code";
         const sExperimentateurInSQL: string = 'p.nom as Experimentateur';
-        const sObjectifInSQL: string = '\"manque objectif\" as Objectif';
-        const sTestInSQL: string = '\"manque test\" as Test';
 
         // -------------------------------------------------
         // recup de toute les exp triees sans les iterations
         // -------------------------------------------------
-        let sqlOnCode = `select distinct ${sCodeInSQL}`;
+        let sqlOnCode = `select distinct ${sCodeInSQL}, p.nom as Experimentateur`;
         sqlOnCode += ' from experience exp ';
+        sqlOnCode += ' inner join personnes p on (p.uid = exp.faiteparqui) ';
         sqlOnCode += " order by cast(substring(exp.experiencestringid, 2, INSTR(exp.experiencestringid, '-')-2) as signed integer) asc";
         sqlOnCode += ", (substring(exp.experiencestringid, 1, 2)) asc";
         console.log(sqlOnCode);
@@ -54,6 +54,7 @@ export default class cMyUI_CSV extends cMyUI {
             let oneCodeExpValue = element as iCodeInfo;
             let iAllCSVValues: iCSVInfo = element as iCSVInfo;
             iAllCSVValues.Code = oneCodeExpValue.Code as string;
+            iAllCSVValues.Experimentateur = oneCodeExpValue.Experimentateur as string;
             iAllCSVValues.ObjectifAsInt = iAllCSVValues.Code.substring(1, iAllCSVValues.Code.indexOf('-'));
             iAllCSVValues.TestAsLetter = iAllCSVValues.Code.substring(iAllCSVValues.Code.indexOf('-') + 1, iAllCSVValues.Code.length);
 
@@ -66,7 +67,7 @@ export default class cMyUI_CSV extends cMyUI {
             sqlMaxIte += ' from experience exp ';
             sqlMaxIte += ` where (exp.experiencestringid like \'${oneCodeExpValue.Code}%\')`;
             console.log(sqlMaxIte);
-            
+
             let allIteration: object[] = cExperience.launchSQL(sqlMaxIte);
             allIteration.forEach(element2 => {
                 let oneIterationValue = element2 as iCodeInfo;
@@ -104,21 +105,27 @@ export default class cMyUI_CSV extends cMyUI {
             });
             iAllCSVValues.Concluante = sConcluante;
             iAllCSVValues.CodeBase = iAllCSVValues.Code + iAllCSVValues.MaxIter;
+
             // ----------------------
             // pour chaqun des codes recup des info
             // ----------------------
-            let sql = `select ${sExperimentateurInSQL}, ${sObjectifInSQL}, ${sTestInSQL}`;
-            sql += ' from experience exp ';
-            sql += ' inner join personnes p on (p.uid = exp.faiteparqui)';
-            sql += ` where(exp.experiencestringid like \'${oneCodeExpValue.Code}%\')`;
+            let sql = 'select obj.objectif as Objectif, test.test as Test from experience_objectif obj ';
+            sql += ' inner join experience_otestonobjectif test on (test.idobjectif = obj.id)';
+            sql += ` where((obj.objectifAsInt = ${iAllCSVValues.ObjectifAsInt}) and (test.TestAsLetter = '${iAllCSVValues.TestAsLetter}'))`;
             console.log(sql);
+
+
 
             let allInfoForCSV: object[] = cExperience.launchSQL(sql);
             let y = allInfoForCSV[0] as iCSVInfo;
-            iAllCSVValues.Experimentateur = y.Experimentateur as string;
-            iAllCSVValues.Objectif = y.Objectif as string;
-            iAllCSVValues.Test = y.Test as string;
-            retour += y.Code + ';' + iAllCSVValues.Experimentateur + ';' + iAllCSVValues.ObjectifAsInt + ';' + iAllCSVValues.Objectif + ';';
+
+            iAllCSVValues.Objectif = 'Pas d\'objectif';
+            iAllCSVValues.Test = 'Pas de test associe';
+            if (y !== undefined) {
+                iAllCSVValues.Objectif = ((y.Objectif === undefined) ? iAllCSVValues.Objectif : y.Objectif as string);
+                iAllCSVValues.Test = ((y.Objectif === undefined) ? iAllCSVValues.Test : y.Test as string);
+            }
+            retour += iAllCSVValues.Code + ';' + iAllCSVValues.Experimentateur + ';' + iAllCSVValues.ObjectifAsInt + ';' + iAllCSVValues.Objectif + ';';
             retour += iAllCSVValues.TestAsLetter + ';' + iAllCSVValues.Test + ';' + iAllCSVValues.MaxIter + ';' + iAllCSVValues.Concluante + ';' + iAllCSVValues.CodeBase + '\r\n' ;
         });
         return retour;

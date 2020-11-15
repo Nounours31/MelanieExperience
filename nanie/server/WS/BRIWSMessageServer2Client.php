@@ -98,12 +98,12 @@ class BRIWSMessageServer2Client implements JsonSerializable {
 
     public function toJSON () {
         $this->logger -> debug("(toJSON) step into");
-        $jsonData = json_encode (json_decode("{}")); 
+        $jsonData = BRITools::myJsonEncode (json_decode("{}")); 
         try {
-            $jsonData = json_encode($this);
+            $jsonData = BRITools::myJsonEncode($this);
         }
         catch (Exception $e) {
-            $jsonData = json_encode($e);
+            $jsonData = BRITools::myJsonEncode($e);
         }
         $this->logger -> debug('(toJSON) -- '.$jsonData);
         return $jsonData;

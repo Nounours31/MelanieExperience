@@ -29,16 +29,23 @@ export default class cMyUI_MainTab_update extends cMyUI {
     private readonly _idInputUpdate_CheckExpButton;
     private readonly _idInputUpdate_ChangeExperienceName;
     private readonly _idInputUpdate_DivToHiddeDialogIfExpUnValide;
+    private readonly _idInputUpdateInfos_okButton;
+    private readonly _idTableOfAllInfo;
+    private readonly _idTextEreaForNewObjectif;
+    private readonly _idTextEreaForNewTest;
     private readonly _nbGenotype;
     private _isExperienceChecked;
     constructor();
     draw(): string;
     private drawUpdateFichier;
+    private drawUpdateInfosAssociees;
     private drawUpdateDialog;
     drawInfoExperienceDialog(): string;
     addCallBackOnMyDialog(): void;
     private addCallBackOnMyDialog_CheckIdExp;
     private addCallBackOnMyDialog_ajoutFiles;
+    private addCallBackOnUpdateInfosAssociees;
     private addCallBackOnMyDialog_ajout;
     private UpdateDeLaZONEBilanViSuDBApresupdateOuAjout;
+    private UpdateDeLaZONEObjectifEtTestOnExperience;
 }

@@ -120,7 +120,7 @@ class BRIError {
     /*
     public function toJSON () {
         $e = $this -> toArray();    
-        $r = json_encode ($e);
+        $r = BRITools::myJsonEncode ($e);
         return  $r;
     }*/
 
@@ -131,7 +131,6 @@ class BRIError {
     public static function GenerateJSONErrorMessage($errno, $l) {
         switch ($errno) {
         case JSON_ERROR_NONE:
-            $l -> fatal (' - Aucune erreur');
             break;
         case JSON_ERROR_DEPTH:
             $l -> fatal ( ' - Profondeur maximale atteinte');

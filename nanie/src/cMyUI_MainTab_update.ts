@@ -13,6 +13,16 @@ import cMyUI from './cMyUI';
 import cUIUtils from './Services/cUIUtils';
 
 
+interface iObjectifOfExp {
+    id?: number;
+    objectifAsInt?: number;
+    objectif?: string;
+    idobjectif?: number;
+    TestAsLetter?: string;
+    test?: string;
+    experiencestringid?:string;
+}
+
 export default class cMyUI_MainTab_update extends cMyUI {
     // ---------------------------------------------------------
     // list de ancre (via les ID) pour JQuery et retourver mes dialoge dans la page
@@ -52,6 +62,13 @@ export default class cMyUI_MainTab_update extends cMyUI {
     private readonly _idInputUpdate_ChangeExperienceName: string = 'cMyUI_MainTab_update_ChangeExperienceName';
     private readonly _idInputUpdate_DivToHiddeDialogIfExpUnValide: string = 'cMyUI_MainTab_update__idInputUpdate_DivToHiddeDialogIfExpUnValide';
 
+
+    private readonly _idInputUpdateInfos_okButton: string = 'cMyUI_MainTab_update__idInputUpdate_BouttonPOurAjoutdeInfo';
+    private readonly _idTableOfAllInfo: string = 'cMyUI_MainTab_update__idInputUpdate__idTableOfAllInfo';
+    private readonly _idTextEreaForNewObjectif: string = 'cMyUI_MainTab_update__idInputUpdate___idTextEreaForNewObjectif';
+    private readonly _idTextEreaForNewTest: string = 'cMyUI_MainTab_update__idInputUpdate___idTextEreaForNewTest';
+    
+    
     // ----------------------------------------------------
     // Nb genotype par defaut
     // ----------------------------------------------------
@@ -103,6 +120,14 @@ export default class cMyUI_MainTab_update extends cMyUI {
         retour += '</fieldset></div>';
 
         // Le separateur
+        retour += '<div class="ui horizontal divider">Infos (Objectifs/Tests) associee </div>';
+
+        // affichage de la zone de mise a jour de l'experience
+        retour += '<div style="margin-left: 10px;"><fieldset><legend> Mise &agrave; jour des infos associ&eacute;s &agrave; une experience en base </legend>';
+        retour += this.drawUpdateInfosAssociees();
+        retour += '</fieldset></div>';
+
+        // Le separateur
         retour += '<div class="ui horizontal divider">G&eacute;notypes associ&eacute;s</div>';
 
         // affichage de la zone de mise a jour de l'experience
@@ -150,7 +175,32 @@ export default class cMyUI_MainTab_update extends cMyUI {
 
 
 
+    // ===========================================================================================
+    // La section de mise a jour des fichiers de l'experiences
+    // ===========================================================================================
+    private drawUpdateInfosAssociees(): string {
+        // -----------------------------------------------
+        // creation du dialogue
+        // -----------------------------------------------
+        let retour: string = `
+            <form class="ui form">
+            <form class="ui form">
+                <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>ID</th> <th>Famille</th>    <th>Objectif</th> <th>Test</th> <th>Info Test</th>
+                    </tr>
+                </thead>
+                <tbody id="${this._idTableOfAllInfo}">
+                </tbody>
+                </table>
+                <!-- Validation  -->
+                <button class="ui button pink right floated" type="submit" id="${this._idInputUpdateInfos_okButton}">Update des infos</button>
+            </form>`;
 
+        return retour;
+    }
+    
 
     // ===========================================================================================
     // La section d'ajout des experiences
@@ -285,6 +335,7 @@ export default class cMyUI_MainTab_update extends cMyUI {
         this.addCallBackOnMyDialog_CheckIdExp();
         this.addCallBackOnMyDialog_ajoutFiles();
         this.addCallBackOnMyDialog_ajout();
+        this.addCallBackOnUpdateInfosAssociees();
         return;
     }
     
@@ -301,6 +352,7 @@ export default class cMyUI_MainTab_update extends cMyUI {
                 let idExp: number = cExperience.getExperienceUidFromExperienceStringid(ExpIdName);
                 if (idExp > 0) {
                     me.UpdateDeLaZONEBilanViSuDBApresupdateOuAjout(idExp);
+                    me.UpdateDeLaZONEObjectifEtTestOnExperience(idExp);
                     me._isExperienceChecked = true;
 
                     $(`#${me._idInputUpdateFile_ExpIDVal}`).prop('disabled', true);
@@ -371,6 +423,40 @@ export default class cMyUI_MainTab_update extends cMyUI {
     }
 
 
+    // ===========================================================================================
+    // Gestion des callback de la section de l'updtae des fichier.
+    // Je dois juste brancher les OK Ajout
+    // ===========================================================================================
+    private addCallBackOnUpdateInfosAssociees(): void {
+        let me: cMyUI_MainTab_update = this;
+
+        $(`#${me._idInputUpdateInfos_okButton}`).on('click', function (event : JQuery.ClickEvent) : boolean {
+            let newObectif: string = $(`#${me._idTextEreaForNewObjectif}`).val() as string;
+            let newTest: string = $(`#${me._idTextEreaForNewTest}`).val() as string;
+
+            let objectifId: number = Number.parseInt ($(`#${me._idTextEreaForNewObjectif}`).attr('name') as string);
+            let testId: number = Number.parseInt($(`#${me._idTextEreaForNewTest}`).attr('name') as string);
+    
+            let isUpdated : boolean = false;
+            if ((newObectif.length > 1) && (objectifId > 0)) {
+                newObectif = cTools.mysql_real_escape_string(newObectif);
+                let sql: string = `update experience_objectif set objectif='${newObectif}' where (id = ${objectifId})`;
+                cExperience.launchSQL(sql);
+                isUpdated = true;
+            }
+            if ((newTest.length > 1) && (objectifId > 0) && (testId > 0)) {
+                newTest = cTools.mysql_real_escape_string(newTest);
+                let sql: string = `update experience_otestonobjectif set test='${newTest}' where (id = ${testId})`;
+                cExperience.launchSQL(sql);
+                isUpdated = true;
+            }
+            if (isUpdated)
+                alert ('Update done! F5 de l apage pour etre sur ... c\'est pap\'s qui code');
+            event.stopImmediatePropagation();
+            return false;
+        });
+    }
+    
 
 
     // ===========================================================================================
@@ -456,7 +542,7 @@ export default class cMyUI_MainTab_update extends cMyUI {
         $(`#${me._idCreationExperience_drawInfoApresCreation}`).empty();
 
         // si pas d'info sur l'exp j'essaye de retrouve son nom dans la page
-        if (id == undefined) {
+        if (id === undefined) {
             let expIdAsString: string = <string>$(`#${me._idInputUpdateFile_ExpIDVal}`).val();
             let uidExp : number = cExperience.getExperienceUidFromExperienceStringid(expIdAsString);
             id = uidExp;
@@ -469,6 +555,114 @@ export default class cMyUI_MainTab_update extends cMyUI {
             cUIUtils.addcallbackFordrawOnExperience (this._idUpdateOKButton);
         return;
 
+    }
+
+
+    // ==========================================================================
+    // affichage de la zone d'info
+    // deleguee dans une autre classe pour factorisation
+    // ==========================================================================
+
+    private UpdateDeLaZONEObjectifEtTestOnExperience(id?: number): void {
+
+        // --------------------------
+        // menage ...
+        // --------------------------
+        let me: cMyUI_MainTab_update = this;
+        $(`#${me._idTableOfAllInfo}`).empty();
+
+        // --------------------------
+        // si pas d'info sur l'exp j'essaye de retrouve son nom dans la page
+        // --------------------------
+        let expIdAsString: string = <string>$(`#${me._idInputUpdateFile_ExpIDVal}`).val();
+        if (id === undefined) {
+            let uidExp: number = cExperience.getExperienceUidFromExperienceStringid(expIdAsString);
+            id = uidExp;
+        }
+
+        // --------------------------
+        // Recup de l'Objectif Id (le premier entier du nom)
+        // --------------------------
+        let ObjectifAsInt: string = expIdAsString.substring(1, expIdAsString.indexOf('-'));
+
+        // --------------------------
+        // Recup du testletter & testId
+        // --------------------------
+        let TestAsLetter: string = expIdAsString.substring(expIdAsString.indexOf('-') + 1, expIdAsString.indexOf('-') + 2);
+        let TestId: string = expIdAsString.substring(0, expIdAsString.indexOf('-') + 2);
+
+        // --------------------------
+        // recup de l'objectif associe a ce ObjectifAsInt
+        // --------------------------
+        let sql = `SELECT id, objectif FROM experience_objectif where (objectifAsInt = ${ObjectifAsInt})`;
+        console.log ('sql: ' + sql);
+        let objectifOfExp: iObjectifOfExp[] = cExperience.launchSQL(sql);
+        let objectif: string = objectifOfExp[0].objectif as string;
+        let objectifId: number = objectifOfExp[0].id as number;
+
+        // --------------------------
+        // recup de l'ensemble des exp de meme objectif
+        // --------------------------
+        sql = `select exp.experiencestringid`;
+        sql += ' from experience exp ';
+        sql += ` where ( (substring(exp.experiencestringid, 2, INSTR(exp.experiencestringid, '-')-2)) = ${ObjectifAsInt})`;
+        console.log('sql: ' + sql);
+        objectifOfExp = cExperience.launchSQL(sql);
+        let allExp : string[] = [];
+        objectifOfExp.forEach(element => {
+            allExp.push(element.experiencestringid as string);
+        });
+        let nbExp: number = allExp.length;
+
+
+        // --------------------------
+        // recup du test asscocie a cette experience
+        // --------------------------
+        sql = `SELECT id, test FROM experience_otestonobjectif where ((idobjectif = ${objectifId}) and (TestAsLetter = '${TestAsLetter}'))`;
+        console.log('sql: ' + sql);
+        objectifOfExp = cExperience.launchSQL(sql);
+        let test: string = objectifOfExp[0].test as string;
+        let testId: number = objectifOfExp[0].id as number;
+
+        // --------------------------
+        // recup de l'ensemble des exp de meme test
+        // --------------------------
+        sql = `select exp.experiencestringid`;
+        sql += ' from experience exp ';
+        sql += ` where (`;
+        sql += ` ((substring(exp.experiencestringid, 2, INSTR(exp.experiencestringid, '-')-2)) = ${ObjectifAsInt}) `;
+        sql += ' and ';
+        sql += ` ((substring(exp.experiencestringid, INSTR(exp.experiencestringid, '-')+1, 1)) = '${TestAsLetter}')`;
+        sql += ')';
+        console.log('sql: ' + sql);
+        objectifOfExp = cExperience.launchSQL(sql);
+        let allExpWithThisTest: string = '';
+        objectifOfExp.forEach(element => {
+            allExpWithThisTest += element.experiencestringid as string;
+            allExpWithThisTest += '<br/>';
+        });
+
+        // --------------------------
+        // --------------------------
+        let dialog: string = '<tr>';
+        dialog += `<tr><td rowspan="${nbExp}">${ObjectifAsInt}</td><td>${allExp[0]}</td><td rowspan="${nbExp}">`;
+        dialog += `<strong style="color:#008c25;">${objectif}</strong><br/>`;
+        dialog += `<div class="pure-control-group">
+                        <label for="${this._idTextEreaForNewObjectif}">New ?</label>
+                        <input type="text" id="${this._idTextEreaForNewObjectif}" name="${objectifId}" placeholder="..." />
+                    </div>`;
+        dialog += `</td><td rowspan="${nbExp}">${allExpWithThisTest}</td><td rowspan="${nbExp}">`;
+        dialog += `<strong style="color:#008c25;">${test}</strong><br/>`;
+        dialog += `<div class="pure-control-group">
+                        <label for="${this._idTextEreaForNewTest}">New ?</label>
+                        <input type="text" id="${this._idTextEreaForNewTest}" name="${testId}" placeholder="..." />
+                    </div>`;
+        dialog += `</td></tr>`;
+
+        for (let j = 1; j < nbExp; j++)
+            dialog += `<tr><td>${allExp[j]}</td></tr>`;
+
+        $(`#${me._idTableOfAllInfo}`).html(dialog);
     }
 }
 

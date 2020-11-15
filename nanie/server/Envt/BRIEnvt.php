@@ -9,7 +9,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/nanie/server/Envt/BRIConfigs.php';
 
 class BRIEnvt {
     const isLOCALSERVER = true;
-    const _DEBUGLEVEL = BRIConst::_ALL;
+    const _DEBUGLEVEL = BRIConst::_ERROR;
     const _DEBUGMAIL = true;
     const _DEBUGMAIL_EMAIL = 'planninglabo.mel@gmail.com';
     

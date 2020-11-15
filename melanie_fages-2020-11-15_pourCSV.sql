@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1:3307
--- Généré le : Dim 15 nov. 2020 à 10:16
--- Version du serveur :  10.4.13-MariaDB
--- Version de PHP : 7.3.21
+-- Host: 127.0.0.1:3307
+-- Generation Time: Nov 15, 2020 at 07:50 PM
+-- Server version: 10.2.14-MariaDB
+-- PHP Version: 7.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `melanie_fages`
+-- Database: `melanie_fages`
 --
 CREATE DATABASE IF NOT EXISTS `melanie_fages` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
 USE `melanie_fages`;
@@ -26,7 +27,7 @@ USE `melanie_fages`;
 -- --------------------------------------------------------
 
 --
--- Structure de la table `chromosomes`
+-- Table structure for table `chromosomes`
 --
 
 DROP TABLE IF EXISTS `chromosomes`;
@@ -37,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `chromosomes` (
 ) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `chromosomes`
+-- Dumping data for table `chromosomes`
 --
 
 INSERT INTO `chromosomes` (`uid`, `nom`) VALUES
@@ -70,7 +71,7 @@ INSERT INTO `chromosomes` (`uid`, `nom`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `experience`
+-- Table structure for table `experience`
 --
 
 DROP TABLE IF EXISTS `experience`;
@@ -84,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `experience` (
 ) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `experience`
+-- Dumping data for table `experience`
 --
 
 INSERT INTO `experience` (`uid`, `experiencestringid`, `daterealisationexperience`, `faiteparqui`, `dateinsert`) VALUES
@@ -106,7 +107,7 @@ INSERT INTO `experience` (`uid`, `experiencestringid`, `daterealisationexperienc
 -- --------------------------------------------------------
 
 --
--- Structure de la table `experience_file`
+-- Table structure for table `experience_file`
 --
 
 DROP TABLE IF EXISTS `experience_file`;
@@ -120,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `experience_file` (
 ) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `experience_file`
+-- Dumping data for table `experience_file`
 --
 
 INSERT INTO `experience_file` (`uid`, `idexperience`, `nom`, `path`, `url`) VALUES
@@ -168,7 +169,7 @@ INSERT INTO `experience_file` (`uid`, `idexperience`, `nom`, `path`, `url`) VALU
 -- --------------------------------------------------------
 
 --
--- Structure de la table `experience_listegenotype`
+-- Table structure for table `experience_listegenotype`
 --
 
 DROP TABLE IF EXISTS `experience_listegenotype`;
@@ -185,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `experience_listegenotype` (
 ) ENGINE=MyISAM AUTO_INCREMENT=63 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `experience_listegenotype`
+-- Dumping data for table `experience_listegenotype`
 --
 
 INSERT INTO `experience_listegenotype` (`uid`, `idexperience`, `chromosome1`, `chromosome2`, `chromosome3`, `chromosome4`, `nbechantillon`, `dateinsert`) VALUES
@@ -244,7 +245,115 @@ INSERT INTO `experience_listegenotype` (`uid`, `idexperience`, `chromosome1`, `c
 -- --------------------------------------------------------
 
 --
--- Structure de la table `experience_resultatdestests`
+-- Table structure for table `experience_objectif`
+--
+
+DROP TABLE IF EXISTS `experience_objectif`;
+CREATE TABLE IF NOT EXISTS `experience_objectif` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `objectifAsInt` int(11) NOT NULL,
+  `objectif` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Dumping data for table `experience_objectif`
+--
+
+INSERT INTO `experience_objectif` (`id`, `objectifAsInt`, `objectif`) VALUES
+(4, 1, 'PINK1 dans le processus apoptotique induite par Rbf1'),
+(5, 2, 'PINK1 dans le processus apoptotique induite par Debcl'),
+(6, 3, 'Relocalisation de Debcl par les inducteur de mitophagie'),
+(7, 4, 'Implication de P/P dans la fragmentation du réseau en condition d\'apoptose'),
+(8, 5, 'Implication de la mitophagie dans le processus apoptotique '),
+(9, 6, 'Parkin dans le processus apoptotique induite par Rbf1'),
+(10, 7, 'Parkin dans le processus apoptotique induite par Debcl'),
+(11, 8, 'Le role de Buffy dans la modulation apoptotique par les inducteur de mitophagie'),
+(12, 9, 'Modification Post Traductionnelle de proteine de la famille Bcl2 par des inducteur de mitophagie au cours du processus apoptotique'),
+(13, 10, 'Le role des inducteur de mitophagie dans la modulation des partenaires de Debcl au cours de l\'apoptose  '),
+(14, 11, 'Modulation de l\'equilibre Fussion/fussion du processus apoptotique par des inducteur de mitophagie'),
+(15, 12, 'Role de PINK1 et Parkin dans la mitophagie induite par apoptose'),
+(16, 13, 'Modulation de la quantité de ROS apoptotique par des inducteur de mitophagie'),
+(17, 14, 'Mise en place du modèle d\'induction de mitophagie'),
+(18, 15, 'La conséquence de l\'invalidation des proteine de la famille BCL2 dans le processus de mitophagie'),
+(19, 16, 'Le role des protéines de la famille BCL2 dans la relocalisation de Parkin'),
+(20, 17, 'Modification Post Traductionnelle de proteine de la famille Bcl2 par des inducteur de mitophagie au cours du processus de mitophagie'),
+(21, 18, 'Comparatif des interactions de Debcl en contexte d\'apoptose et de mitophagie en presence ou abscence d\'inducteur de mitophagie'),
+(22, 19, 'Mise en place de souches utiles');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `experience_otestonobjectif`
+--
+
+DROP TABLE IF EXISTS `experience_otestonobjectif`;
+CREATE TABLE IF NOT EXISTS `experience_otestonobjectif` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idobjectif` int(11) NOT NULL,
+  `TestAsLetter` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'A',
+  `test` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Dumping data for table `experience_otestonobjectif`
+--
+
+INSERT INTO `experience_otestonobjectif` (`id`, `idobjectif`, `TestAsLetter`, `test`) VALUES
+(7, 5, 'A', 'Mesure apoptose au niveau du disque d\'aile en contexte PINK1 muté'),
+(6, 4, 'B', 'Observation du phenotype de l\'aile en contexte PINK1 mutÃ©'),
+(5, 4, 'A', 'Mesure apoptose au niveau du disque d\'aile en contexte PINK1 muté'),
+(8, 5, 'B', 'Observation du phenotype de l\'aile en contexte PINK1 muté'),
+(9, 6, 'A', 'Fractionnement cytosol/mito avec detection Debcl HA en contexte PINK1 Mutant'),
+(10, 6, 'B', 'Fractionnement cytosol/mito avec detection Debcl HA en contexte Parkin Mutant'),
+(11, 7, 'A', 'Mesure de fragementation du reseau mito en abscence de PINK1'),
+(12, 7, 'B', 'Mesure de fragementation du reseau mito en abscence de Parkin'),
+(13, 8, 'A', 'Mesure de la mitophagie (Keima) en contexte de surexpression de Rbf1'),
+(14, 8, 'B', 'Mesure de la mitophagie (Keima) en contexte de surexpression de Debcl'),
+(15, 9, 'A', 'Observation du phenotype de l\'aile en contexte Parkin muté'),
+(16, 9, 'B', 'Mesure apoptose au niveau du disque d\'aile en contexte Parkin muté'),
+(17, 10, 'A', 'Mesure apoptose au niveau du disque d\'aile en contexte Parkin muté'),
+(18, 10, 'B', 'Observation du phenotype de l\'aile en contexte Parkin muté'),
+(19, 11, 'A', 'Mesure de l\'apoptose en abscence de Buffy et de PINK1 fonctionnel'),
+(20, 11, 'B', 'Mesure de l\'apoptose en abscence de Buffy et de Parkin fonctionnel'),
+(21, 12, 'A', 'Identification des MPT de Debcl en contexte PINK1 Mutant'),
+(22, 12, 'B', 'Identification des MPT de Buffy en contexte PINK1 Mutant'),
+(23, 12, 'C', 'Identification des MPT de Debcl en contexte Parkin Mutant'),
+(24, 12, 'D', 'Identification des MPT de Buffy en contexte Parkin Mutant'),
+(25, 13, 'A', 'Mise en place du Debcl couplé a l\'ubiquitine ligase'),
+(26, 13, 'B', 'Isolation des partenaires de Debcl en contexte PINK1 muté'),
+(27, 13, 'C', 'Isolation des partenaires de Debcl en contexte Parkin muté'),
+(28, 14, 'A', 'Mesure de la fragmentation du reseau mitochondriale en apoptose en contexte PINK1 Muté'),
+(29, 14, 'B', 'Mesure de la fragmentation du reseau mitochondriale en apoptose en contexte Parkin Muté'),
+(30, 14, 'C', 'Factionnement cellulaire et localisation de Drp1 au cours de l\'apoptose en contexte PINK1 Muté'),
+(31, 14, 'D', 'Factionnement cellulaire et localisation de Drp1 au cours de l\'apoptose en contexte Parkin Muté'),
+(32, 15, 'A', 'Test de la ligné Keima/ UAS Rbf1 et Keima/UAS Debcl'),
+(33, 15, 'B', 'Faire Recombinant Keima LacZ'),
+(34, 15, 'C', 'Mesure de la mitophagie en contexte apoptotique induit par Rbf1 et PINK1 mutant'),
+(35, 15, 'D', 'Mesure de la mitophagie en contexte apoptotique induit par Debcl et PINK1 mutant'),
+(36, 15, 'E', 'Mesure de la mitophagie en contexte apoptotique induit par Rbf1 et PINK1 mutant'),
+(37, 15, 'F', 'Mesure de la mitophagie en contexte apoptotique induit par Debc et Parkin mutant'),
+(38, 16, 'A', 'Mesure de la quantité de ROS en contexte apoptotique et PINK1 mutant'),
+(39, 16, 'B', 'Mesure de la quantité de ROS en contexte apoptotique et Parkin mutant'),
+(40, 17, 'A', 'Test de la quantite d\'ARNI ND75 necessaire pour induire la mitophagie'),
+(41, 18, 'A', 'Mesure de la mitophagie induite, en contexte Debcl mutant'),
+(42, 18, 'B', 'Mesure de la mitophagie induite, en contexte Buffy mutant'),
+(43, 19, 'A', 'Factionnement cellulaire et localisation de Parkin au cours de l\'apoptose en contexte Buffy non fonctionel'),
+(44, 19, 'B', 'Factionnement cellulaire et localisation de Parkin au cours de l\'apoptose en contexte Debcl non fonctionel'),
+(45, 20, 'A', 'Identification des MPT de Debcl en contexte PINK1 Mutant'),
+(46, 20, 'B', 'Identification des MPT de Buffy en contexte PINK1 Mutant'),
+(47, 20, 'C', 'Identification des MPT de Debcl en contexte Parkin Mutant'),
+(48, 20, 'D', 'Identification des MPT de Buffy en contexte Parkin Mutant'),
+(49, 21, 'A', 'Comparaison des partenaire de Debcl en contexte PINK1 mute'),
+(50, 21, 'B', 'Comparaison des partenaire de Debcl en contexte Parkin mute'),
+(51, 22, 'A', 'Mettre la souche Vg Lac Z sur un balanceur'),
+(52, 22, 'B', 'Mettre les souche keima/Rbf1 ou Debcl ou Lac Z sur balanceur');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `experience_resultatdestests`
 --
 
 DROP TABLE IF EXISTS `experience_resultatdestests`;
@@ -261,7 +370,7 @@ CREATE TABLE IF NOT EXISTS `experience_resultatdestests` (
 ) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `experience_resultatdestests`
+-- Dumping data for table `experience_resultatdestests`
 --
 
 INSERT INTO `experience_resultatdestests` (`uid`, `idexperience`, `territoire`, `marquage`, `SGeneral`, `SComparatif`, `typedetest`, `dateinsert`) VALUES
@@ -288,7 +397,7 @@ INSERT INTO `experience_resultatdestests` (`uid`, `idexperience`, `territoire`, 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `initialesexperience`
+-- Table structure for table `initialesexperience`
 --
 
 DROP TABLE IF EXISTS `initialesexperience`;
@@ -299,7 +408,7 @@ CREATE TABLE IF NOT EXISTS `initialesexperience` (
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `initialesexperience`
+-- Dumping data for table `initialesexperience`
 --
 
 INSERT INTO `initialesexperience` (`uid`, `nom`) VALUES
@@ -312,7 +421,7 @@ INSERT INTO `initialesexperience` (`uid`, `nom`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `marquagedesexperiences`
+-- Table structure for table `marquagedesexperiences`
 --
 
 DROP TABLE IF EXISTS `marquagedesexperiences`;
@@ -323,7 +432,7 @@ CREATE TABLE IF NOT EXISTS `marquagedesexperiences` (
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `marquagedesexperiences`
+-- Dumping data for table `marquagedesexperiences`
 --
 
 INSERT INTO `marquagedesexperiences` (`uid`, `nom`) VALUES
@@ -335,7 +444,7 @@ INSERT INTO `marquagedesexperiences` (`uid`, `nom`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `personnes`
+-- Table structure for table `personnes`
 --
 
 DROP TABLE IF EXISTS `personnes`;
@@ -351,11 +460,11 @@ CREATE TABLE IF NOT EXISTS `personnes` (
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `personnes`
+-- Dumping data for table `personnes`
 --
 
 INSERT INTO `personnes` (`uid`, `nom`, `email`, `alias`, `passwd`, `token`, `validite`) VALUES
-(1, 'dd', 'dd@dd.com', 'dd', '1aabac6d068eef6a7bad3fdf50a05cc8', '7893c056da4e36cb8f18869d0c3a14ed', '2020-11-15 11:14:46'),
+(1, 'dd', 'dd@dd.com', 'dd', '1aabac6d068eef6a7bad3fdf50a05cc8', '60a8b84843ab6d76953f0bddc658b2bd', '2020-11-15 20:46:44'),
 (2, 'cc', 'cc@cc.cc', 'cc', 'e0323a9039add2978bf5b49550572c7c', '', '2020-01-01 00:00:00'),
 (3, 'FAGES', '', '', '', '', NULL),
 (4, 'Brusson', '', '', '', '', NULL);
@@ -363,7 +472,7 @@ INSERT INTO `personnes` (`uid`, `nom`, `email`, `alias`, `passwd`, `token`, `val
 -- --------------------------------------------------------
 
 --
--- Structure de la table `territoireexperiences`
+-- Table structure for table `territoireexperiences`
 --
 
 DROP TABLE IF EXISTS `territoireexperiences`;
@@ -374,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `territoireexperiences` (
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `territoireexperiences`
+-- Dumping data for table `territoireexperiences`
 --
 
 INSERT INTO `territoireexperiences` (`uid`, `nom`) VALUES
@@ -385,7 +494,7 @@ INSERT INTO `territoireexperiences` (`uid`, `nom`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `typedetestdesexperiences`
+-- Table structure for table `typedetestdesexperiences`
 --
 
 DROP TABLE IF EXISTS `typedetestdesexperiences`;
@@ -396,7 +505,7 @@ CREATE TABLE IF NOT EXISTS `typedetestdesexperiences` (
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `typedetestdesexperiences`
+-- Dumping data for table `typedetestdesexperiences`
 --
 
 INSERT INTO `typedetestdesexperiences` (`uid`, `nom`) VALUES
